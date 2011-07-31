@@ -1,0 +1,27 @@
+{% comment %}
+This Page is to store all site-level imports and meta data. 
+It only contains a block for the base layout and header/footer blocks
+{% endcomment %}<!DOCTYPE html>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+ <meta name="title" content="Mobile Trans"> 
+ <meta name="description" content="Find whats around the Chicago CTA"> 
+ <meta name="author" content="joe jasinski, brenton bade"> 
+ <meta name="keywords" content="mobile, chicago, location, cta"> 
+ <meta name="language" content="en-us"> 
+
+ <title>Mobile Trans {% block title %} - Home{% endblock %}</title>
+ {% block extra_head %}
+ <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js" charset="utf-8"></script>
+
+ <script type="text/javascript" src="{{ STATIC_URL }}js/django_csrf.js" charset="utf-8"></script> 
+ <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/master.css">
+ {% endblock extra_head %}
+</head>
+<body>
+<div id="player"></div>
+  {% block base_layout %}{% endblock %}
+</body>
+{% block extra_foot  %}<script></script>{% endblock extra_foot %}
+</html>
