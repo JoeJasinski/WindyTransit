@@ -1,0 +1,46 @@
+h1 {
+  margin: 0px; 
+  padding: 0px;
+font-family: Tahoma, Geneva, sans-serif;
+font-weight:normal;
+padding-top: 20px; 	
+padding-left: 45px; 
+}
+
+.body {
+	background-color: #e0e0e0; 
+	margin: 0px; 
+	padding: 0px;
+	position: absolute;
+top: 0; right: 0; bottom: 0; left: 0;
+}
+
+.banner {
+vertical-align:middle;
+border-bottom: solid 1px #e0e0e0;
+background-color: #272727;
+color: #e0e0e0;
+padding: 0 10px 0 10px; 
+height: 80px;
+}
+
+.banner .wrap {
+ background-image:url('../image/bannergrad.jpg');
+ background-repeat: no-repeat;
+ background-position: 0px;	
+ height: 80px; 
+}
+
+.content {
+ padding: 10px; 
+ background-image:url('../image/maingrad.jpg');
+ min-height: 200px; 
+ background-repeat: repeat-x;
+}
+
+.wrap {
+	width: 800px; 
+	display: block;
+    margin-left: auto;
+    margin-right: auto
+}

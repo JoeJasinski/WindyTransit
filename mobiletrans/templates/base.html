@@ -1,9 +1,16 @@
 {% extends "base_site.html" %} 
-{% load i18n thumbnail %}
+{% load i18n %}
 
 
 {% block base_layout %}
-test
+<div class="body">
+ <div class="banner"><div class="wrap"><h1>Mobile Trans</h1></div></div>
+ <div class="content">
+   <div class="wrap">
+{% block content %}{% endblock content %}
+   </div>
+ </div>	
+</div>
 
 {% endblock base_layout %}
 
