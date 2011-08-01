@@ -1,5 +1,5 @@
 from django.contrib.gis.db import models
-
+from django_extensions.db import fields as ext_fields
 
 class Location(models.Model):
 
@@ -7,6 +7,7 @@ class Location(models.Model):
     modified = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=255)
     point = models.PointField()
+    uuid = ext_fields.UUIDField(auto=False)
     
     class Meta:
         verbose_name = "Location"

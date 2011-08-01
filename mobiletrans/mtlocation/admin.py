@@ -1,5 +1,13 @@
 from django.contrib import admin
 from . import models
 
-admin.site.register(models.Location)
-admin.site.register(models.Landmark)
+class LandmarkAdmin(admin.ModelAdmin):
+    
+    list_display = ['uuid','name','point','address']
+
+class LocationAdmin(admin.ModelAdmin):
+    
+    list_display = ['uuid','name','point',]
+
+admin.site.register(models.Location, LocationAdmin)
+admin.site.register(models.Landmark, LandmarkAdmin)
