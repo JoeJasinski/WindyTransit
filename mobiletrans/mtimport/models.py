@@ -37,6 +37,7 @@ class InputRecordManager(models.Manager):
 class InputRecord(models.Model):
     start = models.DateTimeField(auto_now_add=True)
     end = models.DateTimeField(blank=True, null=True)
+    type = models.CharField(max_length=64, blank=True, null=True)
     status = models.IntegerField(choices=TRANSFER_STATUS, default=TRANSFER_STATUS_RUNNING)
 
     objects = InputRecordManager()
@@ -53,3 +54,4 @@ class InputNote(models.Model):
     
     def __unicode__(self):
         return "%s" % self.created
+    

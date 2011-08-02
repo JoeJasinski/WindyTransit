@@ -59,8 +59,8 @@ class Landmark(object):
                  type=models.TRANSFER_NOTE_STATUS_ERROR,    
                  )
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)               
-
-            landmark.save()
+            else:
+                landmark.save()
         
         return self.stats
         

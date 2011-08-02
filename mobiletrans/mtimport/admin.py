@@ -8,7 +8,7 @@ class InputNoteInline(admin.TabularInline):
     extra = 0 
 
 class ImputRecordAdmin(admin.ModelAdmin):
-    readonly_fields = ['start','end', 'status']
+    readonly_fields = ['start','end', 'status','type']
     list_display = ['start','end','status']
     inlines = [InputNoteInline,]
 
