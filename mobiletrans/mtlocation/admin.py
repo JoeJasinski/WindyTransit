@@ -1,5 +1,8 @@
 from django.contrib import admin
 from . import models
+from mtcore import app_renamer
+
+app_renamer.AppLabelRenamer(native_app_label=u'mtlocation', app_label=u'Location').main()
 
 class LocationAdmin(admin.ModelAdmin):
     

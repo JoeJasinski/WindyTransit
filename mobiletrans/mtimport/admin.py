@@ -1,5 +1,8 @@
 from django.contrib import admin
 from . import models
+from mtcore import app_renamer
+
+app_renamer.AppLabelRenamer(native_app_label=u'mtimport', app_label=u'Importer').main()
 
 
 class InputNoteInline(admin.TabularInline):
@@ -14,3 +17,6 @@ class ImputRecordAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.InputRecord, ImputRecordAdmin)
+
+
+
