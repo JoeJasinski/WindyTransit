@@ -18,6 +18,13 @@ class TransitStopAdmin(admin.ModelAdmin):
     list_filter = ['location_type',]
     list_display = ['stop_id','uuid','name','point','location_type']
 
+
+class TransitRouteAdmin(admin.ModelAdmin):
+    
+    list_display = ['route_id','short_name','long_name','get_type_display',]
+
+
 admin.site.register(models.Location, LocationAdmin)
 admin.site.register(models.Landmark, LandmarkAdmin)
+admin.site.register(models.TransitRoute, TransitRouteAdmin)
 admin.site.register(models.TransitStop, TransitStopAdmin)

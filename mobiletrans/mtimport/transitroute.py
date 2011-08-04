@@ -7,7 +7,7 @@ class ImportException(Exception):
     pass
 
 
-class TransitStop(object):
+class TransitRoute(object):
     
     def __init__(self, input_record, input_data):
         self.stats = {'new':0, 'existing':0,}
@@ -22,7 +22,7 @@ class TransitStop(object):
         for row in data:
             
             try:
-                transitstop = self.parse_row(row)
+                transitroute = self.parse_row(row)
             except ValueError, error:
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
@@ -52,7 +52,7 @@ class TransitStop(object):
                  )
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)               
             else:
-                transitstop.save()
+                transitroute.save()
         
         return self.stats
         
@@ -60,69 +60,74 @@ class TransitStop(object):
         row = list(row)
         existing = False
         
-        pk = "stop_id"          
+        
+        pk = "route_id"          
         try:
             pk_val = row[0]
         except IndexError, error:
             raise IndexError("%s %s" % (pk, error))
-      
+        
         
         from mtlocation import models as loc_models
         try:
-            transitstop = loc_models.TransitStop.objects.get(stop_id=pk_val)
+            transitroute = loc_models.TransitRoute.objects.get(route_id=pk_val)
             existing = True
         except ObjectDoesNotExist:
-            transitstop = loc_models.TransitStop(stop_id=pk_val)
+            transitroute = loc_models.TransitRoute(route_id=pk_val)
             existing = False
         except MultipleObjectsReturned:
-            raise ImportException("multiple objects returned with %s %s " % (pk, pk_val))
+            raise ImportException("multiple objects returned with stop_id %s " % stop_id)
 
-
-        #attr = (1, 'stop_code')
-        #try:
-        #    value = row[attr[0]]
-        #except IndexError, error:
-        #    raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
-        #setattr(transitstop, attr[1], value) 
-        
-        attr = (2, 'name')
-        try:
-            value = row[attr[0]]
-        except IndexError, error:
-            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))  
-        setattr(transitstop, attr[1], value)  
-            
-        attr = (3, 'lattitude')
+        attr = (1, 'short_name')
         try:
             value = row[attr[0]]
         except IndexError, error:
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
-        lattitude = value
-        
-        attr = (4, 'longitude')
+        setattr(transitroute, attr[1], value) 
+
+        attr = (2, 'long_name')
         try:
             value = row[attr[0]]
         except IndexError, error:
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
-        longitude = value 
-        
-        attr = (5, 'location_type')
+        setattr(transitroute, attr[1], value) 
+
+        attr = (3, 'type')
         try:
             value = row[attr[0]]
         except IndexError, error:
-            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))  
-        setattr(transitstop, attr[1], value)  
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
+        setattr(transitroute, attr[1], value) 
 
-        point = fromstr('POINT(%s %s)' % (lattitude, longitude))
-        transitstop.point = point
+        attr = (4, 'url')
+        try:
+            value = row[attr[0]]
+        except IndexError, error:
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
+        setattr(transitroute, attr[1], value) 
 
-       
+        attr = (5, 'color')
+        try:
+            value = row[attr[0]]
+        except IndexError, error:
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
+        setattr(transitroute, attr[1], value) 
+
+        attr = (6, 'text_color')
+        try:
+            value = row[attr[0]]
+        except IndexError, error:
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
+        setattr(transitroute, attr[1], value) 
+
+
+
         if existing:
             self.stats['existing'] += 1
         else:
             self.stats['new'] += 1
-        print vars(transitstop)
-        return transitstop
+        
+        return transitroute
 
 def data_import(input_file_path, input_record):
     
@@ -153,7 +158,7 @@ def data_import(input_file_path, input_record):
     else:
         input_file.close()
 
-    transitstop = TransitStop(input_record, data)
+    transitstop = TransitRoute(input_record, data)
     stats = transitstop.process()
     
     
