@@ -121,7 +121,7 @@ class Landmark(object):
         except IndexError, error:
             raise IndexError("id %s: longitude %s" % (id, error))
 
-        point = fromstr('POINT(%s %s)' % (lattitude, longitude))
+        point = fromstr('POINT(%s %s)' % (longitude, lattitude))
         landmark.point = point
         
         if existing:

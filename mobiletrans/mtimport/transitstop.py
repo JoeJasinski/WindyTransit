@@ -113,7 +113,7 @@ class TransitStop(object):
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))  
         setattr(transitstop, attr[1], value)  
 
-        point = fromstr('POINT(%s %s)' % (lattitude, longitude))
+        point = fromstr('POINT(%s %s)' % (longitude, lattitude))
         transitstop.point = point
 
        
