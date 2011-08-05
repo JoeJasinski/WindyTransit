@@ -12,7 +12,8 @@ class InputNoteInline(admin.TabularInline):
 
 class ImputRecordAdmin(admin.ModelAdmin):
     readonly_fields = ['start','end', 'status','type']
-    list_display = ['start','end','status']
+    list_display = ['start','end','status','type']
+    list_filter = ['type',]
     inlines = [InputNoteInline,]
 
 
