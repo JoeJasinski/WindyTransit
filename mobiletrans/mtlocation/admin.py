@@ -23,8 +23,12 @@ class TransitRouteAdmin(admin.ModelAdmin):
     
     list_display = ['route_id','short_name','long_name','get_type_display',]
 
+class LibraryAdmin(admin.GeoModelAdmin):
+    
+    list_display = ['uuid','name','point','address']
 
 admin.site.register(models.Location, LocationAdmin)
 admin.site.register(models.Landmark, LandmarkAdmin)
 admin.site.register(models.TransitRoute, TransitRouteAdmin)
 admin.site.register(models.TransitStop, TransitStopAdmin)
+admin.site.register(models.Library, LibraryAdmin)

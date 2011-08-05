@@ -170,3 +170,18 @@ class TransitRoute(models.Model):
  
     def __unicode__(self):
         return "%s: %s" % (self.route_id, self.long_name)
+    
+
+class Library(Location):
+    
+    address = models.CharField(max_length=255, blank=True, null=True)
+    zip = models.CharField(max_length=10, blank=True, null=True)
+    hours = models.TextField(blank=True, null=True)
+    phone = models.CharField(max_length=64, blank=True, null=True)
+    website = models.URLField(verify_exists=False, blank=True, null=True)
+
+    objects = LocationManager()
+        
+    class Meta:
+        verbose_name = "Library Location"
+        verbose_name_plural = "Library Locations"
