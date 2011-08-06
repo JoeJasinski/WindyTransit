@@ -42,6 +42,7 @@ class Location(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
     
     name = models.CharField(max_length=255)
     point = models.PointField()
