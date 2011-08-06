@@ -17,7 +17,8 @@ class Library(object):
         self.input_data = input_data
         self.loc_model = loc_model
     
-    def process(self):
+    
+    def get_iteration_root(self):
         if self.input_data.has_key('data'):
             data = self.input_data['data']
         else:
@@ -27,9 +28,13 @@ class Library(object):
              type=models.TRANSFER_NOTE_STATUS_ERROR,    
              )
             models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
-            raise ImportException("JSON missing 'data' element.")
-        
-        for row in data:
+            raise ImportException("JSON missing 'data' element.")     
+        return data
+    
+    
+    def process(self):
+
+        for row in self.get_iteration_root():
             
             try:
                 location = self.parse_row(row)
@@ -80,7 +85,6 @@ class Library(object):
         except IndexError, error:
             raise IndexError("id %s: uuid %s" % (id, error))
         
-        from mtlocation import models as loc_models
         try:
             library = self.loc_model.objects.get(uuid=uuid)
             existing = True
@@ -182,7 +186,7 @@ def data_import(input_file_path, input_record):
 
 
     loc_model = dj_models.get_model('mtlocation', input_record.type) 
-    locations = Landmark(input_record, input_data, loc_model)
+    locations = Library(input_record, input_data, loc_model)
     stats = locations.process()
 
     

@@ -16,12 +16,13 @@ class TransitRoute(object):
         self.input_record = input_record
         self.input_data = input_data
         self.loc_model = loc_model
+ 
+    def get_iteration_root(self):
+        return self.input_data
     
     def process(self):
 
-        data = self.input_data
-
-        for row in data:
+        for row in self.get_iteration_root():
             
             try:
                 location = self.parse_row(row)
@@ -75,7 +76,7 @@ class TransitRoute(object):
             transitroute = self.loc_model(route_id=pk_val)
             existing = False
         except MultipleObjectsReturned:
-            raise ImportException("multiple objects returned with stop_id %s " % stop_id)
+            raise ImportException("multiple objects returned with %s %s " % (pk, pk_val))
 
         attr = (1, 'short_name')
         try:
