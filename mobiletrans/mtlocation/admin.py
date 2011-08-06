@@ -15,12 +15,14 @@ class LandmarkAdmin(admin.GeoModelAdmin):
 
 
 class TransitStopAdmin(admin.GeoModelAdmin):
+    filter_horizontal = ['route',]
+    search_fields = ['stop_id','name']
     list_filter = ['location_type',]
     list_display = ['stop_id','uuid','name','point','location_type']
 
 
 class TransitRouteAdmin(admin.ModelAdmin):
-    
+    search_fields = ['name']    
     list_display = ['route_id','short_name','long_name','get_type_display',]
 
 class LibraryAdmin(admin.GeoModelAdmin):

@@ -84,7 +84,7 @@ class Landmark(Location):
 
 class TransitStop(Location):
 
-    route = models.ForeignKey('mtlocation.TransitRoute', blank=True, null=True)  
+    route = models.ManyToManyField('mtlocation.TransitRoute', blank=True, null=True)  
     stop_id = models.IntegerField(unique=True,
         help_text=("Required. The stop_id field contains an ID that uniquely " 
                    "identifies a stop or station. Multiple routes may use the "
@@ -126,6 +126,8 @@ class TransitStop(Location):
         
         
 class TransitRoute(models.Model):
+
+    uuid = ext_fields.UUIDField(auto=True)
 
     route_id = models.CharField(max_length=64,
         help_text=("Required. The route_id field contains an ID that uniquely identifies a "
