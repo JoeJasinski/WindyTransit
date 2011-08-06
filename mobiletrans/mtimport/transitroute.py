@@ -1,4 +1,5 @@
 import csv
+from django.db import models as dj_models
 from mtimport import models
 from django.contrib.gis.geos import Point, fromstr, fromfile
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
@@ -9,11 +10,12 @@ class ImportException(Exception):
 
 class TransitRoute(object):
     
-    def __init__(self, input_record, input_data):
+    def __init__(self, input_record, input_data, loc_model):
         self.stats = {'new':0, 'existing':0,}
         
         self.input_record = input_record
         self.input_data = input_data
+        self.loc_model = loc_model
     
     def process(self):
 
@@ -22,7 +24,7 @@ class TransitRoute(object):
         for row in data:
             
             try:
-                transitroute = self.parse_row(row)
+                location = self.parse_row(row)
             except ValueError, error:
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
@@ -52,7 +54,7 @@ class TransitRoute(object):
                  )
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)               
             else:
-                transitroute.save()
+                location.save()
         
         return self.stats
         
@@ -60,20 +62,17 @@ class TransitRoute(object):
         row = list(row)
         existing = False
         
-        
         pk = "route_id"          
         try:
             pk_val = row[0]
         except IndexError, error:
             raise IndexError("%s %s" % (pk, error))
         
-        
-        from mtlocation import models as loc_models
         try:
-            transitroute = loc_models.TransitRoute.objects.get(route_id=pk_val)
+            transitroute = self.loc_model.objects.get(route_id=pk_val)
             existing = True
         except ObjectDoesNotExist:
-            transitroute = loc_models.TransitRoute(route_id=pk_val)
+            transitroute = self.loc_model(route_id=pk_val)
             existing = False
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with stop_id %s " % stop_id)
@@ -126,7 +125,7 @@ class TransitRoute(object):
             self.stats['existing'] += 1
         else:
             self.stats['new'] += 1
-        
+        print(vars(transitroute))
         return transitroute
 
 def data_import(input_file_path, input_record):
@@ -158,9 +157,10 @@ def data_import(input_file_path, input_record):
     else:
         input_file.close()
 
-    transitstop = TransitRoute(input_record, data)
-    stats = transitstop.process()
-    
+    loc_model = dj_models.get_model('mtlocation', input_record.type) 
+    locations = TransitRoute(input_record, data, loc_model)
+    stats = locations.process()
+
     
     if not input_record.status == models.TRANSFER_STATUS_FAILED:
         if input_record.inputnote_set.filter(type__in=[models.TRANSFER_NOTE_STATUS_ERROR,]):

@@ -1,4 +1,5 @@
 import json
+from django.db import models as dj_models
 from mtimport import models
 from django.contrib.gis.geos import Point, fromstr, fromfile
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
@@ -9,11 +10,12 @@ class ImportException(Exception):
 
 class Library(object):
     
-    def __init__(self, input_record, input_data):
+    def __init__(self, input_record, input_data, loc_model):
         self.stats = {'new':0, 'existing':0,}
         
         self.input_record = input_record
         self.input_data = input_data
+        self.loc_model = loc_model
     
     def process(self):
         if self.input_data.has_key('data'):
@@ -30,7 +32,7 @@ class Library(object):
         for row in data:
             
             try:
-                library = self.parse_row(row)
+                location = self.parse_row(row)
             except ValueError, error:
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
@@ -60,7 +62,7 @@ class Library(object):
                  )
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)               
             else:
-                library.save()
+                location.save()
         
         return self.stats
         
@@ -80,10 +82,10 @@ class Library(object):
         
         from mtlocation import models as loc_models
         try:
-            library = loc_models.Library.objects.get(uuid=uuid)
+            library = self.loc_model.objects.get(uuid=uuid)
             existing = True
         except ObjectDoesNotExist:
-            library = loc_models.Library(uuid=uuid)
+            library = self.loc_model(uuid=uuid)
             existing = False
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with uuid %s " % uuid)
@@ -178,9 +180,11 @@ def data_import(input_file_path, input_record):
     else:
         input_file.close()
 
-    libraries = Library(input_record, input_data)
-    stats = libraries.process()
-    
+
+    loc_model = dj_models.get_model('mtlocation', input_record.type) 
+    locations = Landmark(input_record, input_data, loc_model)
+    stats = locations.process()
+
     
     if not input_record.status == models.TRANSFER_STATUS_FAILED:
         if input_record.inputnote_set.filter(type__in=[models.TRANSFER_NOTE_STATUS_ERROR,]):
