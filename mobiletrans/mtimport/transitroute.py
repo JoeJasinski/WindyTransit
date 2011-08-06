@@ -11,7 +11,7 @@ class ImportException(Exception):
 class TransitRoute(object):
     
     def __init__(self, input_record, input_data, loc_model):
-        self.stats = {'new':0, 'existing':0,}
+        self.stats = {'new':0, 'existing':0,'errors':0}
         
         self.input_record = input_record
         self.input_data = input_data
@@ -32,6 +32,7 @@ class TransitRoute(object):
                  note="ValueError Parse error: %s" % error,
                  type=models.TRANSFER_NOTE_STATUS_ERROR,    
                  )
+                self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
             except IndexError, error:
                 models.InputRecord.objects.make_note(
@@ -39,6 +40,7 @@ class TransitRoute(object):
                  note="IndexError Parse error: %s" % error,
                  type=models.TRANSFER_NOTE_STATUS_ERROR,    
                  )
+                self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
             except ImportException, error:
                 models.InputRecord.objects.make_note(
@@ -46,6 +48,7 @@ class TransitRoute(object):
                  note="Import Exception Parse error: %s" % error,
                  type=models.TRANSFER_NOTE_STATUS_ERROR,    
                  )
+                self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
             except Exception, error:
                 models.InputRecord.objects.make_note(
@@ -53,6 +56,7 @@ class TransitRoute(object):
                  note="Unknown Parse error: %s" % error,
                  type=models.TRANSFER_NOTE_STATUS_ERROR,    
                  )
+                self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)               
             else:
                 location.save()
@@ -171,7 +175,8 @@ def data_import(input_file_path, input_record):
             
     models.InputRecord.objects.make_note(
      input_record=input_record,
-     note='# new records %s - # existing records %s' % (stats['new'], stats['existing']),
+     note='# new records %s - # existing records %s - error records %s' % (
+                            stats['new'], stats['existing'], stats['errors']),
      type=models.TRANSFER_NOTE_STATUS_NOTE,
     )     
         
