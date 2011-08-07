@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def handle(self, input_file_path="", **options):
         if not input_file_path:
             input_file_path = "%s" % os.path.join(settings.VENV_ROOT, "data", "landmarks.json")
-
+        self.stdout.write("Import %s \n" % input_file_path)
         input_record = models.InputRecord()
         input_record.type = loc_models.Landmark.__name__
         input_record.save()

@@ -36,12 +36,17 @@ class LocationDataHandler(BaseHandler):
             pass
         
         distance_unit = request.GET.get('du')
-        if distance_unit:
+        if distance_unit in ['km','mi','m','yd','ft',]:
             pass
+        else:
+            distance_unit = 'm'
     
         distance =  request.GET.get('d')
         if distance:
-            pass
+            try:
+                distance = int(distance)
+            except IndexError:
+                distance = 1000
         
         ref_pnt = models.Location.objects.all()[0].point
         location_objs = models.Location.objects.filter(

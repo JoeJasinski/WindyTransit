@@ -1,8 +1,11 @@
-import json, csv
-from django.db import models as dj_models
-from mtimport import models
+import json, csv, logging
+from xml.dom import minidom
 from django.contrib.gis.geos import Point, fromstr, fromfile
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.db import models as dj_models
+
+from autoslug.settings import slugify
+from mtimport import models
 
 class ImportException(Exception):
     pass
@@ -11,6 +14,7 @@ class ImportException(Exception):
 class LocationBase(object):
 
     def __init__(self, input_record, input_data, loc_model):
+
         self.stats = {'new':0, 'existing':0, 'errors':0}
         
         self.input_record = input_record
@@ -19,6 +23,7 @@ class LocationBase(object):
 
     def process(self):
 
+        count = 1
         for row in self.get_iteration_root():
             
             try:
@@ -26,7 +31,7 @@ class LocationBase(object):
             except ValueError, error:
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
-                 note="ValueError Parse error: %s" % error,
+                 note="Row %s: ValueError Parse error: %s" % (count, error),
                  type=models.TRANSFER_NOTE_STATUS_ERROR,    
                  )
                 self.stats['errors'] += 1
@@ -34,7 +39,7 @@ class LocationBase(object):
             except IndexError, error:
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
-                 note="IndexError Parse error: %s" % error,
+                 note="Row %s: IndexError Parse error: %s" % (count, error),
                  type=models.TRANSFER_NOTE_STATUS_ERROR,    
                  )
                 self.stats['errors'] += 1
@@ -42,7 +47,7 @@ class LocationBase(object):
             except ImportException, error:
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
-                 note="Import Exception Parse error: %s" % error,
+                 note="Row %s: Import Exception Parse error: %s" % (count, error),
                  type=models.TRANSFER_NOTE_STATUS_ERROR,    
                  )
                 self.stats['errors'] += 1
@@ -50,14 +55,24 @@ class LocationBase(object):
             except Exception, error:
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
-                 note="Unknown Parse error: %s" % error,
+                 note="Row %s: Unknown Parse error: %s" % (count, error),
                  type=models.TRANSFER_NOTE_STATUS_ERROR,    
                  )
                 self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)               
             else:
-                location.save()
-        
+                try:
+                    location.save()
+                except Exception, error: 
+                    models.InputRecord.objects.make_note(
+                     input_record=self.input_record,
+                     note="Row %s: Save Error: %s" % (count, error),
+                     type=models.TRANSFER_NOTE_STATUS_ERROR,    
+                     )
+                    self.stats['errors'] += 1                    
+
+            count += 1
+
         return self.stats
 
 
@@ -140,7 +155,7 @@ class CSVLocationBase(LocationBase):
 
     @classmethod
     def data_import(cls, input_file_path, input_record):
-        
+
         status=None
         data = []
         try:
@@ -187,6 +202,73 @@ class CSVLocationBase(LocationBase):
         )     
             
         models.InputRecord.objects.end_import(input_record, status)
+
+
+class KMLLocationBase(LocationBase):
+
+    def get_iteration_root(self):
+
+        placemarks = self.input_data.getElementsByTagName("Placemark")
+
+        if not placemarks:            
+            models.InputRecord.objects.make_note(
+             input_record=self.input_record,
+             note="Missing 'Placemark' elements.",
+             type=models.TRANSFER_NOTE_STATUS_ERROR,    
+             )
+            models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
+            raise ImportException("Missing 'Placemark' elements.")  
+
+
+    @classmethod
+    def data_import(cls, input_file_path, input_record):
+        
+        status=None
+        data = []
+        try:     
+            input_file = open(input_file_path,'r')
+            input_data = minidom.parse(input_file)
+            data = input_data
+        except IOError:
+            models.InputRecord.objects.make_note(
+             input_record=input_record,
+             note='Invalid File %s' % input_file_path,
+             type=models.TRANSFER_NOTE_STATUS_ERROR,
+            )
+            models.InputRecord.objects.end_import(input_record, models.TRANSFER_STATUS_FAILED)
+            raise ImportException("Error with file read")
+        except Exception, error:
+            models.InputRecord.objects.make_note(
+             input_record=input_record,
+             note='Unexpected problem %s: %s' % (input_file_path, error),
+             type=models.TRANSFER_NOTE_STATUS_ERROR,
+            )
+            models.InputRecord.objects.end_import(input_record, models.TRANSFER_STATUS_FAILED)  
+            raise ImportException("Unknown import error.")
+        else:
+            input_file.close()
+    
+        loc_model = dj_models.get_model('mtlocation', input_record.type) 
+        locations = cls(input_record, data, loc_model)
+        stats = locations.process()
+    
+        
+        if not input_record.status == models.TRANSFER_STATUS_FAILED:
+            if input_record.inputnote_set.filter(type__in=[models.TRANSFER_NOTE_STATUS_ERROR,]):
+                status = models.TRANSFER_STATUS_PARTIAL
+            else:
+                status = models.TRANSFER_STATUS_SUCCESS
+                
+        models.InputRecord.objects.make_note(
+         input_record=input_record,
+         note='# new records %s - # existing records %s - error records %s' % (
+                                stats['new'], stats['existing'], stats['errors']),
+         type=models.TRANSFER_NOTE_STATUS_NOTE,
+        )     
+            
+        models.InputRecord.objects.end_import(input_record, status)
+
+
 
 ########################################
 
@@ -478,4 +560,51 @@ class TransitStop(CSVLocationBase):
         print vars(transitstop)
         return transitstop
 
-    
+
+class Hospital(CSVLocationBase):
+       
+    def parse_row(self, row):
+        existing = False
+
+        pk = "name"                 
+        try:
+            pk_val = row.getElementsByTagName(pk)[0]
+        except Exception, error:
+            raise IndexError("%s %s" % (pk, error))
+
+        slug = slugify(pk_val)
+        
+        try:
+            hospital = self.loc_model.objects.get(slug=slug)
+            existing = True
+        except ObjectDoesNotExist:
+            hospital = self.loc_model(slug=slug)
+            existing = False
+        except MultipleObjectsReturned:
+            raise ImportException("multiple objects returned with %s %s " % (pk, pk_val))
+
+        hospital.name = pk_val
+        
+
+        try:
+            multigeo = row.getElementsByTagName("MultiGeometry")[0]
+        except Exception, error:
+            raise IndexError("%s %s: Error Reading 'MultiGeometry' from 'Placemark': %s" % (pk, pk_val, error)) 
+        
+        try:
+            point = multigeo.getElementsByTagName("Point")[0]
+        except Exception, error:
+            raise IndexError("%s %s: Error Reading 'Point' from 'MultiGeometry': %s" % (pk, pk_val, error)) 
+        
+        try:       
+            coordinates = point.getElementsByTagName("coordinates")[0]
+        except Exception, error:        
+            raise IndexError("%s %s: Error Reading 'coordinates' from 'Point': %s" % (pk, pk_val, error)) 
+                      
+
+        if existing:
+            self.stats['existing'] += 1
+        else:
+            self.stats['new'] += 1
+        print vars(hospital)
+        return hospital

@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 from django.contrib.contenttypes.models import ContentType
 from django_extensions.db import fields as ext_fields
 import uuid
+from autoslug import AutoSlugField
 
 TRANSIT_STOP_TYPE_STOP=0
 TRANSIT_STOP_TYPE_STATION=1
@@ -45,6 +46,7 @@ class Location(models.Model):
     active = models.BooleanField(default=True)
     
     name = models.CharField(max_length=255)
+    slug = AutoSlugField(populate_from='name')
     point = models.PointField()
     uuid = ext_fields.UUIDField(auto=False)
     
@@ -214,5 +216,21 @@ class Library(Location):
         serialize_parent.update(
             {'address':self.address, "zip":self.zip, "hours":self.hours,
              'phone':self.phone, 'website':self.website }) 
+        return serialize_parent 
+
+
+class Hospital(Location):
+
+    def save(self, *args, **kwargs):
+        if not self.uuid:
+            self.uuid = uuid.uuid4()
+        super(Hospital, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "Hospital Location"
+        verbose_name_plural = "Hospital Locations"
+
+    def serialize(self):
+        serialize_parent = super(self.__class__, self).serialize().copy()
         return serialize_parent 
 
