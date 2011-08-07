@@ -54,7 +54,12 @@ class Location(models.Model):
     class Meta:
         verbose_name = "Location"
         verbose_name_plural = "Locations"
-        
+    
+    def serialize(self):
+        point = {'lattitude':self.point.x, 'longitude':self.point.y}
+        return {'created':self.created, 'active':self.active, 'name':self.name, 
+                'point':point, 'uuid':self.uuid, 'type':self.__class__.__name__}
+    
     def as_leaf_class(self):
         content_type = self.content_type
         model = content_type.model_class()
@@ -81,6 +86,13 @@ class Landmark(Location):
         verbose_name = "Landmark Location"
         verbose_name_plural = "Landmark Locations"
 
+    def serialize(self):
+        serialize_parent = super(self.__class__, self).serialize().copy()
+        serialize_parent.update(
+            {'address':self.address, 'architect':self.architect, 
+             'build_date':self.build_date, 'landmark_date':self.landmark_date,})
+        return serialize_parent
+        
 
 class TransitStop(Location):
 
@@ -123,7 +135,15 @@ class TransitStop(Location):
         if not self.uuid:
             self.uuid = uuid.uuid4()
         super(TransitStop, self).save(*args, **kwargs)
-        
+       
+    def serialize(self):
+        serialize_parent = super(self.__class__, self).serialize().copy()
+        serialize_parent.update(
+            { #'routes':map(lambda r: r.serialize(), self.route),
+            'stop_id':self.stop_id, 
+             'stop_code':self.stop_code, 'description':self.description,
+             'url':self.url, 'location_type':self.location_type, }) 
+        return serialize_parent
         
 class TransitRoute(models.Model):
 
@@ -188,3 +208,11 @@ class Library(Location):
     class Meta:
         verbose_name = "Library Location"
         verbose_name_plural = "Library Locations"
+
+    def serialize(self):
+        serialize_parent = super(self.__class__, self).serialize().copy()
+        serialize_parent.update(
+            {'address':self.address, "zip":self.zip, "hours":self.hours,
+             'phone':self.phone, 'website':self.website }) 
+        return serialize_parent 
+

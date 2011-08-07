@@ -44,5 +44,12 @@ class LocationDataHandler(BaseHandler):
             pass
         
         ref_pnt = models.Location.objects.all()[0].point
-        placemarks = models.Location.objects.filter(point__distance_lte=(ref_pnt, D(m=100) )).distance(ref_pnt).order_by('distance')
-        return { 'locations': placemarks, }
+        location_objs = models.Location.objects.filter(
+            point__distance_lte=(ref_pnt, D(m=100) )).distance(ref_pnt).order_by('distance')
+
+        locations = []
+        for location in location_objs:
+            {'location':location.serialize()}
+            locations.append({'location':location.serialize()})
+
+        return { 'locations': locations, }

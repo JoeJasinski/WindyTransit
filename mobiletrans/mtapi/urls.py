@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     url(r'^transitroutes/$', transitroute_resource, { 'emitter_format': 'routexml' }), 
     url(r'^transitroutes.json$', transitroute_resource, { 'emitter_format': 'json' }), 
 
-    url(r'^locations/$', location_resource, { 'emitter_format': 'xml' }),     
-    url(r'^locations.xml$', location_resource, { 'emitter_format': 'xml' }), 
+    url(r'^locations/$', location_resource, { 'emitter_format': 'locxml' }),     
+    url(r'^locations.xml$', location_resource, { 'emitter_format': 'locxml' }), 
     url(r'^locations.json$', location_resource, { 'emitter_format': 'json' }), 
 )

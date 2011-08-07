@@ -22,3 +22,24 @@ class xmlTransitRouteEmitter(XMLEmitter):
 
 Emitter.register('routexml', xmlTransitRouteEmitter, 'text/xml; charset=utf-8')
 Mimer.register(lambda *a: None, ('application/xml',))
+
+
+
+class xmlLocationEmitter(XMLEmitter):
+    def _to_xml(self, xml, data):
+        if isinstance(data, (list, tuple)):
+            for item in data:
+                xml.startElement("location", {})
+                self._to_xml(xml, item)
+                xml.endElement("location")
+        elif isinstance(data, dict):
+            for key, value in data.iteritems():
+                xml.startElement(key, {})
+                self._to_xml(xml, value)
+                xml.endElement(key)
+        else:
+            xml.characters(smart_unicode(data))
+
+
+Emitter.register('locxml', xmlTransitRouteEmitter, 'text/xml; charset=utf-8')
+Mimer.register(lambda *a: None, ('application/xml',))
