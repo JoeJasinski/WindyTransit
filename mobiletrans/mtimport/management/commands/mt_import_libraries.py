@@ -1,7 +1,7 @@
 import os, json
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from mtimport import library, models
+from mtimport import importer, models
 from mtlocation import models as loc_models
 
 class Command(BaseCommand):
@@ -15,7 +15,7 @@ class Command(BaseCommand):
         input_record = models.InputRecord()
         input_record.type = loc_models.Library.__name__
         input_record.save()
-        library.data_import(input_file_path, input_record)
+        importer.Library.data_import(input_file_path, input_record)
         print input_file_path 
 
 

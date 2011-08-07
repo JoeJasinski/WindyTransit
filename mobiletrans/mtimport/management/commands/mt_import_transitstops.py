@@ -1,7 +1,7 @@
 import os
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from mtimport import transitstop, models
+from mtimport import importer, models
 from mtlocation import models as loc_models
 
 class Command(BaseCommand):
@@ -15,7 +15,7 @@ class Command(BaseCommand):
         input_record = models.InputRecord()
         input_record.type = loc_models.TransitStop.__name__
         input_record.save()
-        transitstop.data_import(input_file_path, input_record)
+        importer.TransitStop.data_import(input_file_path, input_record)
         print input_file_path 
 
 

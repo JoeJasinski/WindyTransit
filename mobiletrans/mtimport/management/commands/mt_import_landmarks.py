@@ -1,7 +1,7 @@
 import os, json
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from mtimport import landmark, models
+from mtimport import importer, models
 from mtlocation import models as loc_models
 
 class Command(BaseCommand):
@@ -15,7 +15,7 @@ class Command(BaseCommand):
         input_record = models.InputRecord()
         input_record.type = loc_models.Landmark.__name__
         input_record.save()
-        landmark.data_import(input_file_path, input_record)
+        importer.Landmark.data_import(input_file_path, input_record)
         print input_file_path 
 
 
