@@ -192,7 +192,6 @@ class CSVLocationBase(LocationBase):
 
 class Landmark(JSONLocationBase):
     
-
     def parse_row(self, row):
         
         existing = False
@@ -405,8 +404,6 @@ class TransitRoute(CSVLocationBase):
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
         setattr(transitroute, attr[1], value) 
 
-
-
         if existing:
             self.stats['existing'] += 1
         else:
@@ -435,7 +432,6 @@ class TransitStop(CSVLocationBase):
             existing = False
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with %s %s " % (pk, pk_val))
-
 
         #attr = (1, 'stop_code')
         #try:
@@ -475,7 +471,6 @@ class TransitStop(CSVLocationBase):
         point = fromstr('POINT(%s %s)' % (longitude, lattitude))
         transitstop.point = point
 
-       
         if existing:
             self.stats['existing'] += 1
         else:
