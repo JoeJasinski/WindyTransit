@@ -37,6 +37,9 @@ class LocationManager(models.GeoManager):
     def get_query_set(self):
         return SubclassingQuerySet(self.model)
 
+class RegionManager(models.GeoManager):
+    def get_query_set(self):
+        return SubclassingQuerySet(self.model)
 
 
 class Location(models.Model):
@@ -46,7 +49,7 @@ class Location(models.Model):
     active = models.BooleanField(default=True)
     
     name = models.CharField(max_length=255)
-    slug = AutoSlugField(populate_from='name')
+    slug = AutoSlugField(populate_from='name', max_length=255)
     point = models.PointField()
     uuid = ext_fields.UUIDField(auto=False)
     
@@ -233,4 +236,58 @@ class Hospital(Location):
     def serialize(self):
         serialize_parent = super(self.__class__, self).serialize().copy()
         return serialize_parent 
+
+
+class Region(models.Model):
+
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+    
+    name = models.CharField(max_length=255)
+    slug = AutoSlugField(populate_from='name', max_length=255)
+    area = models.PolygonField()
+    uuid = ext_fields.UUIDField(auto=False)
+    
+    content_type = models.ForeignKey(ContentType,editable=False,null=True)
+    objects = RegionManager()
+    
+    class Meta:
+        verbose_name = "Region"
+        verbose_name_plural = "Region"
+    
+    def serialize(self):
+        return {'created':self.created, 'active':self.active, 'name':self.name, 
+                'uuid':self.uuid, 'type':self.__class__.__name__}
+    
+    def as_leaf_class(self):
+        content_type = self.content_type
+        model = content_type.model_class()
+        if (model == Region):
+            return self
+        return model.objects.get(id=self.id)
+
+    def save(self, *args, **kwargs):
+        if(not self.content_type):
+            self.content_type = ContentType.objects.get_for_model(self.__class__)
+            super(Region, self).save(*args, **kwargs)
+
+
+class Neighborhood(Region):
+
+    long_name = models.CharField(max_length=128, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.uuid:
+            self.uuid = uuid.uuid4()
+        super(Neighborhood, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "Neighborhood Region"
+        verbose_name_plural = "Neighborhood Regions"
+
+    def serialize(self):
+        serialize_parent = super(self.__class__, self).serialize().copy()
+        return serialize_parent 
+
 

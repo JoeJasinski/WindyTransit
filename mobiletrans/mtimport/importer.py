@@ -1,6 +1,6 @@
 import json, csv, logging
 from xml.dom import minidom
-from django.contrib.gis.geos import Point, fromstr, fromfile
+from django.contrib.gis.geos import Point, fromstr, fromfile, GEOSGeometry, MultiPoint, MultiPolygon, Polygon
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models as dj_models
 
@@ -219,6 +219,7 @@ class KMLLocationBase(LocationBase):
             models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
             raise ImportException("Missing 'Placemark' elements.")  
 
+        return placemarks
 
     @classmethod
     def data_import(cls, input_file_path, input_record):
@@ -561,7 +562,7 @@ class TransitStop(CSVLocationBase):
         return transitstop
 
 
-class Hospital(CSVLocationBase):
+class Hospital(KMLLocationBase):
        
     def parse_row(self, row):
         existing = False
@@ -572,7 +573,12 @@ class Hospital(CSVLocationBase):
         except Exception, error:
             raise IndexError("%s %s" % (pk, error))
 
-        slug = slugify(pk_val)
+        try:
+            pk_text = pk_val.childNodes[0].nodeValue
+        except Exception, error:
+            raise Exception("%s %s: Error Reading 'text' from 'pk': %s" % (pk, pk_val, error)) 
+
+        slug = slugify(pk_text)
         
         try:
             hospital = self.loc_model.objects.get(slug=slug)
@@ -583,24 +589,32 @@ class Hospital(CSVLocationBase):
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with %s %s " % (pk, pk_val))
 
-        hospital.name = pk_val
+        hospital.name = pk_text
         
 
         try:
-            multigeo = row.getElementsByTagName("MultiGeometry")[0]
+            point = row.getElementsByTagName("Point")[0]
         except Exception, error:
-            raise IndexError("%s %s: Error Reading 'MultiGeometry' from 'Placemark': %s" % (pk, pk_val, error)) 
-        
-        try:
-            point = multigeo.getElementsByTagName("Point")[0]
-        except Exception, error:
-            raise IndexError("%s %s: Error Reading 'Point' from 'MultiGeometry': %s" % (pk, pk_val, error)) 
+            raise IndexError("%s %s: Error Reading 'Point' from 'Placemark': %s" % (pk, pk_val, error)) 
         
         try:       
             coordinates = point.getElementsByTagName("coordinates")[0]
         except Exception, error:        
-            raise IndexError("%s %s: Error Reading 'coordinates' from 'Point': %s" % (pk, pk_val, error)) 
-                      
+            raise Exception("%s %s: Error Reading 'coordinates' from 'Point': %s" % (pk, pk_val, error)) 
+        
+        try:
+            coord_text = coordinates.childNodes[0].nodeValue
+        except Exception, error:
+            raise Exception("%s %s: Error Reading 'text' from 'coordinates': %s" % (pk, pk_val, error)) 
+        
+        try:
+            longitude, lattitude, other =  coord_text.split(',')
+        except Exception, error:
+            raise Exception("%s %s: Error splitting 'text': %s" % (pk, pk_val, error)) 
+        
+
+        point = fromstr('POINT(%s %s)' % (longitude, lattitude))
+        hospital.point = point     
 
         if existing:
             self.stats['existing'] += 1
@@ -608,3 +622,82 @@ class Hospital(CSVLocationBase):
             self.stats['new'] += 1
         print vars(hospital)
         return hospital
+    
+    
+class Neighborhood(KMLLocationBase):
+       
+    def parse_row(self, row):
+        existing = False
+
+        pk = "name"                 
+        try:
+            pk_val = row.getElementsByTagName(pk)[0]
+        except Exception, error:
+            raise IndexError("%s %s" % (pk, error))
+
+        try:
+            pk_text = pk_val.childNodes[0].nodeValue
+        except Exception, error:
+            raise Exception("%s %s: Error Reading 'text' from 'pk': %s" % (pk, pk_val, error)) 
+
+        slug = slugify(pk_text)
+        
+        try:
+            neighborhood = self.loc_model.objects.get(slug=slug)
+            existing = True
+        except ObjectDoesNotExist:
+            neighborhood = self.loc_model(slug=slug)
+            existing = False
+        except MultipleObjectsReturned:
+            raise ImportException("multiple objects returned with %s %s " % (pk, pk_val))
+
+        neighborhood.name = pk_text
+        
+        
+        try:
+            description = row.getElementsByTagName("description")[0].childNodes[0].nodeValue
+        except Exception, error:
+            pass
+        
+        s2 = description.replace("\n","")
+        s3 = s2[s2.find("PRI_NEIGH<"):]
+        s4 = s3[:s3.find("SEC_NEIGH_NO")]
+        s5 = s4.replace('<td>',"").replace('</td>','').replace("PRI_NEIGH",'').replace("</tr>",'').replace("<tr>",'')
+        neighborhood.long_name = s5
+
+        try:
+            ring = row.getElementsByTagName("MultiGeometry")[0]
+        except Exception, error:
+            raise IndexError("%s %s: Error Reading 'MultiGeometry' from 'Placemark': %s" % (pk, pk_val, error)) 
+
+        try:       
+            coordinates = ring.getElementsByTagName("coordinates")[0]
+        except Exception, error:        
+            raise Exception("%s %s: Error Reading 'coordinates' from 'Point': %s" % (pk, pk_val, error)) 
+        
+        try:
+            coord_text = coordinates.childNodes[0].nodeValue
+        except Exception, error:
+            raise Exception("%s %s: Error Reading 'text' from 'coordinates': %s" % (pk, pk_val, error)) 
+        
+        poly = coord_text.split(' ')
+    
+        
+        point_str = ""
+        for point in poly:
+            if point: 
+                try:
+                    longitude, lattitude, other =  point.split(',')
+                except Exception, error:
+                    raise Exception("%s %s: Error splitting 'text': %s" % (pk, pk_val, error)) 
+                point_str += "%s %s," % (longitude, lattitude)
+        
+        p =  GEOSGeometry('POLYGON((%s))' % point_str.strip()[:-1])
+        neighborhood.area = p
+
+        if existing:
+            self.stats['existing'] += 1
+        else:
+            self.stats['new'] += 1
+        print vars(neighborhood)
+        return neighborhood

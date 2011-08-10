@@ -26,6 +26,7 @@ class InputRecordManager(models.Manager):
     def make_note(self, input_record, note, type):
         ir = InputNote(note=note, type=type)
         ir.input_record = input_record
+        #print vars(ir)
         ir.save()
     
     def end_import(self, input_record, status=None):
