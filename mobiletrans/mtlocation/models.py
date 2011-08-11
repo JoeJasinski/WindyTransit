@@ -199,6 +199,16 @@ class TransitRoute(models.Model):
     def __unicode__(self):
         return "%s: %s" % (self.route_id, self.long_name)
     
+    def serialize(self):
+        serialize_parent =  { 
+            'uuid':self.uuid, 'route_id':self.route_id,
+            'short_name':self.short_name, 'long_name':self.long_name,
+            'description':self.description, 'type':self.type,
+            'color':self.color, 'text_color':self.text_color,
+            'url':self.url,
+        }
+        return serialize_parent
+
 
 class Library(Location):
     

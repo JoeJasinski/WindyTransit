@@ -8,24 +8,36 @@ from mtlocation import models
 class TransitRouteHandler(BaseHandler):
     methods_allowed = ('GET',)
 
+    def read(self, request, uuid):
+        
+        try:
+            transit_route = models.TransitRoute.objects.get(uuid=uuid)
+        except:
+            transit_route = []
+        else:
+            transit_route_dict = transit_route.serialize()
+            stops = map(lambda x: x.serialize(),  transit_route.transitstop_set.all() )
+            transit_route_dict.update({'stops':stops,})
+
+        return {'transit_route':transit_route_dict}
+    
+
+class TransitRoutesHandler(BaseHandler):
+    methods_allowed = ('GET',)
+
     def read(self, request):
         routes = models.TransitRoute.objects.all()
          
         transit_routes = []
         for route in routes:
-            node_names = ('uuid', 'route_id',
-            'short_name', 'long_name', 'description', 
-            'type', 'color', 'text_color','url')
-            transit_route = {}
-            for node_name in node_names:
-                transit_route.update({node_name:getattr(route, "%s" % node_name)})
+            transit_route = route.serialize()
             
             transit_route = {'transit_route':transit_route}
             transit_routes.append(transit_route)
 
         return {'transit_routes':transit_routes}
     
-    
+
 class LocationDataHandler(BaseHandler):
     methods_allowed = ('GET',)
 
@@ -49,12 +61,15 @@ class LocationDataHandler(BaseHandler):
                 distance = 1000
         
         ref_pnt = models.Location.objects.all()[0].point
+        
         location_objs = models.Location.objects.filter(
             point__distance_lte=(ref_pnt, D(m=100) )).distance(ref_pnt).order_by('distance')
+
+        neighborhood = map(lambda x: x.serialize(), models.Neighborhood.objects.filter(area__contains=ref_pnt))
 
         locations = []
         for location in location_objs:
             {'location':location.serialize()}
-            locations.append({'location':location.serialize()})
+            locations.append({'location':location.serialize(),'neighborhood':neighborhood})
 
         return { 'locations': locations, }
