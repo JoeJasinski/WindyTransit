@@ -1,0 +1,43 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block extrahead %}{{ block.super }}
+<style type="text/css">
+
+</style>
+{% endblock %}
+
+
+{% block after_related_objects %}{{ block.super }}
+{% if original.id %}
+<fieldset class="module aligned">
+<h2>Transit Stops</h2>
+
+
+  <table id="imprint-products">
+    <thead>
+     <tr>
+		 <td class="admin_stop_uuid">UUID</td>
+		 <td class="admin_stop_id">Stop ID</td>
+		 <td class="admin_stop_name">Stop Name</td>
+		 <td class="admin_stop_name">Slug</td>
+		 <td class="admin_stop_name">Point</td>
+     </tr>
+    </thead>
+    <tbody>
+    {% for stop in original.transitstop_set.all %}   	
+     <tr>
+		 <td class="admin_stop_uuid"><a href="{}">{{ stop.uuid }}</a></td>
+		 <td class="admin_stop_id">{{ stop.stop_id }}</td>
+		 <td class="admin_stop_name">{{ stop.name  }}</td>
+		 <td class="admin_stop_name">{{ stop.slug }}</td>
+		 <td class="admin_stop_name">{{ stop.point }}</td>
+     </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+</fieldset>
+
+{% endif %}
+
+{% endblock %}
