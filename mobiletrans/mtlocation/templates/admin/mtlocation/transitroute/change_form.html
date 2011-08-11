@@ -27,7 +27,7 @@
     <tbody>
     {% for stop in original.transitstop_set.all %}   	
      <tr>
-		 <td class="admin_stop_uuid"><a href="{}">{{ stop.uuid }}</a></td>
+		 <td class="admin_stop_uuid"><a href="{% url admin:mtlocation_transitstop_change stop.id %}">{{ stop.uuid }}</a></td>
 		 <td class="admin_stop_id">{{ stop.stop_id }}</td>
 		 <td class="admin_stop_name">{{ stop.name  }}</td>
 		 <td class="admin_stop_name">{{ stop.slug }}</td>
