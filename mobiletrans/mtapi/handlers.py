@@ -29,7 +29,7 @@ class TransitRoutesHandler(BaseHandler):
     def read(self, request):
         
         kwargs = {}
-        type = request.GET.get('type').lower()
+        type = request.GET.get('type','').lower()
         if type in ['1','3','bus','train']:
             if type == "bus":
                 type = 3
