@@ -5,6 +5,7 @@ font-family: Tahoma, Geneva, sans-serif;
 font-weight:normal;
 padding-top: 20px; 	
 padding-left: 45px; 
+width: 300px; 
 }
 
 .body {
@@ -43,4 +44,27 @@ height: 80px;
 	display: block;
     margin-left: auto;
     margin-right: auto
+}
+
+.menu { float: right; margin-right: 160px; 
+margin-top: 15px; }
+
+.menu ul li{
+ font-family: Tahoma, Geneva, sans-serif;
+ display: inline;
+ list-style-type: none;
+ padding: 15px 20px 10px 20px;
+ margin-left: 10px; 
+ background: #444;
+ text-align: center;
+ border-bottom: solid 1px red;
+}
+
+.menu ul li a {
+  color: white; 
+  text-decoration: none;
+  width: 100px; 
+  display: table-cell;
+  float: right; 
+  
 }
