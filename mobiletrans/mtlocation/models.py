@@ -145,10 +145,12 @@ class TransitStop(Location):
         serialize_parent = super(self.__class__, self).serialize().copy()
         serialize_parent.update(
             { #'routes':map(lambda r: r.serialize(), self.route),
-            'stop_id':self.stop_id, 
-             'stop_code':self.stop_code, 'description':self.description,
-             'url':self.url, 'location_type':self.location_type, }) 
+            'stop_id':self.stop_id,  'stop_code':self.stop_code, 
+            'description':self.description, 'url':self.url, 
+            'location_type_name':self.get_location_type_display(), 
+            'location_type_id':self.location_type }) 
         return serialize_parent
+        
         
 class TransitRoute(models.Model):
 

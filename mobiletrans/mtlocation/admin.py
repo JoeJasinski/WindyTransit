@@ -26,6 +26,7 @@ class TransitStopAdmin(admin.GeoModelAdmin):
     list_display = LocationAdmin.list_display  + ['stop_id','location_type']
     readonly_fields = LocationAdmin.readonly_fields
 
+
 class TransitRouteAdmin(admin.ModelAdmin):
     search_fields = ['name']   
     readonly_fields = ['uuid'] 

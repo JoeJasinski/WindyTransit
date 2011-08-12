@@ -8,8 +8,9 @@ from mtlocation import models
 class TransitRouteHandler(BaseHandler):
     methods_allowed = ('GET',)
 
+
     def read(self, request, uuid):
-        
+        transit_route_dict = {}       
         try:
             transit_route = models.TransitRoute.objects.get(uuid=uuid)
         except:
@@ -45,30 +46,35 @@ class LocationDataHandler(BaseHandler):
         
         query = request.GET.get('q')
         if query:
-            pass
+            try:
+                x, y, = query.split(',')
+            except:
+                pass
         
         distance_unit = request.GET.get('du')
-        if distance_unit in ['km','mi','m','yd','ft',]:
-            pass
-        else:
+        if not distance_unit in ['km','mi','m','yd','ft',]:
             distance_unit = 'm'
     
         distance =  request.GET.get('d')
         if distance:
             try:
                 distance = int(distance)
-            except IndexError:
-                distance = 1000
+            except:
+                pass
         
-        ref_pnt = models.Location.objects.all()[0].point
+        if not distance:
+            distance = 1000                    
+        d = {distance_unit:distance}
+
+        ref_pnt = models.Location.objects.get(uuid="e07f055c-5bd5-442f-b340-077bf7e06ee4").point
         
         location_objs = models.Location.objects.filter(
-            point__distance_lte=(ref_pnt, D(m=100) )).distance(ref_pnt).order_by('distance')
+            point__distance_lte=(ref_pnt, D(**d) )).distance(ref_pnt).order_by('distance')
 
         neighborhood = map(lambda x: x.serialize(), models.Neighborhood.objects.filter(area__contains=ref_pnt))
 
         locations = []
-        for location in location_objs:
+        for location in location_objs[:25]:
             {'location':location.serialize()}
             locations.append({'location':location.serialize(),'neighborhood':neighborhood})
 
