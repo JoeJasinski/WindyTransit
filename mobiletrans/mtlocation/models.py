@@ -205,7 +205,8 @@ class TransitRoute(models.Model):
         serialize_parent =  { 
             'uuid':self.uuid, 'route_id':self.route_id,
             'short_name':self.short_name, 'long_name':self.long_name,
-            'description':self.description, 'type':self.type,
+            'description':self.description, 'type_id':self.type,
+            'type_name':self.get_type_display(),
             'color':self.color, 'text_color':self.text_color,
             'url':self.url,
         }

@@ -27,7 +27,17 @@ class TransitRoutesHandler(BaseHandler):
     methods_allowed = ('GET',)
 
     def read(self, request):
-        routes = models.TransitRoute.objects.all()
+        
+        kwargs = {}
+        type = request.GET.get('type').lower()
+        if type in ['1','3','bus','train']:
+            if type == "bus":
+                type = 3
+            if type == "train":
+                type = 1
+            kwargs.update({'type':type})
+        
+        routes = models.TransitRoute.objects.filter(**kwargs)
          
         transit_routes = []
         for route in routes:
