@@ -33,6 +33,7 @@ class SubclassingQuerySet(models.query.GeoQuerySet):
         for item in super(SubclassingQuerySet, self).__iter__():
             yield item.as_leaf_class()
 
+
 class LocationManager(models.GeoManager):
     def get_query_set(self):
         return SubclassingQuerySet(self.model)
@@ -54,7 +55,9 @@ class Location(models.Model):
     uuid = ext_fields.UUIDField(auto=False)
     
     content_type = models.ForeignKey(ContentType,editable=False,null=True)
-    objects = LocationManager()
+
+    sub_objects = LocationManager()
+    objects = models.GeoManager()
     
     class Meta:
         verbose_name = "Location"
@@ -130,6 +133,7 @@ class TransitStop(Location):
 
     objects = LocationManager()
 
+    
     class Meta:
         verbose_name = "Transit Location"
         verbose_name_plural = "Transit Locations"

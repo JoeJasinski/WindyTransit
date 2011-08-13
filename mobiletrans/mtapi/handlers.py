@@ -2,6 +2,7 @@ import re
 from django.contrib.gis.measure import D 
 from piston.handler import BaseHandler
 from piston.utils import rc, throttle
+from django.contrib.gis.geos import fromstr
 
 from mtlocation import models
 
@@ -54,12 +55,15 @@ class LocationDataHandler(BaseHandler):
 
     def read(self, request):
         
+        ref_pnt =  fromstr('POINT(-87.627778 41.881944)')
         query = request.GET.get('q')
         if query:
             try:
                 x, y, = query.split(',')
             except:
                 pass
+            else:
+                ref_pnt = fromstr('POINT(%s %s)' % (y, x))
         
         distance_unit = request.GET.get('du')
         if not distance_unit in ['km','mi','m','yd','ft',]:
@@ -76,7 +80,7 @@ class LocationDataHandler(BaseHandler):
             distance = 1000                    
         d = {distance_unit:distance}
 
-        ref_pnt = models.Location.objects.get(uuid="e07f055c-5bd5-442f-b340-077bf7e06ee4").point
+        #ref_pnt = models.Location.objects.get(uuid="e07f055c-5bd5-442f-b340-077bf7e06ee4").point
         
         location_objs = models.Location.objects.filter(
             point__distance_lte=(ref_pnt, D(**d) )).distance(ref_pnt).order_by('distance')
@@ -84,8 +88,10 @@ class LocationDataHandler(BaseHandler):
         neighborhood = map(lambda x: x.serialize(), models.Neighborhood.objects.filter(area__contains=ref_pnt))
 
         locations = []
-        for location in location_objs[:25]:
-            {'location':location.serialize()}
-            locations.append({'location':location.serialize(),'neighborhood':neighborhood})
+        for location, distance in [ (l, l.distance) for l in location_objs.distance(ref_pnt) ][:25]:
+            distance = location.distance 
+            location = location.as_leaf_class().serialize()
+            location.update({'distance':distance})
+            locations.append({'location':location,'neighborhood':neighborhood})
 
         return { 'locations': locations, }
