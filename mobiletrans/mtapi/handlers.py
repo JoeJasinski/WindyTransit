@@ -92,6 +92,6 @@ class LocationDataHandler(BaseHandler):
             distance = location.distance 
             location = location.as_leaf_class().serialize()
             location.update({'distance':distance})
-            locations.append({'location':location,'neighborhood':neighborhood})
+            locations.append({'location':location,})
 
-        return { 'locations': locations, }
+        return { 'locations': locations, 'neighborhood':neighborhood }
