@@ -44,7 +44,7 @@ class TransitRoutesHandler(BaseHandler):
         for route in routes:
             transit_route = route.serialize()
             
-            transit_route = {'transit_route':transit_route}
+            #transit_route = {'transit_route':transit_route}
             transit_routes.append(transit_route)
 
         return {'transit_routes':transit_routes}
@@ -99,6 +99,6 @@ class LocationDataHandler(BaseHandler):
             distance = location.distance 
             location = location.as_leaf_class().serialize()
             location.update({'distance':distance})
-            locations.append({'location':location,})
+            locations.append(location,)
 
         return { 'locations': locations, 'neighborhood':neighborhood }

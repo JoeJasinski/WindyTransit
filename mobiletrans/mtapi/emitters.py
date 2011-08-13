@@ -50,9 +50,9 @@ class xmlLocationEmitter(XMLEmitter):
     def _to_xml(self, xml, data):
         if isinstance(data, (list, tuple)):
             for item in data:
-                xml.startElement("locations", {})
+                xml.startElement("location", {})
                 self._to_xml(xml, item)
-                xml.endElement("locations")
+                xml.endElement("location")
         elif isinstance(data, dict):
             for key, value in data.iteritems():
                 xml.startElement(key, {})
