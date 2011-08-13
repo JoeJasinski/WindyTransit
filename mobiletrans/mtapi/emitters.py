@@ -8,9 +8,9 @@ class xmlTransitRouteEmitter(XMLEmitter):
     def _to_xml(self, xml, data):
         if isinstance(data, (list, tuple)):
             for item in data:
-                xml.startElement("transit_list", {})
+                xml.startElement("stop", {})
                 self._to_xml(xml, item)
-                xml.endElement("transit_list")
+                xml.endElement("stop")
         elif isinstance(data, dict):
             for key, value in data.iteritems():
                 xml.startElement(key, {})
@@ -25,13 +25,13 @@ Mimer.register(lambda *a: None, ('application/xml',))
 
 
 
-class xmlLocationEmitter(XMLEmitter):
+class xmlTransitRoutesEmitter(XMLEmitter):
     def _to_xml(self, xml, data):
         if isinstance(data, (list, tuple)):
             for item in data:
-                xml.startElement("location", {})
+                xml.startElement("transit_route", {})
                 self._to_xml(xml, item)
-                xml.endElement("location")
+                xml.endElement("transit_route")
         elif isinstance(data, dict):
             for key, value in data.iteritems():
                 xml.startElement(key, {})
@@ -41,5 +41,26 @@ class xmlLocationEmitter(XMLEmitter):
             xml.characters(smart_unicode(data))
 
 
-Emitter.register('locxml', xmlTransitRouteEmitter, 'text/xml; charset=utf-8')
+Emitter.register('routesxml', xmlTransitRoutesEmitter, 'text/xml; charset=utf-8')
+Mimer.register(lambda *a: None, ('application/xml',))
+
+
+
+class xmlLocationEmitter(XMLEmitter):
+    def _to_xml(self, xml, data):
+        if isinstance(data, (list, tuple)):
+            for item in data:
+                xml.startElement("locations", {})
+                self._to_xml(xml, item)
+                xml.endElement("locations")
+        elif isinstance(data, dict):
+            for key, value in data.iteritems():
+                xml.startElement(key, {})
+                self._to_xml(xml, value)
+                xml.endElement(key)
+        else:
+            xml.characters(smart_unicode(data))
+
+
+Emitter.register('locxml', xmlLocationEmitter, 'text/xml; charset=utf-8')
 Mimer.register(lambda *a: None, ('application/xml',))

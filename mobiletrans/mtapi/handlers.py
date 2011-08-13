@@ -1,4 +1,4 @@
-import re
+import re, decimal 
 from django.contrib.gis.measure import D 
 from piston.handler import BaseHandler
 from piston.utils import rc, throttle
@@ -56,14 +56,21 @@ class LocationDataHandler(BaseHandler):
     def read(self, request):
         
         ref_pnt =  fromstr('POINT(-87.627778 41.881944)')
-        query = request.GET.get('q')
-        if query:
+        lat = request.GET.get('lat')
+        long = request.GET.get('long')
+        if lat and long:
             try:
-                x, y, = query.split(',')
-            except:
-                pass
-            else:
-                ref_pnt = fromstr('POINT(%s %s)' % (y, x))
+                lat = decimal.Decimal(lat)
+            except decimal.InvalidOperation:
+                lat = None
+            
+            try:
+                long = decimal.Decimal(long)
+            except decimal.InvalidOperation:
+                long = None
+        
+        if lat and long:
+            ref_pnt = fromstr('POINT(%s %s)' % (str(lat), str(long)))
         
         distance_unit = request.GET.get('du')
         if not distance_unit in ['km','mi','m','yd','ft',]:

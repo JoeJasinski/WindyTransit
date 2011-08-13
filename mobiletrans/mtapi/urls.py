@@ -11,8 +11,8 @@ location_resource = Resource(handler=LocationDataHandler, **ad)
 
 
 urlpatterns = patterns('',
-    url(r'^transitroutes.xml$', transitroutes_resource, { 'emitter_format': 'routexml' }, name="api_transitroutes_xml"), 
-    url(r'^transitroutes/$', transitroutes_resource, { 'emitter_format': 'routexml' }, name="api_transitroutes"), 
+    url(r'^transitroutes.xml$', transitroutes_resource, { 'emitter_format': 'routesxml' }, name="api_transitroutes_xml"), 
+    url(r'^transitroutes/$', transitroutes_resource, { 'emitter_format': 'routesxml' }, name="api_transitroutes"), 
     url(r'^transitroutes.json$', transitroutes_resource, { 'emitter_format': 'json' }, name="api_transitroutes_json"), 
 
     url(r'^transitroutes/(?P<uuid>[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})/transitroute.xml$', 
