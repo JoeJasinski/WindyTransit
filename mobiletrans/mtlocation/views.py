@@ -23,7 +23,7 @@ def renderkml(request):
     
     template = loader.get_template('mtlocation/locale.kml')
     
-    placemarks = models.Location.objects.filter(point__distance_lte=(ref_pnt, D(m=100) )).distance(ref_pnt).order_by('distance') 
+    placemarks = models.Location.objects.filter(point__distance_lte=(ref_pnt, D(**d) )).distance(ref_pnt).order_by('distance') 
     c = Context({ 'placemarks': placemarks })
     
     response = HttpResponse(template.render(c), content_type="application/vnd.google-earth.kml+xml")
