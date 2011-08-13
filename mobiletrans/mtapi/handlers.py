@@ -4,6 +4,7 @@ from piston.handler import BaseHandler
 from piston.utils import rc, throttle
 from django.contrib.gis.geos import fromstr
 
+from mtcore import utils
 from mtlocation import models
 
 class TransitRouteHandler(BaseHandler):
@@ -55,37 +56,15 @@ class LocationDataHandler(BaseHandler):
 
     def read(self, request):
         
-        ref_pnt =  fromstr('POINT(-87.627778 41.881944)')
         lat = request.GET.get('lat')
         long = request.GET.get('long')
-        if lat and long:
-            try:
-                lat = decimal.Decimal(lat)
-            except decimal.InvalidOperation:
-                lat = None
-            
-            try:
-                long = decimal.Decimal(long)
-            except decimal.InvalidOperation:
-                long = None
         
-        if lat and long:
-            ref_pnt = fromstr('POINT(%s %s)' % (str(lat), str(long)))
+        ref_pnt, y, x = utils.get_pt_from_coord(lat, long)
         
         distance_unit = request.GET.get('du')
-        if not distance_unit in ['km','mi','m','yd','ft',]:
-            distance_unit = 'm'
-    
         distance =  request.GET.get('d')
-        if distance:
-            try:
-                distance = int(distance)
-            except:
-                pass
-        
-        if not distance:
-            distance = 1000                    
-        d = {distance_unit:distance}
+
+        d = utils.get_distance(distance, distance_unit)
 
         #ref_pnt = models.Location.objects.get(uuid="e07f055c-5bd5-442f-b340-077bf7e06ee4").point
         

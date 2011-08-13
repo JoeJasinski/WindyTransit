@@ -5,11 +5,21 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.gis.measure import D 
 
+from mtcore import utils
 from . import models
 
 def renderkml(request):
     
-    ref_pnt = models.Location.objects.all()[0].point
+    lat = request.GET.get('lat')
+    long = request.GET.get('long')
+    
+    ref_pnt, y, x = utils.get_pt_from_coord(lat, long)
+    
+    distance_unit = request.GET.get('du')
+    distance =  request.GET.get('d')
+
+    d = utils.get_distance(distance, distance_unit)
+
     
     template = loader.get_template('mtlocation/locale.kml')
     
@@ -22,6 +32,7 @@ def renderkml(request):
 
 
 
+"""
 from xml.dom.minidom import Document
 def transitroutes(request):
 
@@ -54,3 +65,4 @@ def transitroutes(request):
     response = HttpResponse(doc.toprettyxml(indent="  "), content_type="application/xml")
     response['Content-Disposition'] = 'attachment; filename=locale.xml'
     return response 
+"""
