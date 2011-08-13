@@ -1,0 +1,130 @@
+from django.contrib.gis.geos.collections import *
+from xml.dom import minidom
+
+p = "/Users/jjasinsk/Sites/env/mobiletrans/data/neighborhoods.kml"
+f = open(p)
+x = minidom.parse(f)
+rows = x.getElementsByTagName("Placemark")
+row = rows[0]
+ring = row.getElementsByTagName("coordinates")[0].childNodes[0].nodeValue
+
+poly = ring.split(' ')
+
+point_str = ""
+for point in poly:
+    if point:
+        longitude, lattitude, other = point.split(',')
+        point_str += "%s %s," % (longitude, lattitude)
+
+GEOSGeometry('POLYGON((%s))' % point_str.strip()[:-1])
+
+for row in rows:
+	#row.getElementsByTagName("name")
+	row.getElementsByTagName("coordinates")
+
+neighborhood.polygon = Polygon(tuple(point_list))
+
+
+
+s="""
+<![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format">
+<body leftmargin="0" topmargin="0" bottommargin="0" rightmargin="0">
+<font face="Arial">
+<table border="1" width="300" cellpadding="5" cellspacing="0">
+<tr bgcolor="#9CBCE2">
+<th width="50" align="left">Field Name</th>
+<th width="50" align="left">Field Value</th>
+</tr>
+<tr>
+<td>PRI_NEIGH_NO</td>
+<td>206</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>PRI_NEIGH</td>
+<td>West De Paul</td>
+</tr>
+<tr>
+<td>SEC_NEIGH_NO</td>
+<td>&lt;Null&gt;</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>SEC_NEIGH</td>
+<td>&lt;Null&gt;</td>
+</tr>
+</table>
+</font>
+</body>
+</html>
+]]>
+"""
+
+s2 = s.replace("\n","")
+s3 = s2[s2.find("PRI_NEIGH<"):]
+s4 = s3[:s3.find("SEC_NEIGH_NO")]
+s4.replace('<td>',"").replace('</td>','').replace("PRI_NEIGH",'').replace("</tr>",'').replace("<tr>",'')
+
+
+ref_pnt = Location.objects.all()[0].point
+qs = Neighborhood.objects.filter(area__contains=ref_pnt)
+
+import re
+
+r = re.compile("/<td>PRI_NEIGH</td><td>(?P<name>\w+)</td>/")
+m = r.match(s2)
+m.group(0)
+
+
+
+from django.contrib.gis.measure import D 
+from django.contrib.gis.geos import fromstr
+ref_pnt =  fromstr('POINT(-87.627778 41.881944)')
+
+location_objs = Location.objects.filter(
+            point__distance_lte=(ref_pnt, D(m=1000) )).distance(ref_pnt).order_by('distance')
+[ (l, l.distance) for l in location_objs.distance(ref_pnt) ]
+
+
+import csv
+f = open('loc_mapping.csv','w')
+w = csv.writer(f)
+for l in TransitStop.objects.all():
+    for i in l.route.all():
+        w.writerow([l.stop_id, i.route_id])
+
+
+
+import pickle
+r = []
+for l in TransitRoute.objects.filter(type=1):
+    r.append((l.route_id, map(lambda x: x, l.transitstop_set.values_list('stop_id', flat=True))) )
+
+f = pickle.dumps(r ) 
+x = open("transit_route.pickle", 'w')
+x.write(f)
+x.close()
+
+import pickle
+r = open("transit_route.pickle")
+f = pickle.load(r)
+
+for i in f:
+  r = TransitRoute.objects.get(route_id=i[0])
+  l = TransitStop.objects.filter(stop_id__in=i[1])
+  r.transitstop_set.add(*l)
+
+
+
+
+
+ public | mtimport_inputnote           | table | mobiletrans
+ public | mtimport_inputrecord         | table | mobiletrans
+ public | mtlocation_landmark          | table | mobiletrans
+ public | mtlocation_library           | table | mobiletrans
+ public | mtlocation_location          | table | mobiletrans
+ public | mtlocation_neighborhood      | table | mobiletrans
+ public | mtlocation_region            | table | mobiletrans
+ public | mtlocation_transitroute      | table | mobiletrans
+ public | mtlocation_transitstop       | table | mobiletrans
+ public | mtlocation_transitstop_route | table | mobiletrans
+
+
