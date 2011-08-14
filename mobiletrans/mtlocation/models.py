@@ -51,7 +51,7 @@ class Location(models.Model):
     
     name = models.CharField(max_length=255)
     slug = AutoSlugField(populate_from='name', max_length=255)
-    point = models.PointField()
+    point = models.PointField(help_text="Represented as (longitude, lattitude)")
     uuid = ext_fields.UUIDField(auto=False)
     
     content_type = models.ForeignKey(ContentType,editable=False,null=True)
@@ -64,7 +64,7 @@ class Location(models.Model):
         verbose_name_plural = "Locations"
     
     def serialize(self):
-        point = {'lattitude':self.point.x, 'longitude':self.point.y}
+        point = {'lattitude':self.point.y, 'longitude':self.point.x}
         return {'created':self.created, 'active':self.active, 'name':self.name, 
                 'point':point, 'uuid':self.uuid, 'type':self.__class__.__name__}
     
