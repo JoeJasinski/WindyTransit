@@ -16,10 +16,13 @@ def get_pt_from_coord(lat_input, long_input):
         except decimal.InvalidOperation:
             pass
     
-    if lat and long:
-        ref_pnt = fromstr('POINT(%s %s)' % (str(long), str(lat)))
-    else:
-        ref_pnt =  fromstr('POINT(-87.627778 41.881944)')
+    if not lat:
+        lat = "41.881944"
+        
+    if not long:
+        long = "-87.627778"
+
+    ref_pnt = fromstr('POINT(%s %s)' % (str(long), str(lat)))        
     
     return (ref_pnt, lat, long)
 
