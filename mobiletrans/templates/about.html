@@ -1,10 +1,20 @@
 {% extends "base.html" %}
 
 
+{% block active_about %}active{% endblock %}
+
 {% block content %}
 
 <div class="block-box">
-  about
+  <p>So you're in Chicago and are looking for things to do.  {{ site.name }} allows</p>
+  
+  <p>
+  	<ul>
+  		<li>Locate the nearest CTA "L" stop.</li>
+  		<li>Find things around a CTA "L" stop.</li>
+  	</ul>
+  	
+  </p>
 </div>
 
 {% endblock content %}

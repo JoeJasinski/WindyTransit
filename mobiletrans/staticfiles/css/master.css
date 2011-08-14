@@ -81,8 +81,28 @@ margin-top: 15px;  }
   width: 100px; 
 }
 
+.menu ul li  a.active {
+  color: red; 
+}
+
 .home {
  background-image:url('../image/home.png');
 
 }
 
+.block-box {
+	width: 640px; 
+	height: 500px; 
+	background-color: #e0e0e0; 
+
+ border: solid 15px #272727;
+ border-radius:10px;
+ -moz-border-radius:10px;
+ -webkit-border-radius:10px;
+ padding: 20px; 	
+}
+
+.black-box-map
+{
+	background-color: #272727; 
+}
