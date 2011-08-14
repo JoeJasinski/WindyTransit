@@ -11,7 +11,7 @@ def index(request, template_name=""):
     lat = request.GET.get('lat')
     long = request.GET.get('long')
     
-    ref_pnt, y, x = utils.get_pt_from_coord(lat, long)
+    ref_pnt, lat, long = utils.get_pt_from_coord(lat, long)
     
     distance_unit = request.GET.get('du')
     distance =  request.GET.get('d')
