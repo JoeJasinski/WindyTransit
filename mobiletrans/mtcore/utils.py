@@ -1,5 +1,6 @@
-import decimal
+import decimal, urllib
 from django.contrib.gis.geos import fromstr
+
 
 def get_pt_from_coord(lat_input, long_input):
 
@@ -40,6 +41,15 @@ def get_distance(distance="806", distance_unit='m'):
     
     if not distance:
         distance = "806"                  
-    d = {distance_unit:distance} 
+    d = {str(distance_unit):str(distance)} 
     #raise Exception(d)     
     return d
+
+
+def encode_args(url_parts):
+    encoded = urllib.urlencode(url_parts)
+    return encoded 
+    
+def build_url(protocol="http", host='example.com', path="/", args=""):
+    return urllib.quote_plus("%s://%s%s?%s" % (protocol, host, path, args))
+    

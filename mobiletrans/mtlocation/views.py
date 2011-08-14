@@ -23,7 +23,7 @@ def renderkml(request, lat=None, long=None):
 
     d = utils.get_distance(distance, distance_unit)
 
-    #raise AssertionError(lat, long)
+    #raise AssertionError(d, lat, long)
     
     template = loader.get_template('mtlocation/locale.kml')
     
