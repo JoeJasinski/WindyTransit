@@ -17,25 +17,26 @@ def get_pt_from_coord(lat_input, long_input):
             pass
     
     if lat and long:
-        ref_pnt = fromstr('POINT(%s %s)' % (str(lat), str(long)))
+        ref_pnt = fromstr('POINT(%s %s)' % (str(long), str(lat)))
     else:
         ref_pnt =  fromstr('POINT(-87.627778 41.881944)')
     
     return (ref_pnt, lat, long)
 
 
-def get_distance(distance, distance_unit):
+def get_distance(distance="806", distance_unit='m'):
 
     if not distance_unit in ['km','mi','m','yd','ft',]:
         distance_unit = 'm'
         
     if distance:
         try:
-            distance = int(distance)
+            distance = decimal.Decimal("%s" % distance)
         except:
             pass
     
     if not distance:
-        distance = 1000                    
-    d = {distance_unit:distance}      
+        distance = "806"                  
+    d = {distance_unit:distance} 
+    #raise Exception(d)     
     return d
