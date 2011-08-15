@@ -83,7 +83,7 @@ class LocationDataHandler(BaseHandler):
         neighborhood = map(lambda x: x.serialize(), models.Neighborhood.objects.filter(area__contains=ref_pnt))
 
         locations = []
-        for location, distance in [ (l, l.distance) for l in location_objs.distance(ref_pnt) ][:25]:
+        for location, distance in [ (l, l.distance) for l in location_objs.distance(ref_pnt) ]:
             distance = location.distance 
             location = location.as_leaf_class().serialize()
             location.update({'distance':distance})
