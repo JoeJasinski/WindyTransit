@@ -1,6 +1,7 @@
 import decimal, urllib
 from django.contrib.gis.geos import fromstr
-
+from django.db.models.loading import get_models, get_app
+from mtlocation.models import Location
 
 def get_pt_from_coord(lat_input, long_input):
 
@@ -52,4 +53,12 @@ def encode_args(url_parts):
     
 def build_url(protocol="http", host='example.com', path="/", args=""):
     return urllib.quote_plus("%s://%s%s?%s" % (protocol, host, path, args))
+
+
+def get_point_types(point_types):
+    available_types = [ (m.__name__).lower() for m in get_models(get_app('mtlocation')) if issubclass(m, Location)  ]
+    point_types = map(lambda x: x.lower(), point_types)
+    types = set(point_types).intersection(set(available_types))
+    #raise AssertionError(available_types, point_types, types)
+    return list(types)
     

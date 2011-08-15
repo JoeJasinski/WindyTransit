@@ -1,3 +1,7 @@
+body {
+	background-color: #e0e0e0; 
+}
+
 h1 {
   margin: 0px; 
   padding: 0px;
@@ -67,7 +71,7 @@ margin-top: 15px;  }
  background: #333;
  text-align: center;
  border-bottom: solid 1px #444;
- /* background-image: url('../image/menugrad.jpg'); */
+ background-image: url('../image/buttongrad.png'); 
  background-position: right bottom;
  border-radius:5px;
  -moz-border-radius:5px;

@@ -58,18 +58,23 @@ class LocationDataHandler(BaseHandler):
         
         lat = request.GET.get('lat')
         long = request.GET.get('long')
-        
         ref_pnt, y, x = utils.get_pt_from_coord(lat, long)
         
         distance_unit = request.GET.get('du')
         distance =  request.GET.get('d')
-
         d = utils.get_distance(distance, distance_unit)
 
+
+        point_types_input = request.GET.getlist('type')
         #ref_pnt = models.Location.objects.get(uuid="e07f055c-5bd5-442f-b340-077bf7e06ee4").point
+        
+        point_types = utils.get_point_types(point_types_input)
         
         location_objs = models.Location.objects.filter(
             point__distance_lte=(ref_pnt, D(**d) )).distance(ref_pnt).order_by('distance')
+
+        if point_types_input:
+            location_objs = location_objs.filter(content_type__model__in=point_types)
 
         neighborhood = map(lambda x: x.serialize(), models.Neighborhood.objects.filter(area__contains=ref_pnt))
 

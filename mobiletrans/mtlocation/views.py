@@ -12,17 +12,16 @@ def renderkml(request, lat=None, long=None):
     
     if not lat:
         lat = request.GET.get('lat', None)
-    
     if not long:
         long = request.GET.get('long', None)
-    
     ref_pnt, y, x = utils.get_pt_from_coord(lat, long)
     
     distance_unit = request.GET.get('du')
     distance =  request.GET.get('d')
-
     d = utils.get_distance(distance, distance_unit)
 
+    point_types = request.GET.getlist('type')
+    utils.get_point_types(point_types)
     #raise AssertionError(d, lat, long)
     
     template = loader.get_template('mtlocation/locale.kml')

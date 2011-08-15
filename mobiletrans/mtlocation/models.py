@@ -45,6 +45,8 @@ class RegionManager(models.GeoManager):
 
 class Location(models.Model):
 
+    class_slug = 'location'
+
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
@@ -82,6 +84,8 @@ class Location(models.Model):
 
 
 class Landmark(Location):
+
+    class_slug = 'landmark'
     
     address = models.CharField(max_length=255, blank=True, null=True)
     architect = models.CharField(max_length=255, blank=True, null=True)
@@ -103,6 +107,8 @@ class Landmark(Location):
         
 
 class TransitStop(Location):
+
+    class_slug = 'transit_stop'
 
     route = models.ManyToManyField('mtlocation.TransitRoute', blank=True, null=True)  
     stop_id = models.IntegerField(unique=True,
@@ -157,6 +163,8 @@ class TransitStop(Location):
         
         
 class TransitRoute(models.Model):
+
+    class_slug = 'transit_route'
 
     uuid = ext_fields.UUIDField(auto=True)
 
@@ -218,6 +226,8 @@ class TransitRoute(models.Model):
 
 
 class Library(Location):
+
+    class_slug = 'library'
     
     address = models.CharField(max_length=255, blank=True, null=True)
     zip = models.CharField(max_length=10, blank=True, null=True)
@@ -240,6 +250,8 @@ class Library(Location):
 
 
 class Hospital(Location):
+
+    class_slug = 'hospital'
 
     def save(self, *args, **kwargs):
         if not self.uuid:
