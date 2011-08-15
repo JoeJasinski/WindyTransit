@@ -64,6 +64,10 @@ class LocationDataHandler(BaseHandler):
         distance =  request.GET.get('d')
         d = utils.get_distance(distance, distance_unit)
 
+    
+        limit = request.GET.get('limit')
+        limit = utils.get_limit(limit)
+
 
         point_types_input = request.GET.getlist('type')
         #ref_pnt = models.Location.objects.get(uuid="e07f055c-5bd5-442f-b340-077bf7e06ee4").point
@@ -85,4 +89,4 @@ class LocationDataHandler(BaseHandler):
             location.update({'distance':distance})
             locations.append(location,)
 
-        return { 'locations': locations, 'neighborhood':neighborhood }
+        return { 'locations': locations[:limit], 'neighborhood':neighborhood }

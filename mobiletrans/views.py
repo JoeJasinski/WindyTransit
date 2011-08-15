@@ -17,9 +17,14 @@ def index(request, template_name=""):
     distance =  request.GET.get('d')
     d = utils.get_distance(distance, distance_unit)    
 
+    limit = request.GET.get('limit')
+    limit = utils.get_limit(limit)
+
     point_types = request.GET.getlist('type')
 
     url_parts = {}
+    if limit:
+        url_parts.update({'limit':limit})
     if distance_unit:
         url_parts.update({'du':distance_unit})
     if distance:

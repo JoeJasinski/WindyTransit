@@ -61,4 +61,19 @@ def get_point_types(point_types):
     types = set(point_types).intersection(set(available_types))
     #raise AssertionError(available_types, point_types, types)
     return list(types)
-    
+
+
+def get_limit(limit):
+
+    if not limit:
+        limit = 25
+    else:
+        try:
+            limit = int(limit)
+        except:
+            limit = 25
+        else:
+            if limit < 1 or limit > 50:
+                limit = 25
+        
+    return limit

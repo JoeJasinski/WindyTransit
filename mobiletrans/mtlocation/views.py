@@ -24,48 +24,16 @@ def renderkml(request, lat=None, long=None):
     utils.get_point_types(point_types)
     #raise AssertionError(d, lat, long)
     
+    limit = request.GET.get('limit')
+    limit = utils.get_limit(limit)
+    
     template = loader.get_template('mtlocation/locale.kml')
     
     placemarks = models.Location.objects.filter(point__distance_lte=(ref_pnt, D(**d) )).distance(ref_pnt).order_by('distance') 
-    c = Context({ 'placemarks': placemarks })
+    c = Context({ 'placemarks': placemarks[:limit] })
     
     response = HttpResponse(template.render(c), content_type="application/vnd.google-earth.kml+xml")
     response['Content-Disposition'] = 'attachment; filename=locale.kml'
     return response 
 
 
-
-"""
-from xml.dom.minidom import Document
-def transitroutes(request):
-
-    ref_pnt = models.Location.objects.all()[0].point
-    placemarks = models.TransitRoute.objects.all()
-    
-    doc = Document()
-    request = doc.createElement("request")
-    transit_routes = doc.createElement("transit_routes")
-    for placemark in placemarks:
-        transit_route = doc.createElement("transit_route")
-
-        for child_node in [
-            ('uuid','uuid'), ('route_id','route_id',),
-            ('short_name','short_name'), ('long_name', 'long_name'),
-            ('description','description'), ('type','type'),
-            ('color','color'), ('text_color','text_color'), ('url','url')]:
-            child = doc.createElement(child_node[0])
-            child_text = doc.createTextNode("%s" % getattr(placemark, "%s" % child_node[1]))
-            child.appendChild(child_text)
-            transit_route.appendChild(child)
-            
-        transit_routes.appendChild(transit_route)
-        
-        
-        
-    request.appendChild(transit_routes)    
-    doc.appendChild(request)
-    
-    response = HttpResponse(doc.toprettyxml(indent="  "), content_type="application/xml")
-    response['Content-Disposition'] = 'attachment; filename=locale.xml'
-    return response 
-"""
