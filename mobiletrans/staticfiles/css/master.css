@@ -61,7 +61,7 @@ height: 80px;
     margin-right: auto;
 }
 
-.menu { float: right; margin-right: 160px; 
+.menu { float: right; margin-right: 45px; 
 margin-top: 15px;  }
 
 .menu ul li{
@@ -96,6 +96,13 @@ margin-top: 15px;  }
 
 }
 
+.block-txt {
+	width: 640px; 
+ padding: 10px; 	
+ margin-left: auto;
+ margin-right: auto;
+}
+
 .block-box {
 	width: 640px; 
 	height: 500px; 
@@ -106,9 +113,30 @@ margin-top: 15px;  }
  -moz-border-radius:10px;
  -webkit-border-radius:10px;
  padding: 20px; 	
+ text-align: center; 
+ margin-left: auto;
+ margin-right: auto;
 }
 
 .black-box-map
 {
 	background-color: #272727; 
+}
+
+.block-small {
+	 margin-left: auto;
+ margin-right: auto;
+ background-color: #272727;
+ padding: 15px; 
+ text-align:center; 
+ width: 300px; 
+  border-radius:20px;
+  -moz-border-radius:20px;
+ -webkit-border-radius:20px;
+}
+
+.block-download {
+  color: white; 
+  padding: 20px; 
+  border: #666 solid 1px; 
 }

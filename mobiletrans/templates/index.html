@@ -1,9 +1,51 @@
 {% extends "base.html" %}
 
 
-{% block active_index %}active{% endblock %}
+{% block extra_head %}{{ block.super }}
+
+<script type="text/javascript">
+	var map;
+	var geocoder;
+	
+    function initialize() 
+	{
+		map = new GMap2(document.getElementById("map_image"));
+		map.setCenter(new GLatLng(34, 0), 1);
+		map.setUIToDefault();
+		geocoder = new GClientGeocoder();
+		if (navigator.geolocation) 
+		{
+			navigator.geolocation.getCurrentPosition(function(position) 
+			{  
+				document.getElementById('latitude').innerHTML = position.coords.latitude;
+				document.getElementById('longitude').innerHTML = position.coords.longitude;
+				var coord = position.coords.latitude+","+position.coords.longitude;
+				geocoder.getLocations(coord, addAddressToMap);
+			}); 
+		} 
+	}
+
+	if (!navigator.geolocation) 
+	{
+		document.getElementById('latitude').innerHTML = "Unknown";
+		document.getElementById('longitude').innerHTML = "Unknown";
+		document.getElementById('address').innerHTML = "Unknown";
+		alert("I'm sorry, but geolocation services are not supported by your browser.");
+	} 
+</script>
+
+{% endblock extra_head %}
+
+{% block active_index %}active{% endblock active_index %}
 
 {% block content %}
+
+<div class="block-txt">
+	<div class="coords">
+	Latitude: <span class="coordinates" id="latitude"></span>
+	Longitude: <span class="coordinates" id="longitude"></span>
+	</div>
+</div>
 
 <div class="block-box black-box-map">
 
