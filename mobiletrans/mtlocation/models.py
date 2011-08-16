@@ -137,8 +137,9 @@ class TransitStop(Location):
                    "may have different properties from stops when they are represented "
                    "on a map or used in trip planning."))
 
+    #object = models.GeoManager()
     objects = LocationManager()
-
+    orig_objects = models.GeoManager()
     
     class Meta:
         verbose_name = "Transit Location"
