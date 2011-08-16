@@ -158,3 +158,10 @@ text-align: justify;
 	text-align: left; 
 }
 
+.block-qr {
+	margin: 15px; 
+	  display:inline-block;
+  text-align:center;
+  border: 1px solid #666; 
+	
+}
