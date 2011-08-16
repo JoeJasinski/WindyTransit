@@ -31,4 +31,5 @@ urlpatterns = patterns('',
     url(r'^transitstops/$', transitstop_resource, { 'emitter_format': 'locxml' }, name="api_transitstops"),     
     url(r'^transitstops.xml$', transitstop_resource, { 'emitter_format': 'locxml' }, name="api_transitstops_xml"), 
     url(r'^transitstops.json$', transitstop_resource, { 'emitter_format': 'json' }, name="api_transitstops_json"), 
+    url(r'^transitstops.newline$', transitstop_resource, { 'emitter_format': 'newline' }, name="api_transitstops_newline"), 
 )

@@ -64,3 +64,16 @@ class xmlLocationEmitter(XMLEmitter):
 
 Emitter.register('locxml', xmlLocationEmitter, 'text/xml; charset=utf-8')
 Mimer.register(lambda *a: None, ('application/xml',))
+
+
+
+class newlineTransitStopEmitter(Emitter):
+    def render(self, request, format='xml'):
+        response = self.data
+        try:
+            response = '\n'.join(map(lambda x: x['uuid'], response.items()[0][1]))
+        except:
+            response = ''
+        return response
+
+Emitter.register('newline', newlineTransitStopEmitter, 'text/plain; charset=utf-8')
