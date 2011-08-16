@@ -6,15 +6,20 @@
 {% block content %}
 
 <div class="block-box">
-  <p>So you're in Chicago and are looking for things to do.  {{ site.name }} allows</p>
-  
-  <p>
-  	<ul>
-  		<li>Locate the nearest CTA "L" stop.</li>
-  		<li>Find things around a CTA "L" stop.</li>
-  	</ul>
-  	
-  </p>
+ <h2 class="block-title">About</h2>
+<p>This mobile app is designed for Chicago "L" users.  Have you ever wondered what's around all the various CTA stops?  Have you ever wondered which stop is closest to your current location?   Wonder no longer.  Windy Transit helps Chicago travelers find locations of interest around the CTA stop of their choice.  This web-service backed android application makes finding this information a breeze.  The search returns Hospitals, Libraries, Landmarks, and Bus Stops.</p>
+<p>Using a sophistocated GEO-spacial web service api, this app queries a datawarehouse populated with geographic locations from all around Chicago.  As this backend is higly customizable, more types of data will soon be added.  </p>
+
+<div class="list">
+<p class="list">Coming Soon!
+	<ul>
+	<li>Neighborhood Detection -  see what neighborhood you are in.</li>
+	<li>Use on any phone - Website providing similar functionality to the Android app.</li>
+	<li>More landmark types</li>
+    </ul>
+</p>
+</div>
+
 </div>
 
 {% endblock content %}
