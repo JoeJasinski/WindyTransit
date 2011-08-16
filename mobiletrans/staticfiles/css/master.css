@@ -10,7 +10,7 @@ h1 {
 /* font-family: Tahoma, Geneva, sans-serif; */
 font-family: 'Open Sans', sans-serif;
 padding-top: 20px; 	
-padding-left: 45px; 
+padding-left: 160px; 
 width: 300px; 
 }
 
@@ -41,9 +41,9 @@ height: 80px;
 }
 
 .banner .wrap {
- background-image:url('../image/bannergrad.jpg');
+ background-image:url('../image/logo.png');
  background-repeat: no-repeat;
- background-position: 0px;	
+ background-position: 40px;	
  height: 80px; 
 }
 
