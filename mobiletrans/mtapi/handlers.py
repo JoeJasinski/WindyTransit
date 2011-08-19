@@ -80,7 +80,7 @@ class LocationDataHandler(BaseHandler):
         if point_types_input:
             location_objs = location_objs.filter(content_type__model__in=point_types)
 
-        neighborhood = map(lambda x: x.serialize(), models.Neighborhood.objects.filter(area__contains=ref_pnt))
+        neighborhood = map(lambda x: x.serialize(), models.Neighborhood.sub_objects.filter(area__contains=ref_pnt))
 
         locations = []
         for location, distance in [ (l, l.distance) for l in location_objs.distance(ref_pnt) ]:

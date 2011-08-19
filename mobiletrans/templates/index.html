@@ -4,34 +4,35 @@
 {% block extra_head %}{{ block.super }}
 
 <script type="text/javascript">
-	var map;
-	var geocoder;
-	
-    function initialize() 
-	{
-		map = new GMap2(document.getElementById("map_image"));
-		map.setCenter(new GLatLng(34, 0), 1);
-		map.setUIToDefault();
-		geocoder = new GClientGeocoder();
-		if (navigator.geolocation) 
-		{
-			navigator.geolocation.getCurrentPosition(function(position) 
-			{  
-				document.getElementById('latitude').innerHTML = position.coords.latitude;
-				document.getElementById('longitude').innerHTML = position.coords.longitude;
-				var coord = position.coords.latitude+","+position.coords.longitude;
-				geocoder.getLocations(coord, addAddressToMap);
-			}); 
-		} 
-	}
 
-	if (!navigator.geolocation) 
-	{
-		document.getElementById('latitude').innerHTML = "Unknown";
-		document.getElementById('longitude').innerHTML = "Unknown";
-		document.getElementById('address').innerHTML = "Unknown";
-		alert("I'm sorry, but geolocation services are not supported by your browser.");
-	} 
+function main() {
+    
+    // Check for geoLocation Support
+    if (navigator.geolocation) {
+        // YES                                                      
+        // snapshot of position: 
+        //navigator.geolocation.getCurrentPosition(renderPosition, renderError);
+        // updating position:
+        navigator.geolocation.watchPosition(renderPosition, renderError);
+    } else {
+        // NO
+        $('#geoResults').html('<p>Your browser does not support geolocation.</p>');
+    }
+}
+
+//jQuery to render the output
+function renderPosition(position) 
+{
+  
+$.get('{% url index %}', 
+  { lat: position.coords.latitude, lon: position.coords.longitude }
+}
+
+function renderError() {
+    $('#georesults').html('<p>The page could not get your location.</p>');
+}
+
+
 </script>
 
 {% endblock extra_head %}

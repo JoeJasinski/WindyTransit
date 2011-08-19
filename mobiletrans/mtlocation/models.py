@@ -280,7 +280,10 @@ class Region(models.Model):
     uuid = ext_fields.UUIDField(auto=False)
     
     content_type = models.ForeignKey(ContentType,editable=False,null=True)
-    objects = RegionManager()
+
+    sub_objects = RegionManager()
+    objects = models.GeoManager()
+
     
     class Meta:
         verbose_name = "Region"
@@ -307,6 +310,9 @@ class Neighborhood(Region):
 
     long_name = models.CharField(max_length=128, blank=True, null=True)
 
+    objects = models.GeoManager()
+
+
     def save(self, *args, **kwargs):
         if not self.uuid:
             self.uuid = uuid.uuid4()
@@ -318,6 +324,8 @@ class Neighborhood(Region):
 
     def serialize(self):
         serialize_parent = super(self.__class__, self).serialize().copy()
+        serialize_parent.update(
+            {'long_name':self.long_name}) 
         return serialize_parent 
 
 
