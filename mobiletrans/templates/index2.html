@@ -7,6 +7,8 @@
 
 $(document).ready(function(){
 
+	var markersArray = [];
+
 	var myLatlng = new google.maps.LatLng(41.875696,-87.624207);
 	var myOptions = {
 	  zoom: 11,
@@ -16,8 +18,34 @@ $(document).ready(function(){
 
 	var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	    
-	var ctaLayer = new google.maps.KmlLayer('{{ url }}');
-	ctaLayer.setMap(map);
+	//var ctaLayer = new google.maps.KmlLayer('{{ url }}');
+	//ctaLayer.setMap(map);
+
+    google.maps.event.addListener(map, 'click', function(event) {
+      deleteOverlays();
+      addMarker(event.latLng);
+	  var ctaLayer = new google.maps.KmlLayer('{{ url }}?lat=' + event.latLng.lat() + '&long=' + event.latLng.lng() );
+	  ctaLayer.setMap(map);
+    });
+    
+    
+    function addMarker(location) {
+    marker = new google.maps.Marker({
+      position: location,
+      map: map
+    });
+    markersArray.push(marker);
+    }
+    
+    // Deletes all markers in the array by removing references to them
+	function deleteOverlays() {
+	  if (markersArray) {
+	    for (i in markersArray) {
+	      markersArray[i].setMap(null);
+	    }
+	    markersArray.length = 0;
+	  }
+	}
 
 });
 

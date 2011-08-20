@@ -100,7 +100,8 @@ class PrepParams(object):
                 long = request.GET.get('lon')
             if not long:
                 long = request.GET.get('lng') 
-                         
+
+                        
         ref_pnt, lat, long = self.get_pt_from_coord(lat, long)
     
         if overrides.has_key('du'):
@@ -119,6 +120,7 @@ class PrepParams(object):
         else:
             limit = request.GET.get('limit')
         limit = self.get_limit(limit)
+
     
         if overrides.has_key('point_types'):
             point_types_input = overrides['point_types']

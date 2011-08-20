@@ -21,10 +21,9 @@ def index(request, template_name=""):
     if params.point_types:
         url_parts = [ ('type','%s' % i) for i in params.point_types ] + url_parts.items()
     encoded_args = utils.encode_args(url_parts)
-    
+
     built_url = utils.build_url(host=Site.objects.get_current().domain, 
-                                path=reverse('mtlocation_renderkml_latlong', 
-                                            kwargs={'lat':params.lat, 'long':params.long,}),
+                                path=reverse('mtlocation_renderkml'),
                                 args=encoded_args, encode=False)
     
     context = {'url':built_url, 'lat':params.lat, 'long':long, }
