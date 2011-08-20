@@ -9,36 +9,24 @@ from mtcore import utils
 
 def index(request, template_name=""):
     
-    lat = request.GET.get('lat')
-    long = request.GET.get('long')
-    ref_pnt, lat, long = utils.get_pt_from_coord(lat, long)
+    params = utils.PrepParams(request)
     
-    distance_unit = request.GET.get('du')
-    distance =  request.GET.get('d')
-    d = utils.get_distance(distance, distance_unit)    
-
-    limit = request.GET.get('limit')
-    limit = utils.get_limit(limit)
-
-    point_types = request.GET.getlist('type')
-
     url_parts = {}
-    if limit:
-        url_parts.update({'limit':limit})
-    if distance_unit:
-        url_parts.update({'du':distance_unit})
-    if distance:
-        url_parts.update({'d':distance})
-    if point_types:
-        url_parts = [ ('type','%s' % i) for i in point_types ] + url_parts.items()
+    if params.limit:
+        url_parts.update({'limit':params.limit})
+    if params.distance_unit:
+        url_parts.update({'du':params.distance_unit})
+    if params.distance:
+        url_parts.update({'d':params.distance})
+    if params.point_types:
+        url_parts = [ ('type','%s' % i) for i in params.point_types ] + url_parts.items()
     encoded_args = utils.encode_args(url_parts)
+
+    built_url = utils.build_url(host=Site.objects.get_current().domain, 
+                                path=reverse('mtlocation_renderkml'),
+                                args=encoded_args, encode=False)
     
-    built_url = utils.build_url(host=Site.objects.get_current(), 
-                                path=reverse('mtlocation_renderkml_latlong', 
-                                            kwargs={'lat':lat, 'long':long,}),
-                                args=encoded_args)
-    
-    context = {'url':built_url, 'lat':lat, 'long':long, }
+    context = {'url':built_url, 'lat':params.lat, 'long':long, }
     
     return render_to_response(template_name, context, context_instance=RequestContext(request))
 

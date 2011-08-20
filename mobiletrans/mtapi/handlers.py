@@ -56,77 +56,45 @@ class LocationDataHandler(BaseHandler):
 
     def read(self, request):
         
-        lat = request.GET.get('lat')
-        long = request.GET.get('long')
-        ref_pnt, y, x = utils.get_pt_from_coord(lat, long)
-        
-        distance_unit = request.GET.get('du')
-        distance =  request.GET.get('d')
-        d = utils.get_distance(distance, distance_unit)
+        params = utils.PrepParams(request)
 
-    
-        limit = request.GET.get('limit')
-        limit = utils.get_limit(limit)
-
-
-        point_types_input = request.GET.getlist('type')
-        #ref_pnt = models.Location.objects.get(uuid="e07f055c-5bd5-442f-b340-077bf7e06ee4").point
-        
-        point_types = utils.get_point_types(point_types_input)
-        
         location_objs = models.Location.objects.filter(
-            point__distance_lte=(ref_pnt, D(**d) )).distance(ref_pnt).order_by('distance')
+            point__distance_lte=(params.ref_pnt, D(**params.d) )).distance(params.ref_pnt).order_by('distance')
 
-        if point_types_input:
-            location_objs = location_objs.filter(content_type__model__in=point_types)
+        if params.point_types_input:
+            location_objs = location_objs.filter(content_type__model__in=params.point_types)
 
-        neighborhood = map(lambda x: x.serialize(), models.Neighborhood.sub_objects.filter(area__contains=ref_pnt))
+        neighborhood = map(lambda x: x.serialize(), models.Neighborhood.sub_objects.filter(area__contains=params.ref_pnt))
 
         locations = []
-        for location, distance in [ (l, l.distance) for l in location_objs.distance(ref_pnt) ]:
+        for location, distance in [ (l, l.distance) for l in location_objs.distance(params.ref_pnt) ]:
             distance = location.distance 
             location = location.as_leaf_class().serialize()
             location.update({'distance':distance})
             locations.append(location,)
 
-        return { 'locations': locations[:limit], 'neighborhood':neighborhood }
+        return { 'locations': locations[:params.limit], 'neighborhood':neighborhood }
     
     
 class TransitStopDataHandler(BaseHandler):
     methods_allowed = ('GET',)
 
     def read(self, request):
-        
-        lat = request.GET.get('lat')
-        long = request.GET.get('long')
-        ref_pnt, y, x = utils.get_pt_from_coord(lat, long)
 
-        
-        distance_unit = request.GET.get('du')
-        distance =  request.GET.get('d')
-        d = utils.get_distance(distance, distance_unit)
-
-    
-        limit = request.GET.get('limit')
-        limit = utils.get_limit(limit)
-
-        point_types_input = request.GET.getlist('type')
-        #ref_pnt = models.Location.objects.get(uuid="e07f055c-5bd5-442f-b340-077bf7e06ee4").point
-        
-        point_types = utils.get_point_types(point_types_input)
+        params = utils.PrepParams(request)
         
         location_objs = models.TransitStop.orig_objects.filter(location_type=models.TRANSIT_STOP_TYPE_STATION,
-            point__distance_lte=(ref_pnt, D(**d) )).distance(ref_pnt).order_by('distance')
+            point__distance_lte=(params.ref_pnt, D(**params.d) )).distance(params.ref_pnt).order_by('distance')
 
-        if point_types_input:
-            location_objs = location_objs.filter(content_type__model__in=point_types)
+        if params.point_types_input:
+            location_objs = location_objs.filter(content_type__model__in=params.point_types)
 
         locations = []
-        for location, distance in [ (l, l.distance) for l in location_objs.distance(ref_pnt) ]:
+        for location, distance in [ (l, l.distance) for l in location_objs.distance(params.ref_pnt) ]:
             distance = location.distance 
             location = location.as_leaf_class().serialize()
             location.update({'distance':distance})
             locations.append(location,)
 
 
-        return { 'locations': locations[:limit], }
+        return { 'locations': locations[:params.limit], }
