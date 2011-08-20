@@ -9,9 +9,11 @@ def encode_args(url_parts):
     encoded = urllib.urlencode(url_parts)
     return encoded 
     
-def build_url(protocol="http", host='example.com', path="/", args=""):
-    return urllib.quote_plus("%s://%s%s?%s" % (protocol, host, path, args))
-
+def build_url(protocol="http", host='example.com', path="/", args="", encode=True):
+    url = ("%s://%s%s?%s" % (protocol, host, path, args))
+    if encode:
+        url = urllib.quote_plus(url)
+    return url
 
 class PrepParams(object):
 
