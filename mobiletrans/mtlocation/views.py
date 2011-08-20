@@ -10,27 +10,12 @@ from . import models
 
 def renderkml(request, lat=None, long=None):
     
-    if not lat:
-        lat = request.GET.get('lat', None)
-    if not long:
-        long = request.GET.get('long', None)
-    ref_pnt, y, x = utils.get_pt_from_coord(lat, long)
-    
-    distance_unit = request.GET.get('du')
-    distance =  request.GET.get('d')
-    d = utils.get_distance(distance, distance_unit)
+    params = utils.PrepParams(request, overrides={'lat':lat, 'long':long})
 
-    point_types = request.GET.getlist('type')
-    utils.get_point_types(point_types)
-    #raise AssertionError(d, lat, long)
-    
-    limit = request.GET.get('limit')
-    limit = utils.get_limit(limit)
-    
     template = loader.get_template('mtlocation/locale.kml')
     
-    placemarks = models.Location.objects.filter(point__distance_lte=(ref_pnt, D(**d) )).distance(ref_pnt).order_by('distance') 
-    c = Context({ 'placemarks': placemarks[:limit] })
+    placemarks = models.Location.objects.filter(point__distance_lte=(params.ref_pnt, D(**params.d) )).distance(params.ref_pnt).order_by('distance') 
+    c = Context({ 'placemarks': placemarks[:params.limit] })
     
     response = HttpResponse(template.render(c), content_type="application/vnd.google-earth.kml+xml")
     response['Content-Disposition'] = 'attachment; filename=locale.kml'
