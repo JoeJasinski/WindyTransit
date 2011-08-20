@@ -24,7 +24,7 @@ $(document).ready(function(){
     google.maps.event.addListener(map, 'click', function(event) {
       deleteOverlays();
       addMarker(event.latLng);
-	  var ctaLayer = new google.maps.KmlLayer('{{ url }}?lat=' + event.latLng.lat() + '&long=' + event.latLng.lng() );
+	  var ctaLayer = new google.maps.KmlLayer('{{ url }}&lat=' + event.latLng.lat() + '&long=' + event.latLng.lng() );
 	  ctaLayer.setMap(map);
     });
     
