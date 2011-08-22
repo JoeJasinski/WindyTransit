@@ -5,7 +5,7 @@
     <Style>
       <IconStyle>
         <Icon>
-          <href>http://{{ site.domain }}{{ MEDIA_URL }}image/location-transit.png</href>
+          <href>http://{{ site.domain }}{{ STATIC_URL }}image/location-transit.png</href>
         </Icon>
       </IconStyle>
     </Style>
