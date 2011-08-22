@@ -5,7 +5,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url('^$', 'views.index', { 'template_name':'index2.html'}, name="index"),
+    url('^$', 'views.index', { 'template_name':'index.html'}, name="index"),
     url('^download/$', 'views.download', { 'template_name':'download.html'}, name="download"),
     url('^about/$', 'views.about', { 'template_name':'about.html'}, name="about"),
     url('^kml/$', 'mtlocation.views.renderkml', { }, name="mtlocation_renderkml"),
