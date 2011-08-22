@@ -1,7 +1,9 @@
 from django.contrib.gis.db import models
 from django.contrib.contenttypes.models import ContentType
 from django_extensions.db import fields as ext_fields
+from django.contrib.sites.models import Site
 import uuid
+from django.conf import settings
 from autoslug import AutoSlugField
 
 TRANSIT_STOP_TYPE_STOP=0
@@ -82,6 +84,12 @@ class Location(models.Model):
             self.content_type = ContentType.objects.get_for_model(self.__class__)
             super(Location, self).save(*args, **kwargs)
 
+    def placemark_icon(self):
+        site = Site.objects.get_current()
+        static_url = settings.STATIC_URL
+        return_value = "http://%s%simage/location-transit.png" % (site, static_url)
+        return return_value 
+    
 
 class Landmark(Location):
 
@@ -161,7 +169,22 @@ class TransitStop(Location):
             'location_type_name':self.get_location_type_display(), 
             'location_type_id':self.location_type }) 
         return serialize_parent
-        
+       
+    def placemark_icon(self):
+        site = Site.objects.get_current()
+        static_url = settings.STATIC_URL
+        return_value = ""
+    
+        if self.location_type == 1:
+            try:
+                route_id = self.route.all()[0].route_id
+            except:
+                pass
+            else:
+                return_value = "http://%s%simage/location-transit-%s.png" % (site, static_url, route_id) 
+        if not return_value: 
+            return_value = "http://%s%simage/location-transit.png" % (site, static_url)
+        return return_value 
         
 class TransitRoute(models.Model):
 
