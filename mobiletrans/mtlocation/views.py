@@ -17,7 +17,7 @@ def renderkml(request, lat=None, long=None):
     template = loader.get_template('mtlocation/locale.kml')
     
     placemarks = models.Location.objects.filter(point__distance_lte=(params.ref_pnt, D(**params.d) )).distance(params.ref_pnt).order_by('distance') 
-    c = Context({ 'placemarks': placemarks[:params.limit], 'site': Site.objects.get_current(), 'MEDIA_URL':settings.MEDIA_URL, })
+    c = Context({ 'placemarks': placemarks[:params.limit], 'site': Site.objects.get_current(), 'STATIC_URL':settings.STATIC_URL, })
     
     response = HttpResponse(template.render(c), content_type="application/vnd.google-earth.kml+xml")
     response['Content-Disposition'] = 'attachment; filename=locale.kml'
