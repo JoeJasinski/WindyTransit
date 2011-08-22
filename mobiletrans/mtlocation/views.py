@@ -11,8 +11,13 @@ from mtcore import utils
 from . import models
 
 def renderkml(request, lat=None, long=None):
-    
-    params = utils.PrepParams(request, overrides={'lat':lat, 'long':long})
+    overrides = {}
+    if lat:
+        overrides.update({'lat':lat})
+    if long:
+        overrides.update({'long':long}) 
+ 
+    params = utils.PrepParams(request, overrides)
 
     template = loader.get_template('mtlocation/locale.kml')
     
