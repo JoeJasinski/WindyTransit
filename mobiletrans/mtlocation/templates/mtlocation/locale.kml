@@ -27,7 +27,7 @@
       </IconStyle>
     </Style>
     <name>{{ placemark.name }}</name>
-    <description><![CDATA[ {{ placemark.description }} ]]</description>
+    <description>{{ placemark.description }}</description>
     {{ placemark.point.kml|safe }}
   </Placemark>
   {% endfor %}
