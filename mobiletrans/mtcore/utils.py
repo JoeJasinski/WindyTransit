@@ -127,7 +127,7 @@ class PrepParams(object):
         else:   
             point_types_input = request.GET.getlist('type')
         point_types = self.get_point_types(point_types_input)
-    
+
         self.lat = lat
         self.long = long
         self.distance_unit = distance_unit
