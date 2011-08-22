@@ -6,8 +6,6 @@
       <IconStyle>
         <Icon>
           <href>http://{{ site.domain }}{{ STATIC_URL }}image/location-transit.png</href>
-          <w>15</w>
-          <h>15</h>
         </Icon>
       </IconStyle>
     </Style>
