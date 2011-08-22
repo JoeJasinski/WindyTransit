@@ -2,6 +2,13 @@
 <kml xmlns="http://www.opengis.net/kml/2.2">
 <Document>
   {% for placemark in placemarks %}<Placemark>
+    <Style>
+      <IconStyle>
+        <Icon>
+          <href>http://{{ site.domain }}{{ MEDIA_URL }}image/location-transit.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
     <name>{{ placemark.name }}</name>
     <description>{{ placemark.description }}</description>
     {{ placemark.point.kml|safe }}
