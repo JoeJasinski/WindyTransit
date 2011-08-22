@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
 <Document>
+  {% if neighborhood %}<Placemark>
+    <name>{{ neighborhood.name }}</name>
+    <description>{{ neighborhood.long_name }}</description>
+
+    <Style>
+      <PolyStyle>
+        <color>44ff0000</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+
+    <MultiGeometry>
+    {{ neighborhood.area.kml|safe }}
+    </MultiGeometry>
+
+  </Placemark>{% endif %}
   {% for placemark in placemarks %}<Placemark>
     <Style>
       <IconStyle>
@@ -10,7 +27,7 @@
       </IconStyle>
     </Style>
     <name>{{ placemark.name }}</name>
-    <description>{{ placemark.description }}</description>
+    <description><![CDATA[ {{ placemark.description }} ]]</description>
     {{ placemark.point.kml|safe }}
   </Placemark>
   {% endfor %}
