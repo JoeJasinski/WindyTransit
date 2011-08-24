@@ -11,6 +11,7 @@ from mtcore import utils
 from . import models
 
 def renderkml(request, lat=None, long=None):
+
     overrides = {}
     if lat:
         overrides.update({'lat':lat})
@@ -31,7 +32,9 @@ def renderkml(request, lat=None, long=None):
         context.update({ 'neighborhood':neighborhood,})
     
     placemarks = models.Location.objects.filter(point__distance_lte=(params.ref_pnt, D(**params.d) )).distance(params.ref_pnt).order_by('distance') 
-    context = { 'placemarks': placemarks[:params.limit], 'site': Site.objects.get_current(), 'STATIC_URL':settings.STATIC_URL, }    
+    
+    context.update({ 'placemarks': placemarks[:params.limit], 'site': Site.objects.get_current(), 'STATIC_URL':settings.STATIC_URL, })
+
     c = Context(context)
 
     response = HttpResponse(template.render(c), content_type="application/vnd.google-earth.kml+xml")
