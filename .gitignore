@@ -3,6 +3,7 @@
 *.egg
 *.EGG
 *.EGG-INFO
+*.DS_Store
 bin
 build
 develop-eggs
