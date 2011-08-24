@@ -57,6 +57,11 @@ class NeighborhoodAdmin(admin.GeoModelAdmin):
     search_fields = RegionAdmin.search_fields + ['long_name',]
     list_display = RegionAdmin.list_display + ['long_name',]
 
+class ZipcodeAdmin(admin.GeoModelAdmin):
+
+    search_fields = RegionAdmin.search_fields
+    list_display = RegionAdmin.list_display
+
 
 admin.site.register(models.Location, LocationAdmin)
 admin.site.register(models.Landmark, LandmarkAdmin)
@@ -67,3 +72,4 @@ admin.site.register(models.Hospital, HospitalAdmin)
 
 admin.site.register(models.Region, RegionAdmin)
 admin.site.register(models.Neighborhood, NeighborhoodAdmin)
+admin.site.register(models.Zipcode, ZipcodeAdmin)

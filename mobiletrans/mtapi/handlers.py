@@ -56,6 +56,8 @@ class LocationDataHandler(BaseHandler):
 
     def read(self, request):
         
+        context = {}
+        
         params = utils.PrepParams(request)
 
         location_objs = models.Location.objects.filter(
@@ -64,7 +66,9 @@ class LocationDataHandler(BaseHandler):
         if params.point_types_input:
             location_objs = location_objs.filter(content_type__model__in=params.point_types)
 
-        neighborhood = map(lambda x: x.serialize(), models.Neighborhood.sub_objects.filter(area__contains=params.ref_pnt))
+        if params.neighborhood:
+            neighborhood = map(lambda x: x.serialize(), models.Neighborhood.sub_objects.filter(area__contains=params.ref_pnt))
+            context.update({'neighborhood':neighborhood})
 
         locations = []
         for location, distance in [ (l, l.distance) for l in location_objs.distance(params.ref_pnt) ]:
@@ -73,7 +77,8 @@ class LocationDataHandler(BaseHandler):
             location.update({'distance':distance})
             locations.append(location,)
 
-        return { 'locations': locations[:params.limit], 'neighborhood':neighborhood }
+        context.update({ 'locations': locations[:params.limit], })
+        return context
     
     
 class TransitStopDataHandler(BaseHandler):

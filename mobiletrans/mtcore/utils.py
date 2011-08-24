@@ -69,6 +69,14 @@ class PrepParams(object):
         return list(types)
     
     
+    def get_neighborhood(self, neighborhood):
+        if "%s".lower() % neighborhood in ['false','0',0,'no','n']:
+            neighborhood  = False
+        else:
+            neighborhood = True
+        return neighborhood
+        
+    
     def get_limit(self, limit):
     
         if not limit:
@@ -121,7 +129,12 @@ class PrepParams(object):
             limit = request.GET.get('limit')
         limit = self.get_limit(limit)
 
-    
+        if overrides.has_key('neighborhood'):
+            neighborhood = overrides['neighborhood']    
+        else: 
+            neighborhood = request.GET.get('neighborhood')
+        neighborhood = self.get_neighborhood(neighborhood)
+
         if overrides.has_key('point_types'):
             point_types_input = overrides['point_types']
         else:   
@@ -133,6 +146,7 @@ class PrepParams(object):
         self.distance_unit = distance_unit
         self.distance = distance
         self.d = d
+        self.neighborhood = neighborhood
         self.limit = limit
         self.point_types = point_types
         self.point_types_input = point_types_input

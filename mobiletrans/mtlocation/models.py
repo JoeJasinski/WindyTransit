@@ -352,3 +352,20 @@ class Neighborhood(Region):
         return serialize_parent 
 
 
+class Zipcode(Region):
+
+    objects = models.GeoManager()
+
+
+    def save(self, *args, **kwargs):
+        if not self.uuid:
+            self.uuid = uuid.uuid4()
+        super(Zipcode, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "Zipcode Region"
+        verbose_name_plural = "Zipcode Regions"
+
+    def serialize(self):
+        serialize_parent = super(self.__class__, self).serialize().copy()
+        return serialize_parent 

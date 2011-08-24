@@ -18,18 +18,22 @@ def renderkml(request, lat=None, long=None):
         overrides.update({'long':long}) 
  
     params = utils.PrepParams(request, overrides)
-
+    
+    context = {}
+    
     template = loader.get_template('mtlocation/locale.kml')
     
-    try:
-        neighborhood = models.Neighborhood.sub_objects.filter(area__contains=params.ref_pnt)[0]
-    except IndexError:
-        neighborhood = ""
+    if params.neighborhood:
+        try:
+            neighborhood = models.Neighborhood.sub_objects.filter(area__contains=params.ref_pnt)[0]
+        except IndexError:
+            neighborhood = ""
+        context.update({ 'neighborhood':neighborhood,})
+    
     placemarks = models.Location.objects.filter(point__distance_lte=(params.ref_pnt, D(**params.d) )).distance(params.ref_pnt).order_by('distance') 
-    c = Context({ 'neighborhood':neighborhood, 'placemarks': placemarks[:params.limit], 'site': Site.objects.get_current(), 'STATIC_URL':settings.STATIC_URL, })
+    context = { 'placemarks': placemarks[:params.limit], 'site': Site.objects.get_current(), 'STATIC_URL':settings.STATIC_URL, }    
+    c = Context(context)
 
     response = HttpResponse(template.render(c), content_type="application/vnd.google-earth.kml+xml")
     response['Content-Disposition'] = 'attachment; filename=locale.kml'
     return response 
-
-
