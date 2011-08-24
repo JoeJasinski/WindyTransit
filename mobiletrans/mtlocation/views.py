@@ -30,7 +30,14 @@ def renderkml(request, lat=None, long=None):
         except IndexError:
             neighborhood = ""
         context.update({ 'neighborhood':neighborhood,})
-    
+   
+    if params.zipcode:
+        try:
+            zipcode = models.Zipcode.sub_objects.filter(area__contains=params.ref_pnt)[0]
+        except IndexError:
+            zipcode = ""
+        context.update({ 'zipcode':zipcode,})        
+         
     placemarks = models.Location.objects.filter(point__distance_lte=(params.ref_pnt, D(**params.d) )).distance(params.ref_pnt).order_by('distance') 
     
     context.update({ 'placemarks': placemarks[:params.limit], 'site': Site.objects.get_current(), 'STATIC_URL':settings.STATIC_URL, })

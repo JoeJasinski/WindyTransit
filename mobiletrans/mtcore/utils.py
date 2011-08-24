@@ -4,7 +4,6 @@ from django.db.models.loading import get_models, get_app
 from mtlocation.models import Location
 
 
-
 def encode_args(url_parts):
     encoded = urllib.urlencode(url_parts)
     return encoded 
@@ -76,6 +75,14 @@ class PrepParams(object):
             neighborhood = True
         return neighborhood
         
+
+    def get_zipcode(self, zipcode):
+        if "%s".lower() % zipcode in ['false','0',0,'no','n']:
+            zipcode  = False
+        else:
+            zipcode = True
+        return zipcode
+    
     
     def get_limit(self, limit):
     
@@ -135,6 +142,13 @@ class PrepParams(object):
             neighborhood = request.GET.get('neighborhood')
         neighborhood = self.get_neighborhood(neighborhood)
 
+        if overrides.has_key('zipcode'):
+            zipcode = overrides['zipcode']    
+        else: 
+            zipcode = request.GET.get('zipcode')
+        zipcode = self.get_neighborhood(zipcode)
+
+
         if overrides.has_key('point_types'):
             point_types_input = overrides['point_types']
         else:   
@@ -147,6 +161,7 @@ class PrepParams(object):
         self.distance = distance
         self.d = d
         self.neighborhood = neighborhood
+        self.zipcode = zipcode
         self.limit = limit
         self.point_types = point_types
         self.point_types_input = point_types_input

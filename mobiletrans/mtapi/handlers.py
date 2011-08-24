@@ -67,8 +67,12 @@ class LocationDataHandler(BaseHandler):
             location_objs = location_objs.filter(content_type__model__in=params.point_types)
 
         if params.neighborhood:
-            neighborhood = map(lambda x: x.serialize(), models.Neighborhood.sub_objects.filter(area__contains=params.ref_pnt))
+            neighborhood = map(lambda x: x.serialize(), models.Neighborhood.objects.filter(area__contains=params.ref_pnt))
             context.update({'neighborhood':neighborhood})
+
+        if params.zipcode:
+            zipcode = map(lambda x: x.serialize(), models.Zipcode.objects.filter(area__contains=params.ref_pnt))
+            context.update({'zipcode':zipcode})
 
         locations = []
         for location, distance in [ (l, l.distance) for l in location_objs.distance(params.ref_pnt) ]:
