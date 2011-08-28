@@ -1,7 +1,6 @@
 body {
-	background-color: #e0e0e0; 
+ background-color: #e0e0e0; 
  font-family: Tahoma, Geneva, sans-serif;
-
 }
 
 h1, h2 {
@@ -24,11 +23,11 @@ h1 a {
 }
 
 .body {
-	background-color: #e0e0e0; 
-	margin: 0px; 
-	padding: 0px;
-	position: absolute;
-top: 0; right: 0; bottom: 0; left: 0;
+ background-color: #e0e0e0; 
+ margin: 0px; 
+ padding: 0px;
+ position: absolute;
+ top: 0; right: 0; bottom: 0; left: 0;
 }
 
 .banner {
@@ -55,10 +54,10 @@ height: 80px;
 }
 
 .wrap {
-	width: 800px; 
-	display: block;
-    margin-left: auto;
-    margin-right: auto;
+ width: 800px; 
+ display: block;
+ margin-left: auto;
+ margin-right: auto;
 }
 
 .menu { float: right; margin-right: 45px; 
@@ -81,42 +80,44 @@ margin-top: 15px;  }
 }
 
 .menu ul li a {
-  color: white; 
-  text-decoration: none;
-  font-size: 12px;
-  width: 100px; 
+ color: white; 
+ text-decoration: none;
+ font-size: 12px;
+ width: 100px; 
 }
 
 .menu ul li  a.active {
-  color: red; 
+ color: red; 
 }
 
 .home {
  background-image:url('../image/home.png');
+}
 
+.block-center {
+ margin-left: auto;
+ margin-right: auto;
 }
 
 .block-txt {
-	width: 640px; 
- padding: 10px; 	
- margin-left: auto;
+width: 640px; 
+padding: 10px; 	
+margin-left: auto;
  margin-right: auto;
-
 }
 
 .block-box {
-	width: 640px; 
-	height: 500px; 
-	background-color: #e0e0e0; 
-
-   border: solid 15px #272727;
- border-radius:10px;
- -moz-border-radius:10px;
- -webkit-border-radius:10px;
- padding: 20px; 	
- text-align: center; 
- margin-left: auto;
- margin-right: auto;
+width: 640px; 
+height: 500px; 
+background-color: #e0e0e0; 
+border: solid 15px #272727;
+border-radius:10px;
+-moz-border-radius:10px;
+-webkit-border-radius:10px;
+padding: 20px; 	
+text-align: center; 
+margin-left: auto;
+margin-right: auto;
 }
 
 .block-box p {
@@ -125,18 +126,18 @@ text-align: justify;
 
 .black-box-map
 {
-	background-color: #272727; 
+ background-color: #272727; 
 }
 
 .block-small {
-	 margin-left: auto;
+ margin-left: auto;
  margin-right: auto;
  background-color: #272727;
  padding: 15px; 
  text-align:center; 
  width: 300px; 
-  border-radius:20px;
-  -moz-border-radius:20px;
+ border-radius:20px;
+ -moz-border-radius:20px;
  -webkit-border-radius:20px;
 }
 
@@ -149,19 +150,124 @@ text-align: justify;
 .block-download a{
   color: white; 
   padding: 20px; 
-  margin: 5px; 
-
+  margin: 5px;
 }
 
 .list li
 {
-	text-align: left; 
+ text-align: left; 
 }
 
 .block-qr {
-	margin: 15px; 
-	  display:inline-block;
-  text-align:center;
-  border: 1px solid #666; 
-	
+ margin: 15px;
+ display:inline-block;
+ text-align:center;
+ border: 1px solid #666; 	
+}
+
+.block-desc {
+ width: 700px; 
+ margin-left: auto;
+ margin-right: auto;
+ text-align: center; 
+}
+
+.block-buttons {
+ width: 700px; 
+}
+
+.block-buttons ul 
+{
+	padding-left: 0px; 
+}
+
+.block-buttons li
+{
+ padding: 5px; 
+ margin: 5px;
+ list-style: none; 
+ margin-left: 0px;
+ padding-left: 0px;  
+ text-align: center; 
+}
+
+.block-buttons li a
+{
+ padding: 10px; 
+ width: 650px; 
+ display: block; 
+ text-decoration: none; 
+ border-radius:10px;
+ -moz-border-radius:10px;
+ -webkit-border-radius:10px;
+}
+
+.block-buttons li.top a.top_a
+{
+ color: white; 
+ background-color: black; 
+ background: url("../image/buttongrad_l.png") repeat scroll center #333333;
+}
+
+.block-buttons li ul li a#orange
+{
+ color: white; 
+ background: url("../image/buttongrad_lt.png") center #F9461C;
+}
+
+.block-buttons li a#brown
+{
+ color: white; 
+ background: url("../image/buttongrad_lt.png") center #62361B;
+}
+
+.block-buttons li a#green
+{
+ color: white; 
+ background: url("../image/buttongrad_lt.png") center #009B3A;
+}
+
+.block-buttons li a#pink
+{
+ color: white; 
+ background: url("../image/buttongrad_lt.png") center #E27EA6;
+}
+
+.block-buttons li a#blue
+{
+ color: white; 
+ background: url("../image/buttongrad_lt.png") center #00A1DE;
+}
+
+.block-buttons li a#yellow
+{
+ color: white; 
+ background: url("../image/buttongrad_lt.png") center #F9E300;
+}
+
+.block-buttons li a#purple
+{
+ color: white; 
+ background: url("../image/buttongrad_lt.png") center #522398;
+ }
+
+.block-buttons li a#red
+{
+ color: white; 
+ background: url("../image/buttongrad_lt.png") center #C60C30;
+}
+
+.level1
+{
+	display:none; 
+}
+
+.level2
+{
+ color: red;
+ background-color: #eee;  
+ background-position: center;
+ border-radius:10px;
+ -moz-border-radius:10px;
+ -webkit-border-radius:10px;
 }

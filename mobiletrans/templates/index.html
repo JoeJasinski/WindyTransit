@@ -47,6 +47,36 @@ $(document).ready(function(){
 	  }
 	}
 
+
+    $(".block-buttons .top").click(function () {
+      $(".block-buttons .level1").slideToggle("slow");
+      return false; 
+    });
+
+    $(".block-buttons .level1").click(function () {
+	  /* var clicked_element = $(this);
+	  alert(clickec_element); */
+      $.getJSON('api/1/transitroutes/f757cf70-c325-11e0-a70d-002332d6d7e4/transitroute.json', 
+        function(data) {
+        	var route = data.transit_route
+
+			ul = $('<ul>');
+			$.each(route.stops,
+			function( intIndex, objValue )
+			{
+				 a = $("<a/>").text(objValue.name);
+				 li = $('<li>').attr("class",'level2').append(a);
+				 ul.append(li);
+				 /* alert(objValue); */
+			});
+			$(".level1").append(ul);			
+
+		});
+		
+      
+      return false; 
+    });
+
 });
 
 </script>
@@ -56,9 +86,29 @@ $(document).ready(function(){
 {% block active_index %}active{% endblock active_index %}
 
 {% block content %}
+<div class="block-center block-buttons">
+<ul>
+<li class="top"><a class="top_a" href="">Find a Train Stop</a>
+	<ul>
+	<li class="level1"><a id="red" href="">Red Line</a></li>
+	<li class="level1"><a id="blue" href="">Blue Line</a></li>
+	<li class="level1"><a id="orange" href="">Orange Line</a></li>
+	<li class="level1"><a id="purple" href="">Purple Line</a></li>
+	<li class="level1"><a id="pink" href="">Pink Line</a></li>
+	<li class="level1"><a id="green" href="">Green Line</a></li>
+	<li class="level1"><a id="yellow" href="">Yellow Line</a></li>
+	<li class="level1"><a id="brown" href="">Brown Line</a></li>
+	</ul>
+</li>
 
+</ul>
+</div>
 
-<div class="block-box black-box-map">
+<div class="block-center block-desc">
+<p>Click the map within Chicago to locate nearby landmarks and determine the neighborhood.</p>
+</div>
+
+<div class="block-center block-box black-box-map">
 
 <div id="map_canvas" style="width:100%; height:100%"></div>
 {# <iframe width="640" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&amp;hl=en&amp;q={{ url }}&amp;ie=UTF8&amp;om=1&amp;ll=41.881944,-87.627778&amp;spn=0.006776,0.013733&amp;z=12&amp;output=embed"></iframe><br /><small><a href="http://maps.google.com/maps?f=q{}&amp;hl=en&amp;q={{ url }}&amp;ie=UTF8&amp;om=1&amp;ll=48.858193,2.289619&amp;spn=0.006776,0.013733&amp;z=17&amp;source=embed" style="color:white;text-align:left">View Larger Map</a></small>  #}
