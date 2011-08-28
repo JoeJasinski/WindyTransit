@@ -48,32 +48,42 @@ $(document).ready(function(){
 	}
 
 
-    $(".block-buttons .top").click(function () {
+    $(".block-buttons .top a.top_a").click(function () {
       $(".block-buttons .level1").slideToggle("slow");
       return false; 
     });
 
-    $(".block-buttons .level1").click(function () {
+    $(".block-buttons .level1 a.level1_a").click(function () {
 	  /* var clicked_element = $(this);
 	  alert(clickec_element); */
-      $.getJSON('api/1/transitroutes/f757cf70-c325-11e0-a70d-002332d6d7e4/transitroute.json', 
-        function(data) {
-        	var route = data.transit_route
+	 
+	 if ( $('.block-buttons .level1 ul').children('li.level2').size() == 0 ) {
+     // do something
 
-			ul = $('<ul>');
-			$.each(route.stops,
-			function( intIndex, objValue )
-			{
-				 a = $("<a/>").text(objValue.name);
-				 li = $('<li>').attr("class",'level2').append(a);
-				 ul.append(li);
-				 /* alert(objValue); */
+
+	      $.getJSON('api/1/transitroutes/f757cf70-c325-11e0-a70d-002332d6d7e4/transitroute.json', 
+	        function(data) {
+	        	var route = data.transit_route
+	
+				ul = $('<ul>');
+				$.each(route.stops,
+				function( intIndex, objValue )
+				{
+					 a = $("<a/>").text(objValue.name);
+					 li = $('<li>').attr("class",'level2').append(a);
+					 ul.append(li);
+					 /* alert(objValue); */
+				});
+				$(".level1").append(ul);			
+	
 			});
-			$(".level1").append(ul);			
-
-		});
-		
-      
+			
+   		}
+   		else
+   		{
+   			alert('tst');
+   		}
+   	   
       return false; 
     });
 
@@ -90,14 +100,14 @@ $(document).ready(function(){
 <ul>
 <li class="top"><a class="top_a" href="">Find a Train Stop</a>
 	<ul>
-	<li class="level1"><a id="red" href="">Red Line</a></li>
-	<li class="level1"><a id="blue" href="">Blue Line</a></li>
-	<li class="level1"><a id="orange" href="">Orange Line</a></li>
-	<li class="level1"><a id="purple" href="">Purple Line</a></li>
-	<li class="level1"><a id="pink" href="">Pink Line</a></li>
-	<li class="level1"><a id="green" href="">Green Line</a></li>
-	<li class="level1"><a id="yellow" href="">Yellow Line</a></li>
-	<li class="level1"><a id="brown" href="">Brown Line</a></li>
+	<li class="level1"><a class="level1_a" id="red" href="">Red Line</a></li>
+	<li class="level1"><a class="level1_a" id="blue" href="">Blue Line</a></li>
+	<li class="level1"><a class="level1_a" id="orange" href="">Orange Line</a></li>
+	<li class="level1"><a class="level1_a" id="purple" href="">Purple Line</a></li>
+	<li class="level1"><a class="level1_a" id="pink" href="">Pink Line</a></li>
+	<li class="level1"><a class="level1_a" id="green" href="">Green Line</a></li>
+	<li class="level1"><a class="level1_a" id="yellow" href="">Yellow Line</a></li>
+	<li class="level1"><a class="level1_a" id="brown" href="">Brown Line</a></li>
 	</ul>
 </li>
 
