@@ -11,10 +11,18 @@ class TransitRouteHandler(BaseHandler):
     methods_allowed = ('GET',)
 
 
-    def read(self, request, uuid):
-        transit_route_dict = {}       
+    def read(self, request, uuid=None, route_id=None):
+        transit_route_dict = {}    
+        
+        if uuid:
+            kwargs = {'uuid':uuid}
+        elif route_id:
+            kwargs = {'route_id':route_id}
+        else:
+            kwargs = {}
+           
         try:
-            transit_route = models.TransitRoute.objects.get(uuid=uuid)
+            transit_route = models.TransitRoute.objects.get(**kwargs)
         except:
             transit_route = []
         else:

@@ -47,6 +47,7 @@ $(document).ready(function(){
 	  }
 	}
 
+	// Display aJax loading box
 	$('#loadingDiv')
 	    .hide()  // hide it initially
 	    .ajaxStart(function() {
@@ -57,19 +58,21 @@ $(document).ready(function(){
 	    })
 	;
 
-
+	
+	// Show Transit Routes 
     $(".block-buttons li.top a.top_a").click(function () {
       $(".block-buttons .level1").slideToggle("slow");
       return false; 
     });
 
+	// Show transit stops
     $(".block-buttons li.level1 a.level1_a").click(function () {
 	  var clicked_element = $(this);
 	  var clicked_parent = clicked_element.parent();
 	  /* alert(clickec_element); */
 	 
 	 if ( clicked_parent.children('ul').children('li.level2').size() == 0 ) {
-	      $.getJSON('api/1/transitroutes/f757cf70-c325-11e0-a70d-002332d6d7e4/transitroute.json', 
+	      $.getJSON(clicked_element.attr('href'), 
 	        function(data) {
 	        	var route = data.transit_route
 	
@@ -77,7 +80,8 @@ $(document).ready(function(){
 				$.each(route.stops,
 				function( intIndex, objValue )
 				{
-					 a = $("<a/>").attr("href","").css("color",clicked_element.css('background-color')).text(objValue.name);
+					 kml = '/kml/?lat=' + objValue.point.lattitude + "&long=" + objValue.point.longitude
+					 a = $("<a/>").attr("href",kml).attr('class','level2_a').css("color",clicked_element.css('background-color')).text(objValue.name);
 					 li = $('<li>').attr("class",'level2').append(a);
 					 ul.append(li);
 				});
@@ -89,6 +93,12 @@ $(document).ready(function(){
    			clicked_parent.children('ul').children('li.level2').toggle('slow');
    		}
    	   
+      return false; 
+    });
+
+    $(".block-buttons li.level2 a.level2_a").live('click', function () {
+      var ctaLayer = new google.maps.KmlLayer(this);
+	  ctaLayer.setMap(map);
       return false; 
     });
 
@@ -107,14 +117,14 @@ $(document).ready(function(){
 <ul>
 <li class="top"><a class="top_a" href="">Find a Train Stop</a>
 	<ul>
-	<li class="level1"><a class="level1_a" id="red" href="">Red Line</a></li>
-	<li class="level1"><a class="level1_a" id="blue" href="">Blue Line</a></li>
-	<li class="level1"><a class="level1_a" id="orange" href="">Orange Line</a></li>
-	<li class="level1"><a class="level1_a" id="purple" href="">Purple Line</a></li>
-	<li class="level1"><a class="level1_a" id="pink" href="">Pink Line</a></li>
-	<li class="level1"><a class="level1_a" id="green" href="">Green Line</a></li>
-	<li class="level1"><a class="level1_a" id="yellow" href="">Yellow Line</a></li>
-	<li class="level1"><a class="level1_a" id="brown" href="">Brown Line</a></li>
+	<li class="level1"><a class="level1_a" id="red" href="/api/1/transitroutes/Red/transitroute.json">Red Line</a></li>
+	<li class="level1"><a class="level1_a" id="blue" href="/api/1/transitroutes/Blue/transitroute.json">Blue Line</a></li>
+	<li class="level1"><a class="level1_a" id="orange" href="/api/1/transitroutes/Org/transitroute.json">Orange Line</a></li>
+	<li class="level1"><a class="level1_a" id="purple" href="/api/1/transitroutes/P/transitroute.json">Purple Line</a></li>
+	<li class="level1"><a class="level1_a" id="pink" href="/api/1/transitroutes/Pink/transitroute.json">Pink Line</a></li>
+	<li class="level1"><a class="level1_a" id="green" href="/api/1/transitroutes/G/transitroute.json">Green Line</a></li>
+	<li class="level1"><a class="level1_a" id="yellow" href="/api/1/transitroutes/Y/transitroute.json">Yellow Line</a></li>
+	<li class="level1"><a class="level1_a" id="brown" href="/api/1/transitroutes/Brn/transitroute.json">Brown Line</a></li>
 	</ul>
 </li>
 
