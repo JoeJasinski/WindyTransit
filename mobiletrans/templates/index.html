@@ -99,6 +99,7 @@ $(document).ready(function(){
     $(".block-buttons li.level2 a.level2_a").live('click', function () {
       var ctaLayer = new google.maps.KmlLayer(this);
 	  ctaLayer.setMap(map);
+	  $('li.top').children('ul').toggle();
       return false; 
     });
 
