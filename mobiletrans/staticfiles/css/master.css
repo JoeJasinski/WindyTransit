@@ -271,3 +271,28 @@ text-align: justify;
  -moz-border-radius:10px;
  -webkit-border-radius:10px;
 }
+
+
+#loadingDiv
+{
+/*make visible*/
+display:block;
+
+/*position it 200px down the screen*/
+position:absolute;
+top:50%;
+left:50%;
+width:100px;
+/*in supporting browsers, make it
+  a little transparent*/
+background:#fff;
+filter: alpha(opacity=75); /* internet explorer */
+-khtml-opacity: 0.75;      /* khtml, old safari */
+-moz-opacity: 0.75;       /* mozilla, netscape */
+opacity: 0.75;           /* fx, safari, opera */
+border-top:1px solid #ddd;
+border:3px solid black;
+border-radius:10px;
+-moz-border-radius:10px;
+-webkit-border-radius:10p
+}

@@ -47,20 +47,28 @@ $(document).ready(function(){
 	  }
 	}
 
+	$('#loadingDiv')
+	    .hide()  // hide it initially
+	    .ajaxStart(function() {
+	        $(this).show();
+	    })
+	    .ajaxStop(function() {
+	        $(this).hide();
+	    })
+	;
 
-    $(".block-buttons .top a.top_a").click(function () {
+
+    $(".block-buttons li.top a.top_a").click(function () {
       $(".block-buttons .level1").slideToggle("slow");
       return false; 
     });
 
-    $(".block-buttons .level1 a.level1_a").click(function () {
-	  /* var clicked_element = $(this);
-	  alert(clickec_element); */
+    $(".block-buttons li.level1 a.level1_a").click(function () {
+	  var clicked_element = $(this);
+	  var clicked_parent = clicked_element.parent();
+	  /* alert(clickec_element); */
 	 
-	 if ( $('.block-buttons .level1 ul').children('li.level2').size() == 0 ) {
-     // do something
-
-
+	 if ( clicked_parent.children('ul').children('li.level2').size() == 0 ) {
 	      $.getJSON('api/1/transitroutes/f757cf70-c325-11e0-a70d-002332d6d7e4/transitroute.json', 
 	        function(data) {
 	        	var route = data.transit_route
@@ -69,19 +77,16 @@ $(document).ready(function(){
 				$.each(route.stops,
 				function( intIndex, objValue )
 				{
-					 a = $("<a/>").text(objValue.name);
+					 a = $("<a/>").attr("href","").css("color",clicked_element.css('background-color')).text(objValue.name);
 					 li = $('<li>').attr("class",'level2').append(a);
 					 ul.append(li);
-					 /* alert(objValue); */
 				});
-				$(".level1").append(ul);			
-	
+				clicked_parent.append(ul)
 			});
-			
    		}
    		else
    		{
-   			$('.block-buttons .level1 ul').children('li.level2').toggle('slow');
+   			clicked_parent.children('ul').children('li.level2').toggle('slow');
    		}
    	   
       return false; 
@@ -96,6 +101,8 @@ $(document).ready(function(){
 {% block active_index %}active{% endblock active_index %}
 
 {% block content %}
+<div id='loadingDiv'>Loading..<img src="{{ STATIC_URL }}/image/ajax-loader.gif"></div>
+
 <div class="block-center block-buttons">
 <ul>
 <li class="top"><a class="top_a" href="">Find a Train Stop</a>
