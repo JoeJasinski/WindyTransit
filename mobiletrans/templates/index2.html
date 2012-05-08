@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+
+
+{% block extra_head %}{{ block.super }}
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+	/*
+	var markersArray = [];
+
+	var myLatlng = new google.maps.LatLng(41.875696,-87.624207);
+	var myOptions = {
+	  zoom: 11,
+	  center: myLatlng,
+	  mapTypeId: google.maps.MapTypeId.ROADMAP
+	}
+
+	var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	    
+	//var ctaLayer = new google.maps.KmlLayer('{{ url }}');
+	//ctaLayer.setMap(map);
+
+    google.maps.event.addListener(map, 'click', function(event) {
+      deleteOverlays();
+      addMarker(event.latLng);
+	  var ctaLayer = new google.maps.KmlLayer('{{ url }}&lat=' + event.latLng.lat() + '&long=' + event.latLng.lng() );
+	  ctaLayer.setMap(map);
+    });
+    
+    
+    function addMarker(location) {
+    marker = new google.maps.Marker({
+      position: location,
+      map: map
+    });
+    markersArray.push(marker);
+    }
+    
+    // Deletes all markers in the array by removing references to them
+	function deleteOverlays() {
+	  if (markersArray) {
+	    for (i in markersArray) {
+	      markersArray[i].setMap(null);
+	    }
+	    markersArray.length = 0;
+	  }
+	}
+	*/
+
+    map = new OpenLayers.Map('map_canvas');
+    var gmap = new OpenLayers.Layer.Google(
+        "Google Streets", // the default
+        {numZoomLevels: 20}
+    );
+   map.addLayers([gmap]);
+    map.setCenter(new OpenLayers.LonLat(-87.624207,41.875696).transform(
+        new OpenLayers.Projection("EPSG:4326"),
+        map.getProjectionObject()
+    ), 11);
+
+
+
+    OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
+        defaultHandlerOptions: {
+            'single': true,
+            'double': false,
+            'pixelTolerance': 0,
+            'stopSingle': false,
+            'stopDouble': false
+        },
+
+        initialize: function(options) {
+            this.handlerOptions = OpenLayers.Util.extend(
+                {}, this.defaultHandlerOptions
+            );
+            OpenLayers.Control.prototype.initialize.apply(
+                this, arguments
+            ); 
+            this.handler = new OpenLayers.Handler.Click(
+                this, {
+                    'click': this.trigger
+                }, this.handlerOptions
+            );
+        }, 
+
+        trigger: function(e) {
+            var lonlat = map.getLonLatFromViewPortPx(e.xy);
+            alert("You clicked near " + lonlat.lat + " N, " +
+                                      + lonlat.lon + " E");
+        }
+
+    });
+
+
+    var click = new OpenLayers.Control.Click();
+    map.addControl(click);
+    click.activate();
+
+	/*
+	map.events.register('click', map, handleMapClick);
+	
+	function handleMapClick(e)
+	{
+	   var lonlat = map.getLonLatFromViewPortPx(e.xy);
+	   // use lonlat
+	
+	   // If you are using OpenStreetMap (etc) tiles and want to convert back 
+	   // to gps coords add the following line :-
+	   lonlat.transform( map.projection,map.displayProjection);
+	
+	   // Longitude = lonlat.lon
+	   // Latitude  = lonlat.lat
+	   alert(lonlat);
+	} 
+
+	*/
+
+	// Display aJax loading box
+	$('#loadingDiv')
+	    .hide()  // hide it initially
+	    .ajaxStart(function() {
+	        $(this).show();
+	    })
+	    .ajaxStop(function() {
+	        $(this).hide();
+	    })
+	;
+
+	
+	// Show Transit Routes 
+    $(".block-buttons li.top a.top_a").click(function () {
+      $(".block-buttons .level1").slideToggle("slow");
+      return false; 
+    });
+
+	// Show transit stops
+    $(".block-buttons li.level1 a.level1_a").click(function () {
+	  var clicked_element = $(this);
+	  var clicked_parent = clicked_element.parent();
+	  /* alert(clickec_element); */
+	 
+	 if ( clicked_parent.children('ul').children('li.level2').size() == 0 ) {
+	      $.getJSON(clicked_element.attr('href'), 
+	        function(data) {
+	        	var route = data.transit_route
+	
+				ul = $('<ul>');
+				$.each(route.stops,
+				function( intIndex, objValue )
+				{
+					 kml = '/kml/?lat=' + objValue.point.lattitude + "&long=" + objValue.point.longitude
+					 a = $("<a/>").attr("href",kml).attr('class','level2_a').css("color",clicked_element.css('background-color')).text(objValue.name);
+					 li = $('<li>').attr("class",'level2').append(a);
+					 ul.append(li);
+				});
+				clicked_parent.append(ul)
+			});
+   		}
+   		else
+   		{
+   			clicked_parent.children('ul').children('li.level2').toggle('slow');
+   		}
+   	   
+      return false; 
+    });
+
+    $(".block-buttons li.level2 a.level2_a").live('click', function () {
+      var ctaLayer = new google.maps.KmlLayer(this);
+	  ctaLayer.setMap(map);
+	  $('li.top').children('ul').children('li').hide();
+      return false; 
+    });
+
+});
+
+</script>
+
+{% endblock extra_head %}
+
+{% block active_index %}active{% endblock active_index %}
+
+{% block content %}
+<div id='loadingDiv'>Loading..<img src="{{ STATIC_URL }}/image/ajax-loader.gif"></div>
+
+<div class="block-center block-buttons">
+<ul>
+<li class="top"><a class="top_a" href="">Find a Train Stop</a>
+	<ul>
+	<li class="level1"><a class="level1_a" id="red" href="/api/1/transitroutes/Red/transitroute.json">Red Line</a></li>
+	<li class="level1"><a class="level1_a" id="blue" href="/api/1/transitroutes/Blue/transitroute.json">Blue Line</a></li>
+	<li class="level1"><a class="level1_a" id="orange" href="/api/1/transitroutes/Org/transitroute.json">Orange Line</a></li>
+	<li class="level1"><a class="level1_a" id="purple" href="/api/1/transitroutes/P/transitroute.json">Purple Line</a></li>
+	<li class="level1"><a class="level1_a" id="pink" href="/api/1/transitroutes/Pink/transitroute.json">Pink Line</a></li>
+	<li class="level1"><a class="level1_a" id="green" href="/api/1/transitroutes/G/transitroute.json">Green Line</a></li>
+	<li class="level1"><a class="level1_a" id="yellow" href="/api/1/transitroutes/Y/transitroute.json">Yellow Line</a></li>
+	<li class="level1"><a class="level1_a" id="brown" href="/api/1/transitroutes/Brn/transitroute.json">Brown Line</a></li>
+	</ul>
+</li>
+
+</ul>
+</div>
+
+<div class="block-center block-desc">
+<p>Click the map within Chicago to locate nearby landmarks and determine the neighborhood.</p>
+</div>
+
+<div class="block-center block-box black-box-map">
+
+<div id="map_canvas" style="width:100%; height:100%"></div>
+{# <iframe width="640" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&amp;hl=en&amp;q={{ url }}&amp;ie=UTF8&amp;om=1&amp;ll=41.881944,-87.627778&amp;spn=0.006776,0.013733&amp;z=12&amp;output=embed"></iframe><br /><small><a href="http://maps.google.com/maps?f=q{}&amp;hl=en&amp;q={{ url }}&amp;ie=UTF8&amp;om=1&amp;ll=48.858193,2.289619&amp;spn=0.006776,0.013733&amp;z=17&amp;source=embed" style="color:white;text-align:left">View Larger Map</a></small>  #}
+
+</div>
+
+
+{% endblock content %}
+	

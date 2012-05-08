@@ -1,0 +1,111 @@
+from mtlocation import models
+from django.contrib.gis.measure import D 
+
+lat = "41.881944"
+long = "-87.627778"
+
+from django.contrib.gis.geos import fromstr
+ref_pnt = fromstr('POINT(%s %s)' % (str(long), str(lat)))  
+
+d = {'m':'1000'}
+location_objs = TransitStop.orig_objects.filter(location_type=models.TRANSIT_STOP_TYPE_STATION, point__distance_lte=(ref_pnt, D(**d) )).distance(ref_pnt).order_by('distance')
+
+
+
+point = []
+for location in locations:
+    long = location.point.x
+    lat = location.point.y
+    point.append(("%s" % long, "%s" % lat))  
+
+
+345 18
+381 41
+290 41
+291 42
+
+
+
+
+(((-87.534424999999999, 41.651837), (-87.534732000000005, 41.651837999999998), (-87.535028999999994, 41.651837999999998), (-87.535033999999996, 41.653655000000001), (-87.533630000000002, 41.653641), (-87.533634000000006, 41.654193999999997), (-87.532712000000004, 41.654200000000003), (-87.532712000000004, 41.653761000000003), (-87.531685999999993, 41.653754999999997), (-87.531696999999994, 41.654595), (-87.531937999999997, 41.654915000000003), (-87.532131000000007, 41.655065), (-87.531758999999994, 41.655329000000002), (-87.530139000000005, 41.656477000000002), (-87.529953000000006, 41.656609000000003), (-87.529432, 41.656978000000002), (-87.529011999999994, 41.657108999999998), (-87.528694000000002, 41.656602999999997), (-87.525687000000005, 41.651826999999997), (-87.525453999999996, 41.650970999999998), (-87.525458, 41.650644), (-87.525458999999998, 41.650561000000003), (-87.525474000000003, 41.649991999999997), (-87.525465999999994, 41.649650000000001), (-87.525475999999998, 41.649351000000003), (-87.525474000000003, 41.649239999999999), (-87.525479000000004, 41.648809), (-87.530179000000004, 41.648806999999998), (-87.530167000000006, 41.651133000000002), (-87.530137999999994, 41.651822000000003), (-87.530478000000002, 41.651823999999998), (-87.530861000000002, 41.651826999999997), (-87.531349000000006, 41.651826999999997), (-87.531786999999994, 41.651826), (-87.532201999999998, 41.651826), (-87.532578999999998, 41.651828000000002), (-87.532708999999997, 41.651829999999997), (-87.533119999999997, 41.651833000000003), (-87.533467999999999, 41.651836000000003), (-87.533814000000007, 41.651837), (-87.534240999999994, 41.651837), (-87.534424999999999, 41.651837)),)
+(((-87.738149000000007, 41.979061000000002), (-87.73809, 41.979061999999999), (-87.736086999999998, 41.979095000000001), (-87.735724000000005, 41.979100000000003), (-87.735609999999994, 41.976686999999998), (-87.735618000000002, 41.976689), (-87.735862999999995, 41.976781000000003), (-87.736057000000002, 41.976840000000003), (-87.736271000000002, 41.976885000000003), (-87.736778999999999, 41.976906999999997), (-87.737029000000007, 41.976911000000001), (-87.737207999999995, 41.976953999999999), (-87.737361000000007, 41.976995000000002), (-87.737588000000002, 41.977072), (-87.737795000000006, 41.977145999999998), (-87.738060000000004, 41.977232999999998), (-87.738071000000005, 41.977237000000002), (-87.738149000000007, 41.979061000000002)),)
+>>> 
+
+
+
+
+
+from django.contrib.gis.geos import fromstr
+
+location_data = [('NicNonnalds', '-87.627675', '41.881925'), ('Boundaries Books', '-87.6281729688', '41.881849562'), ('Field Marshal Department Store', '-87.62839', '41.88206'), ('RadioShock', '-87.6269801114', '41.8814058757'), ('CAN Insurance', '-87.6266873845', '41.8818595588'), ('SuperWay Sandwiches', '-87.6266580795', '41.8813617549'), ('911 Convenience Store', '-87.6285777569', '41.8810785557'), ('Nobel Barnes Books', '-87.627834', '41.880856'), ('Decade Park', '-87.62929387', '41.88207029'), ('Burrito Bell', '-87.6282415079', '41.8830285557'), ('Seals Tower', '-87.627696', '41.880745'), ('Lake Hotel', '-87.627696', '41.880745'), ('Weekly Plaza', '-87.627696', '41.880745'), ('Forest Museum', '-87.62749695', '41.88316957'), ]
+
+for location in location_data: 
+   point = fromstr("POINT(%s %s)" % (location[1], location[2]))
+   location_obj = Location(name=location[0], point=point)
+   location_obj.save()
+
+# Create a reference point that will be used as the center of our search.  We will look for other points around this reference point.
+from django.contrib.gis.geos import fromstr
+lat = "41.881944"
+long = "-87.627778"
+
+# NOTE: A point takes the format "POINT(longitude latitude)".  Please be careful as it's easy to mix up the order of longitude and latitude. 
+ref_pnt = fromstr("POINT(%s %s)" % (long, lat))
+
+
+ref_pnt.distance(ref_pnt)
+
+# Define a search radius of 100 meters from the reference point.  We will find neighboring points that fall within this radius. 
+distance_from_point = {'m':'100'}
+
+# Search for locations closer than 100 meters from reference point
+close_locations = Location.objects.filter(point__distance_lte=(ref_pnt, D(**distance_from_point) ))
+
+# Search for locations closer than 100 meters from reference point, sorted by distance
+close_locations_sorted = Location.objects.filter(point__distance_lte=(ref_pnt, D(**distance_from_point) )).distance(ref_pnt).order_by('distance')
+
+# Search for locations further than 100 meters from reference point, sorted by distance
+far_locations = Location.objects.filter(point__distance_gte=(ref_pnt, D(**distance_from_point) )).distance(ref_pnt).order_by('distance')
+
+# print the located locations and the distances
+[ (l, l.distance) for l in close_locations_sorted.distance(ref_pnt) ]
+
+for l in close_locations_sorted.distance(ref_pnt):
+   print "%s - %s" % (l.name, l.distance)
+
+
+
+region = Region.objects.all()[0]
+
+# Determine the geometry type of the region.  In this case, it's a Polygon.
+Region.objects.all()[0].area.geom_type
+
+# Output this coordinates for this region. 
+Region.objects.all()[0].area.coords
+
+# Determine if the reference point is inside the region.
+region.area.contains(ref_pnt)
+
+# Find the polygon boundary.  
+region.area.boundary
+
+# Find the approximate center of the region.
+region.area.centroid
+
+# Find the area of the region.
+region.area.area
+
+# Find the number of points in the region.
+region.area.num_points
+
+# Find the convex hull of the region.  Useful to simplify complex calculations. 
+region.area.convex_hull
+
+# Output this region in KML format.
+region.area.kml
+
+# Print regions in order of least number of points in the polygon to most
+for r in Region.objects.all().num_points().order_by('num_points'):
+   print r, r.num_points
+
+

@@ -1,0 +1,41 @@
+------ Security
+use random.SystemRandom() not random.Random()
+django-secure
+Use Rate limit on nginx
+web application hackers handbook
+playdoe - mozilla
+bcrypt
+script
+
+
+---- Deployments
+zeromq
+redis
+gunicorn
+
+
+----- parsing
+html/etree
+ - html.iterlinks - find all links on page
+ - html/etree.sourceline
+ - html/etree.find/findall - find matching tags within chunk of elements
+ - html/etree.decendents/children/sibling/ancestors
+ - html.forms - find all forms on page
+ - html/etree 
+      - element.text
+      - element.text_content()
+      - element.itertext()
+- lxml.xpath 
+  - yt_etree - etree.fromstr(html)
+    yt_etree.xpath('channel/item/category/text()')
+    yt_etree.xpath('channel/item/*')
+- creating xml 
+- Tweepy - 
+- feedparser / htmlparser / re 
+- html5lib / mechanize / scrapy.org
+
+
+----- maps
+cloudemade.com
+gmaps styled map
+http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/index.html
