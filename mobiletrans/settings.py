@@ -93,7 +93,15 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
 )
+
+
+COMPRESS_ENABLED=True
+COMPRESS_OUTPUT_DIR=''
+COMPRESS_CSS_FILTERS=[
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter',] 
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '9v5=sh2zq5^5-g1x+9q=prax%7jc+xw5%5_+^be!n=z%xk2v=_'
@@ -142,6 +150,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.gis',
     'django_extensions',
+    "compressor",
+    
     'mtcore',
     'mtlocation',
     'mtimport',
