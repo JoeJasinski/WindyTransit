@@ -134,7 +134,7 @@ class TransitStop(Location):
         help_text=("Optional. The stop_desc field contains a description of a stop. "
                    "Please provide useful, quality information. Do not simply "
                    "duplicate the name of the stop."))
-    url = models.URLField(verify_exists=True, blank=True, null=True,
+    url = models.URLField(blank=True, null=True,
         help_text=("Optional. The stop_url field contains the URL of a web page about "
                    "a particular stop. This should be different from the agency_url "
                    "and the route_url fields. "))
@@ -226,7 +226,7 @@ class TransitRoute(models.Model):
                    "text drawn against a background of route_color. The color must be provided as a "
                    "six-character hexadecimal number, for example, FFD700. If no color is specified, the "
                    "default text color is black (000000)."))
-    url = models.URLField(verify_exists=False, blank=True, null=True,
+    url = models.URLField(blank=True, null=True,
         help_text=("Optional. The route_url field contains the URL of a web page about that particular "
                    "route. This should be different from the agency_url."))
 
@@ -257,7 +257,7 @@ class Library(Location):
     zip = models.CharField(max_length=10, blank=True, null=True)
     hours = models.TextField(blank=True, null=True)
     phone = models.CharField(max_length=64, blank=True, null=True)
-    website = models.URLField(verify_exists=False, blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
 
     objects = LocationManager()
         

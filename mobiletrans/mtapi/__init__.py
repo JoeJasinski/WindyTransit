@@ -1,1 +1,1 @@
-from mtapi import emitters
+from mobiletrans.mtapi import emitters

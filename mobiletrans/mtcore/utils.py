@@ -1,7 +1,7 @@
 import decimal, urllib
 from django.contrib.gis.geos import fromstr
 from django.db.models.loading import get_models, get_app
-from mtlocation.models import Location
+from mobiletrans.mtlocation.models import Location
 
 
 def encode_args(url_parts):

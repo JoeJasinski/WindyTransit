@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.contrib.sites.models import Site
 
-from mtcore import utils
+from mobiletrans.mtcore import utils
 
 def index(request, template_name=""):
     

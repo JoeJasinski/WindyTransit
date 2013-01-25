@@ -8,8 +8,8 @@
         <div class=menu>
           <ul>
         	<li class="home"><a href="/" class="{% block active_index %}{% endblock %}">home</a></li>
-			<li><a href="{% url about %}" class="{% block active_about %}{% endblock %}">about</a></li>
-        	<li><a href="{% url download %}" class="{% block active_download %}{% endblock %}">download</a></li>
+			<li><a href="{% url "about" %}" class="{% block active_about %}{% endblock %}">about</a></li>
+        	<li><a href="{% url "download" %}" class="{% block active_download %}{% endblock %}">download</a></li>
            </ul>
          </div>
          <h1><a href="/">{{ site.name }}</a></h1>

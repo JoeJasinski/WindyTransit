@@ -1,8 +1,8 @@
 import os
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from mtimport import importer, models
-from mtlocation import models as loc_models
+from mobiletrans.mtimport import importer, models
+from mobiletrans.mtlocation import models as loc_models
 
 class Command(BaseCommand):
     args = '<zipcodes.kml>'

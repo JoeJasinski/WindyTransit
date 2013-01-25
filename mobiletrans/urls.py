@@ -5,11 +5,11 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url('^$', 'views.index', { 'template_name':'index.html'}, name="index"),
-    url('^download/$', 'views.download', { 'template_name':'download.html'}, name="download"),
-    url('^about/$', 'views.about', { 'template_name':'about.html'}, name="about"),
-    url('^kml/$', 'mtlocation.views.renderkml', { }, name="mtlocation_renderkml"),
-    url('^kml/longlat/(?P<long>[-\d.]+),(?P<lat>[-\d.]+)/$', 'mtlocation.views.renderkml', { }, name="mtlocation_renderkml_longlat"),
-    url('^kml/latlong/(?P<lat>[-\d.]+),(?P<long>[-\d.]+)/$', 'mtlocation.views.renderkml', { }, name="mtlocation_renderkml_latlong"),
-    url('^api/1/', include('mtapi.urls')),    
+    url('^$', 'mobiletrans.views.index', { 'template_name':'index.html'}, name="index"),
+    url('^download/$', 'mobiletrans.views.download', { 'template_name':'download.html'}, name="download"),
+    url('^about/$', 'mobiletrans.views.about', { 'template_name':'about.html'}, name="about"),
+    url('^kml/$', 'mobiletrans.mtlocation.views.renderkml', { }, name="mtlocation_renderkml"),
+    url('^kml/longlat/(?P<long>[-\d.]+),(?P<lat>[-\d.]+)/$', 'mobiletrans.mtlocation.views.renderkml', { }, name="mtlocation_renderkml_longlat"),
+    url('^kml/latlong/(?P<lat>[-\d.]+),(?P<long>[-\d.]+)/$', 'mobiletrans.mtlocation.views.renderkml', { }, name="mtlocation_renderkml_latlong"),
+    url('^api/1/', include('mobiletrans.mtapi.urls')),    
 )

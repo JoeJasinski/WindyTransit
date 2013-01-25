@@ -7,7 +7,7 @@ from django.contrib.gis.measure import D
 from django.contrib.sites.models import Site
 from django.conf import settings
 
-from mtcore import utils
+from mobiletrans.mtcore import utils
 from . import models
 
 def renderkml(request, lat=None, long=None):

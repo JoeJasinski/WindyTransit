@@ -4,8 +4,8 @@ from piston.handler import BaseHandler
 from piston.utils import rc, throttle
 from django.contrib.gis.geos import fromstr
 
-from mtcore import utils
-from mtlocation import models
+from mobiletrans.mtcore import utils
+from mobiletrans.mtlocation import models
 
 class TransitRouteHandler(BaseHandler):
     methods_allowed = ('GET',)

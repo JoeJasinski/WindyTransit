@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 from piston.resource import Resource
 
-from mtapi.handlers import TransitRouteHandler, LocationDataHandler, TransitRoutesHandler, TransitStopDataHandler
+from mobiletrans.mtapi.handlers import TransitRouteHandler, LocationDataHandler, TransitRoutesHandler, TransitStopDataHandler
 
 ad = {  }
 

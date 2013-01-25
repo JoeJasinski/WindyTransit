@@ -123,11 +123,11 @@ MIDDLEWARE_CLASSES = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
-    "django.core.context_processors.auth",
+    "django.contrib.auth.context_processors.auth",
     'django.core.context_processors.request',
     "django.core.context_processors.media",
     'django.core.context_processors.static',
-    'mtcore.context_processors.site',
+    'mobiletrans.mtcore.context_processors.site',
 )
 
 
@@ -152,9 +152,9 @@ INSTALLED_APPS = (
     'django_extensions',
     "compressor",
     
-    'mtcore',
-    'mtlocation',
-    'mtimport',
+    'mobiletrans.mtcore',
+    'mobiletrans.mtlocation',
+    'mobiletrans.mtimport',
 
 )
 
