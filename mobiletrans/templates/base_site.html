@@ -9,6 +9,9 @@ It only contains a block for the base layout and header/footer blocks
  <meta name="author" content="joe jasinski, brenton bade"> 
  <meta name="keywords" content="mobile, chicago, location, cta"> 
  <title>Mobile Trans {% block title %} - Home{% endblock %}</title>
+  <meta name="HandheldFriendly" content="true">
+  <meta name="viewport" content="width=device-width; initial-scale=0.666667; maximum-scale=0.666667; user-scalable=0">
+  <meta name="viewport" content="width=device-width">
  {% block extra_head %}
  {% compress css %}
  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/master.css" charset="utf-8">
