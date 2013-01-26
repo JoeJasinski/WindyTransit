@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models as dj_models
 
 from autoslug.settings import slugify
-from mtimport import models
+from mobiletrans.mtimport import models
 
 class ImportException(Exception):
     pass
