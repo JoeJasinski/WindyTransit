@@ -9,7 +9,7 @@ h1, h2 {
 /* font-family: Tahoma, Geneva, sans-serif; */
 font-family: 'Open Sans', sans-serif;
 padding-top: 20px; 	
-padding-left: 160px; 
+padding-left: 135px; 
 width: 300px; 
 }
 
@@ -42,7 +42,7 @@ height: 80px;
 .banner .wrap {
  background-image:url('../image/logo.png');
  background-repeat: no-repeat;
- background-position: 40px;	
+ background-position: 1px;	
  height: 80px; 
 }
 
@@ -59,7 +59,7 @@ height: 80px;
  margin-right: auto;
 }
 
-.menu { float: right; margin-right: 45px; 
+.menu { float: right; margin-right: 12px; 
 margin-top: 15px;  }
 
 .menu ul li{
