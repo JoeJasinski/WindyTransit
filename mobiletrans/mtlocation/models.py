@@ -1,10 +1,11 @@
+import uuid
 from django.contrib.gis.db import models
 from django.contrib.contenttypes.models import ContentType
 from django_extensions.db import fields as ext_fields
 from django.contrib.sites.models import Site
-import uuid
 from django.conf import settings
 from autoslug import AutoSlugField
+from mobiletrans.mtlocation.fields import SeparatedValuesField 
 
 TRANSIT_STOP_TYPE_STOP=0
 TRANSIT_STOP_TYPE_STATION=1
@@ -369,3 +370,22 @@ class Zipcode(Region):
     def serialize(self):
         serialize_parent = super(self.__class__, self).serialize().copy()
         return serialize_parent 
+
+
+class GPlace(Location):
+
+    rating = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
+    vicinity = models.TextField(blank=True, null=True)
+    types = SeparatedValuesField(blank=True, null=True)
+    reference = models.CharField(max_length=1024, blank=True, null=True)
+    international_phone_number = models.CharField(max_length=30, blank=True, null=True)
+    local_phone_number = models.CharField(max_length=30, blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    url = models.URLField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Google Place"
+        verbose_name_plural = "Google Places" 
+
+    objects = models.GeoManager()
