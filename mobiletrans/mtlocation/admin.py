@@ -62,6 +62,13 @@ class ZipcodeAdmin(admin.GeoModelAdmin):
     search_fields = RegionAdmin.search_fields
     list_display = RegionAdmin.list_display
 
+class GPlaceAdmin(admin.GeoModelAdmin):
+
+    search_fields = LocationAdmin.search_fields
+    list_display = LocationAdmin.list_display 
+    readonly_fields = LocationAdmin.readonly_fields
+
+
 
 admin.site.register(models.Location, LocationAdmin)
 admin.site.register(models.Landmark, LandmarkAdmin)
@@ -69,6 +76,7 @@ admin.site.register(models.TransitRoute, TransitRouteAdmin)
 admin.site.register(models.TransitStop, TransitStopAdmin)
 admin.site.register(models.Library, LibraryAdmin)
 admin.site.register(models.Hospital, HospitalAdmin)
+admin.site.register(models.GPlace, GPlaceAdmin)
 
 admin.site.register(models.Region, RegionAdmin)
 admin.site.register(models.Neighborhood, NeighborhoodAdmin)
