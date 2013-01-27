@@ -180,11 +180,13 @@ text-align: justify;
 }
 
 .block-buttons {
+  margin-top: 0px;
 }
 
 .block-buttons ul 
 {
-	padding-left: 0px; 
+  margin-top: 0px;
+  padding-left: 0px; 
 }
 
 .block-buttons li
