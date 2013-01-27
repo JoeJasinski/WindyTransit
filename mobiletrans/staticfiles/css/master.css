@@ -98,6 +98,10 @@ margin-top: 15px;  }
  margin-right: auto;
 }
 
+.block-wrap { 
+  padding: 15px;
+}
+
 .block-txt {
 width: 640px; 
 padding: 10px; 	
@@ -107,7 +111,7 @@ margin-left: auto;
 
 .block-box {
 width:100%; 
-height: 500px; 
+/* height: 500px; */
 background-color: #e0e0e0; 
 border-top: solid 15px #272727;
 border-bottom: solid 15px #272727;
@@ -126,6 +130,7 @@ text-align: justify;
 .black-box-map
 {
  background-color: #272727; 
+ height: 500px; 
 }
 
 .block-small {
@@ -138,6 +143,10 @@ text-align: justify;
  border-radius:20px;
  -moz-border-radius:20px;
  -webkit-border-radius:20px;
+}
+
+.block-title { 
+
 }
 
 .block-download {
