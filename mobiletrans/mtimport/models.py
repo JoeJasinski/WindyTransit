@@ -23,9 +23,10 @@ TRANSFER_NOTE_STATUS = (
 
 class InputRecordManager(models.Manager):
     
-    def make_note(self, input_record, note, type):
+    def make_note(self, input_record, note, type, exception=None):
         ir = InputNote(note=note, type=type)
         ir.input_record = input_record
+        ir.exception = exception
         print vars(ir)
         ir.save()
     
@@ -47,6 +48,22 @@ class InputRecord(models.Model):
     def __unicode__(self):
         return "%s" % self.start
 
+    def get_notes(self):
+        return self.inputnote_set.all()
+
+    def get_errors(self):
+        return self.get_notes().filter(type=TRANSFER_NOTE_STATUS_ERROR)
+
+    def get_num_errors(self):
+        return self.get_errors().count()
+    get_num_errors.short_description = "Errors"
+
+    def get_warnings(self):
+        return self.get_notes().filter(type=TRANSFER_NOTE_STATUS_WARNING)
+
+    def get_num_warnings(self):
+        return self.get_warnings().count()
+    get_num_warnings.short_description = "Warnings"
 
 class InputNote(models.Model):
     input_record = models.ForeignKey(InputRecord)
