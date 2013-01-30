@@ -1,8 +1,7 @@
 import os, json
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from mobiletrans.mtimport import importer, models
-from mobiletrans.mtlocation import models as loc_models
+from mobiletrans.mtimport import importer
 
 class Command(BaseCommand):
     args = '<landmarks.json>'
@@ -12,10 +11,7 @@ class Command(BaseCommand):
         if not input_file_path:
             input_file_path = "%s" % os.path.join(settings.VENV_ROOT, "data", "landmarks.json")
         self.stdout.write("Import %s \n" % input_file_path)
-        input_record = models.InputRecord()
-        input_record.type = loc_models.Landmark.__name__
-        input_record.save()
-        importer.Landmark.data_import(input_file_path, input_record)
+        input_record = importer.Landmark.data_import(input_file_path)
         print input_file_path 
 
 

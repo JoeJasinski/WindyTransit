@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . import models
+from mobiletrans.mtimport import models
 from mobiletrans.mtcore import app_renamer
 
 app_renamer.AppLabelRenamer(native_app_label=u'mtimport', app_label=u'Importer').main()

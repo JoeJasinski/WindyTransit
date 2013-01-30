@@ -10,6 +10,12 @@ from mobiletrans.mtimport import models
 class ImportException(Exception):
     pass
 
+class IOImportException(Exception):
+    pass
+
+class DataFormatImportException(Exception):
+    pass
+
 
 class LocationBase(object):
 
@@ -20,6 +26,57 @@ class LocationBase(object):
         self.input_record = input_record
         self.input_data = input_data
         self.loc_model = loc_model
+
+
+    @classmethod
+    def get_model_class(cls,):
+        raise NotImplementedError("implement this method in a subclass")
+
+    @classmethod
+    def data_import(cls, input_file_path, input_record):
+        
+        data = []
+        status=None
+
+        input_record = models.InputRecord()
+        input_record.type = cls.get_model_class().__name__
+        input_record.save()
+
+        try:
+            data = self.open_data(input_file_path)
+        except ImportException, error:
+            models.InputRecord.objects.make_note(
+             input_record=input_record,
+             note='Data Error: %s' % (error.message),
+             type=models.TRANSFER_NOTE_STATUS_ERROR,
+             exception=error.__class__.__name_,
+            )
+            models.InputRecord.objects.end_import(input_record, models.TRANSFER_STATUS_FAILED)
+            raise ImportException("Data load problem: %s" % (error))
+
+    
+        loc_model = dj_models.get_model('mtlocation', input_record.type) 
+        locations = cls(input_record, data, loc_model)
+        stats = locations.process()
+    
+        
+        if not input_record.status == models.TRANSFER_STATUS_FAILED:
+            if input_record.inputnote_set.filter(type__in=[models.TRANSFER_NOTE_STATUS_ERROR,]):
+                status = models.TRANSFER_STATUS_PARTIAL
+            else:
+                status = models.TRANSFER_STATUS_SUCCESS
+                
+        models.InputRecord.objects.make_note(
+         input_record=input_record,
+         note='# new records %s - # existing records %s - error records %s' % (
+                                stats['new'], stats['existing'], stats['errors']),
+         type=models.TRANSFER_NOTE_STATUS_NOTE,
+        )     
+            
+        models.InputRecord.objects.end_import(input_record, status)
+
+        return input_record
+        
 
     def process(self):
 
@@ -76,6 +133,18 @@ class LocationBase(object):
         return self.stats
 
 
+    def get_iteration_root(self):
+        raise NotImplementedError("implement this method in a subclass")
+
+
+    def open_data(self, input_file_path):
+        raise NotImplementedError("implement this method in a subclass")
+
+
+    def parse_row(self, row):
+        raise NotImplementedError("implement this method in a subclass")
+
+
 class JSONLocationBase(LocationBase):
 
     def get_iteration_root(self):
@@ -92,116 +161,42 @@ class JSONLocationBase(LocationBase):
         return data
 
 
-    @classmethod
-    def data_import(cls, input_file_path, input_record):
-        
-        status=None
-        
+    def open_data(self, input_file_path):
+
         try:
             input_file = open(input_file_path,'r')
             input_data = json.load(input_file)
-        except IOError:
-            models.InputRecord.objects.make_note(
-             input_record=input_record,
-             note='Invalid File %s' % input_file_path,
-             type=models.TRANSFER_NOTE_STATUS_ERROR,
-            )
-            models.InputRecord.objects.end_import(input_record, models.TRANSFER_STATUS_FAILED)
-            raise ImportException("Error with file read")
+        except IOError, error:
+            raise IOImportException("Error with file read: %s - %s" % (input_file_path, error.message, ))
         except ValueError:
-            models.InputRecord.objects.make_note(
-             input_record=input_record,
-             note='Invalid JSON %s' % input_file_path,
-             type=models.TRANSFER_NOTE_STATUS_ERROR,
-            )
-            models.InputRecord.objects.end_import(input_record, models.TRANSFER_STATUS_FAILED)
-            raise ImportException("Error with JSON read")
+            raise DataFormatImportException("Error with JSON read: %s - %s" % (input_file_path, error.message, ))
         except Exception, error:
-            models.InputRecord.objects.make_note(
-             input_record=input_record,
-             note='Unexpected problem %s: %s' % (input_file_path, error),
-             type=models.TRANSFER_NOTE_STATUS_ERROR,
-            )
-            models.InputRecord.objects.end_import(input_record, models.TRANSFER_STATUS_FAILED)  
-            raise ImportException("Unknown import error.")
+            raise ImportException("Unknown import error: %s - %s" % (input_file_path, error.message, ))
         else:
             input_file.close()
-    
-        loc_model = dj_models.get_model('mtlocation', input_record.type) 
-        locations = cls(input_record, input_data, loc_model)
-        stats = locations.process()
-    
-        
-        if not input_record.status == models.TRANSFER_STATUS_FAILED:
-            if input_record.inputnote_set.filter(type__in=[models.TRANSFER_NOTE_STATUS_ERROR,]):
-                status = models.TRANSFER_STATUS_PARTIAL
-            else:
-                status = models.TRANSFER_STATUS_SUCCESS
-                
-        models.InputRecord.objects.make_note(
-         input_record=input_record,
-         note='# new records %s - # existing records %s - error records %s' % (
-                                stats['new'], stats['existing'], stats['errors']),
-         type=models.TRANSFER_NOTE_STATUS_NOTE,
-        )     
-            
-        models.InputRecord.objects.end_import(input_record, status)
-        
+        return input_data
+
 
 class CSVLocationBase(LocationBase):
  
     def get_iteration_root(self):
         return self.input_data
 
-    @classmethod
-    def data_import(cls, input_file_path, input_record):
+    def open_data(self, input_file_path):
 
-        status=None
-        data = []
         try:
             input_file = open(input_file_path,'r')
             input_data = csv.reader(input_file, delimiter=',', quotechar='"')
             for row in input_data:
                 data.append(row)
             data = data[1:]
-        except IOError:
-            models.InputRecord.objects.make_note(
-             input_record=input_record,
-             note='Invalid File %s' % input_file_path,
-             type=models.TRANSFER_NOTE_STATUS_ERROR,
-            )
-            models.InputRecord.objects.end_import(input_record, models.TRANSFER_STATUS_FAILED)
-            raise ImportException("Error with file read")
+        except IOError, error:
+            raise IOImportException("Error with file load %s - %s" % (input_file_path, error.message)
         except Exception, error:
-            models.InputRecord.objects.make_note(
-             input_record=input_record,
-             note='Unexpected problem %s: %s' % (input_file_path, error),
-             type=models.TRANSFER_NOTE_STATUS_ERROR,
-            )
-            models.InputRecord.objects.end_import(input_record, models.TRANSFER_STATUS_FAILED)  
-            raise ImportException("Unknown import error.")
+            raise ImportException("Unknown import error: %s - %s" % (input_file_path, error.message, ))
         else:
             input_file.close()
-    
-        loc_model = dj_models.get_model('mtlocation', input_record.type) 
-        locations = cls(input_record, data, loc_model)
-        stats = locations.process()
-    
-        
-        if not input_record.status == models.TRANSFER_STATUS_FAILED:
-            if input_record.inputnote_set.filter(type__in=[models.TRANSFER_NOTE_STATUS_ERROR,]):
-                status = models.TRANSFER_STATUS_PARTIAL
-            else:
-                status = models.TRANSFER_STATUS_SUCCESS
-                
-        models.InputRecord.objects.make_note(
-         input_record=input_record,
-         note='# new records %s - # existing records %s - error records %s' % (
-                                stats['new'], stats['existing'], stats['errors']),
-         type=models.TRANSFER_NOTE_STATUS_NOTE,
-        )     
-            
-        models.InputRecord.objects.end_import(input_record, status)
+        return data
 
 
 class KMLLocationBase(LocationBase):
@@ -221,53 +216,20 @@ class KMLLocationBase(LocationBase):
 
         return placemarks
 
-    @classmethod
-    def data_import(cls, input_file_path, input_record):
-        
-        status=None
-        data = []
-        try:     
+    def open_data(self, input_file_path):
+
+        try:
             input_file = open(input_file_path,'r')
             input_data = minidom.parse(input_file)
-            data = input_data
-        except IOError:
-            models.InputRecord.objects.make_note(
-             input_record=input_record,
-             note='Invalid File %s' % input_file_path,
-             type=models.TRANSFER_NOTE_STATUS_ERROR,
-            )
-            models.InputRecord.objects.end_import(input_record, models.TRANSFER_STATUS_FAILED)
-            raise ImportException("Error with file read")
+        except IOError, error:
+            raise IOImportException("Error with file read: %s - %s" % (input_file_path, error.message, ))
+        except ValueError:
+            raise DataFormatImportException("Error with KML read: %s - %s" % (input_file_path, error.message, ))
         except Exception, error:
-            models.InputRecord.objects.make_note(
-             input_record=input_record,
-             note='Unexpected problem %s: %s' % (input_file_path, error),
-             type=models.TRANSFER_NOTE_STATUS_ERROR,
-            )
-            models.InputRecord.objects.end_import(input_record, models.TRANSFER_STATUS_FAILED)  
-            raise ImportException("Unknown import error.")
+            raise ImportException("Unknown import error: %s - %s" % (input_file_path, error.message, ))
         else:
             input_file.close()
-    
-        loc_model = dj_models.get_model('mtlocation', input_record.type) 
-        locations = cls(input_record, data, loc_model)
-        stats = locations.process()
-    
-        
-        if not input_record.status == models.TRANSFER_STATUS_FAILED:
-            if input_record.inputnote_set.filter(type__in=[models.TRANSFER_NOTE_STATUS_ERROR,]):
-                status = models.TRANSFER_STATUS_PARTIAL
-            else:
-                status = models.TRANSFER_STATUS_SUCCESS
-                
-        models.InputRecord.objects.make_note(
-         input_record=input_record,
-         note='# new records %s - # existing records %s - error records %s' % (
-                                stats['new'], stats['existing'], stats['errors']),
-         type=models.TRANSFER_NOTE_STATUS_NOTE,
-        )     
-            
-        models.InputRecord.objects.end_import(input_record, status)
+        return input_data
 
 
 
@@ -623,6 +585,102 @@ class Hospital(KMLLocationBase):
         print vars(hospital)
         return hospital
     
+
+class GPlaceLocationBase(LocationBase):
+
+    def get_iteration_root(self):
+        if hasattr(self.input_data, 'places'):
+            data = self.input_data.places
+        else:
+            models.InputRecord.objects.make_note(
+             input_record=self.input_record,
+             note="Input file missing 'places' element.",
+             type=models.TRANSFER_NOTE_STATUS_ERROR,    
+             )
+            models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
+            raise ImportException("JSON missing 'places' element.")     
+        return data
+
+    def parse_row(self, row):
+        
+        existing = False
+        
+        try:
+            id = row.id
+        except AttributeError, error:
+            raise AttributeError("id %s" % error)
+        
+        try:
+            uuid = row.id
+        except AttributeError, error:
+            raise AttributeError("id %s: uuid %s" % (id, error))
+        
+        try:
+            place = self.loc_model.objects.get(uuid=uuid) existing = True
+        except ObjectDoesNotExist:
+            place = self.loc_model(uuid=uuid)
+            existing = False
+        except MultipleObjectsReturned:
+            raise ImportException("multiple objects returned with uuid %s " % uuid)
+       
+        try:
+            name = row.name
+        except AttributeError, error:
+            raise AttributeError("id %s: name %s" % (id, error))
+        place.name = name
+
+        try:
+            geo = row.geo_location
+        except AttributeError, error:
+            raise AttributeError("id %s: geo_location %s" % (id, error))
+        else:
+            if geo.has_key('lng'):
+                longitude = geo['lng']
+            else:
+                raise AttributeError("id %s: geo_location.lng" % (id))
+
+            if geo.has_key('lat'):
+                lattitude = geo['lat']
+            else:
+                raise AttributeError("id %s: geo_location.lat " % (id ))
+
+        point = fromstr('POINT(%s %s)' % (longitude, lattitude))
+        place.point = point
+ 
+        if hasattr(row, 'rating'):
+            place.rating = row.rating 
+
+        if hasattr(row, 'vicinity'):
+            place.vicinity = row.vicinity
+
+        if hasattr(row, 'types'):
+            place.types = row.types
+
+        if hasattr(row, 'reference'):
+            place.reference = row.reference
+
+        if hasattr(row, 'international_phone_number'):
+            place.international_phone_number = row.international_phone_number
+
+        if hasattr(row, 'local_phone_number'):
+            place.local_phone_number = row.local_phone_number
+ 
+        if hasattr(row, 'website'):
+            place.website = row.website
+ 
+        if hasattr(row, 'formatted_address'):
+            place.address = row.formatted_address
+
+        if hasattr(row, 'url'):
+            place.url = row.url
+     
+        if existing:
+            self.stats['existing'] += 1
+        else:
+            self.stats['new'] += 1
+        
+        return place
+
     
 class Neighborhood(KMLLocationBase):
        

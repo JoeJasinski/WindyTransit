@@ -1,5 +1,5 @@
 from django.contrib.gis import admin
-from . import models
+from mobiletrans.mtlocation import models
 from mobiletrans.mtcore import app_renamer
 
 app_renamer.AppLabelRenamer(native_app_label=u'mtlocation', app_label=u'Location').main()

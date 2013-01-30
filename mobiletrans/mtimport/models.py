@@ -39,6 +39,7 @@ class InputRecord(models.Model):
     start = models.DateTimeField(auto_now_add=True)
     end = models.DateTimeField(blank=True, null=True)
     type = models.CharField(max_length=64, blank=True, null=True)
+    exception = models.CharField(max_length=128, blank=True, null=True)
     status = models.IntegerField(choices=TRANSFER_STATUS, default=TRANSFER_STATUS_RUNNING)
 
     objects = InputRecordManager()
@@ -49,7 +50,8 @@ class InputRecord(models.Model):
 
 class InputNote(models.Model):
     input_record = models.ForeignKey(InputRecord)
-    note = models.TextField()
+    note = models.TextField(blank=True, null=True)
+    exception = models.CharField(max_length=128, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     type = models.CharField(choices=TRANSFER_NOTE_STATUS, max_length=24)
     

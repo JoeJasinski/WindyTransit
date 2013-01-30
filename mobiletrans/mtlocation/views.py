@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 
 from mobiletrans.mtcore import utils
-from . import models
+from mobiletrans.mtlocation import models
 
 def renderkml(request, lat=None, long=None):
 
