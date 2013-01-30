@@ -191,7 +191,7 @@ class CSVLocationBase(LocationBase):
                 data.append(row)
             data = data[1:]
         except IOError, error:
-            raise IOImportException("Error with file load %s - %s" % (input_file_path, error.message)
+            raise IOImportException("Error with file load %s - %s" % (input_file_path, error.message))
         except Exception, error:
             raise ImportException("Unknown import error: %s - %s" % (input_file_path, error.message, ))
         else:
@@ -616,7 +616,8 @@ class GPlaceLocationBase(LocationBase):
             raise AttributeError("id %s: uuid %s" % (id, error))
         
         try:
-            place = self.loc_model.objects.get(uuid=uuid) existing = True
+            place = self.loc_model.objects.get(uuid=uuid) 
+            existing = True
         except ObjectDoesNotExist:
             place = self.loc_model(uuid=uuid)
             existing = False
