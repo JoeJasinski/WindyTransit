@@ -6,6 +6,7 @@ from django.db import models as dj_models
 
 from autoslug.settings import slugify
 from mobiletrans.mtimport import models
+from mobiletrans.mtlocation import models as loc_models
 
 class ImportException(Exception):
     pass
@@ -30,10 +31,10 @@ class LocationBase(object):
 
     @classmethod
     def get_model_class(cls,):
-        raise NotImplementedError("implement this method in a subclass")
+        raise NotImplementedError("implement this get_model_class method in a subclass")
 
     @classmethod
-    def data_import(cls, input_file_path, input_record):
+    def data_import(cls, input_file_path):
         
         data = []
         status=None
@@ -55,7 +56,8 @@ class LocationBase(object):
             raise ImportException("Data load problem: %s" % (error))
 
     
-        loc_model = dj_models.get_model('mtlocation', input_record.type) 
+        #loc_model = dj_models.get_model('mtlocation', input_record.type) 
+        loc_model = cls.get_model_class()
         locations = cls(input_record, data, loc_model)
         stats = locations.process()
     
@@ -134,15 +136,15 @@ class LocationBase(object):
 
 
     def get_iteration_root(self):
-        raise NotImplementedError("implement this method in a subclass")
+        raise NotImplementedError("implement this get_iteration_root method in a subclass")
 
 
     def open_data(self, input_file_path):
-        raise NotImplementedError("implement this method in a subclass")
+        raise NotImplementedError("implement this open_data method in a subclass")
 
 
     def parse_row(self, row):
-        raise NotImplementedError("implement this method in a subclass")
+        raise NotImplementedError("implement this parse_row method in a subclass")
 
 
 class JSONLocationBase(LocationBase):
@@ -236,7 +238,11 @@ class KMLLocationBase(LocationBase):
 ########################################
 
 class Landmark(JSONLocationBase):
-    
+
+    @classmethod
+    def get_model_class(cls,):
+        return loc_models.Landmark
+
     def parse_row(self, row):
         
         existing = False
@@ -305,7 +311,11 @@ class Landmark(JSONLocationBase):
     
 
 class Library(JSONLocationBase):
-    
+
+    @classmethod
+    def get_model_class(cls,):
+        return loc_models.Library
+
     def parse_row(self, row):
         
         existing = False
@@ -387,7 +397,11 @@ class Library(JSONLocationBase):
 
 
 class TransitRoute(CSVLocationBase):
-        
+
+    @classmethod
+    def get_model_class(cls,):
+        return loc_models.TransitRoute
+
     def parse_row(self, row):
         row = list(row)
         existing = False
@@ -458,7 +472,11 @@ class TransitRoute(CSVLocationBase):
 
 
 class TransitStop(CSVLocationBase):
-    
+
+    @classmethod
+    def get_model_class(cls,):
+        return loc_models.TransitStop
+
     def parse_row(self, row):
         row = list(row)
         existing = False
@@ -525,7 +543,11 @@ class TransitStop(CSVLocationBase):
 
 
 class Hospital(KMLLocationBase):
-       
+
+    @classmethod
+    def get_model_class(cls,):
+        return loc_models.Hospital
+   
     def parse_row(self, row):
         existing = False
 
@@ -587,6 +609,10 @@ class Hospital(KMLLocationBase):
     
 
 class GPlaceLocationBase(LocationBase):
+
+    @classmethod
+    def get_model_class(cls,):
+        return loc_models.GPlace
 
     def get_iteration_root(self):
         if hasattr(self.input_data, 'places'):
@@ -684,7 +710,11 @@ class GPlaceLocationBase(LocationBase):
 
     
 class Neighborhood(KMLLocationBase):
-       
+
+    @classmethod
+    def get_model_class(cls,):
+        return loc_models.Neighborhood
+
     def parse_row(self, row):
         existing = False
 
@@ -763,7 +793,11 @@ class Neighborhood(KMLLocationBase):
     
     
 class Zipcode(KMLLocationBase):
-       
+
+    @classmethod
+    def get_model_class(cls,):
+        return loc_models.Zipcode
+
     def parse_row(self, row):
         existing = False
 
