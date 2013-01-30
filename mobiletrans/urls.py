@@ -11,5 +11,5 @@ urlpatterns = patterns('',
     url('^kml/$', 'mobiletrans.mtlocation.views.renderkml', { }, name="mtlocation_renderkml"),
     url('^kml/longlat/(?P<long>[-\d.]+),(?P<lat>[-\d.]+)/$', 'mobiletrans.mtlocation.views.renderkml', { }, name="mtlocation_renderkml_longlat"),
     url('^kml/latlong/(?P<lat>[-\d.]+),(?P<long>[-\d.]+)/$', 'mobiletrans.mtlocation.views.renderkml', { }, name="mtlocation_renderkml_latlong"),
-    url('^api/1/', include('mobiletrans.mtapi.urls')),    
+    url('^api/', include('mobiletrans.mtapi.urls')),    
 )

@@ -1,17 +1,22 @@
-import re, decimal 
+import re, decimal, datetime
 from django.contrib.gis.measure import D 
 from piston.handler import BaseHandler
 from piston.utils import rc, throttle
 from django.contrib.gis.geos import fromstr
 
 from mobiletrans.mtcore import utils
+from mobiletrans.mtcore.external.piston_ext.piston_views import Field, PistonView
 from mobiletrans.mtlocation import models
+
+
+#################################################################################
+
 
 class TransitRouteHandler(BaseHandler):
     methods_allowed = ('GET',)
 
 
-    def read(self, request, uuid=None, route_id=None):
+    def read(self, request, emitter_format="json", uuid=None, route_id=None):
         transit_route_dict = {}    
         
         if uuid:
@@ -31,12 +36,13 @@ class TransitRouteHandler(BaseHandler):
             transit_route_dict.update({'stops':stops,})
 
         return {'transit_route':transit_route_dict}
-    
+
+#################################################################################
 
 class TransitRoutesHandler(BaseHandler):
     methods_allowed = ('GET',)
 
-    def read(self, request):
+    def read(self, request, emitter_format="json"):
         
         kwargs = {}
         type = request.GET.get('type','').lower()
@@ -57,12 +63,37 @@ class TransitRoutesHandler(BaseHandler):
             transit_routes.append(transit_route)
 
         return {'transit_routes':transit_routes}
-    
+
+
+#################################################################################
+
+class LocationView(PistonView):
+
+    def __init__(self, *args, **kwargs):
+        super(LocationView, self).__init__(*args, **kwargs)
+        location = self.data 
+        self.fields = self.fields + [
+            Field('', lambda x: location, destination='location', ),
+        ]
+
+class LocationsRootView(PistonView):
+
+    def __init__(self, *args, **kwargs):
+        super(LocationsRootView, self).__init__(*args, **kwargs)
+        locations = self.data['locations']
+        neighborhood = self.data['neighborhood']
+        zipcode = self.data['zipcode']
+        self.fields = self.fields + [
+            Field('', lambda x: zipcode, destination='zipcode', ),
+            Field('', lambda x: neighborhood, destination='neighborhood', ),
+            Field('', lambda x:  [l for l in locations], destination='locations', ),
+        ]
+
 
 class LocationDataHandler(BaseHandler):
     methods_allowed = ('GET',)
 
-    def read(self, request):
+    def read(self, request, emitter_format="json"):
         
         context = {}
         
@@ -90,13 +121,15 @@ class LocationDataHandler(BaseHandler):
             locations.append(location,)
 
         context.update({ 'locations': locations[:params.limit], })
-        return context
-    
+        return LocationsRootView(context)
+        #return context
+
+#################################################################################
     
 class TransitStopDataHandler(BaseHandler):
     methods_allowed = ('GET',)
 
-    def read(self, request):
+    def read(self, request, emitter_format="json"):
 
         params = utils.PrepParams(request)
         

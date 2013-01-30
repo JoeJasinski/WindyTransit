@@ -24,7 +24,7 @@ from mtsettings.local_settings import (VENV_ROOT, PROJECT_ROOT )
 #        'PORT': '',
 #    }
 #}
-
+GOOGLE_PLACES_API_KEY = ''
 #######################
 #####  END These settings should go in local_settings.py
 ####################
