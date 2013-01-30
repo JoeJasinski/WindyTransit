@@ -20,14 +20,12 @@ class DataFormatImportException(Exception):
 
 class LocationBase(object):
 
-    def __init__(self, input_record, input_data, loc_model):
+    def __init__(self, input_record, input_data):
 
         self.stats = {'new':0, 'existing':0, 'errors':0}
         
         self.input_record = input_record
         self.input_data = input_data
-        self.loc_model = loc_model
-
 
     @classmethod
     def get_model_class(cls,):
@@ -44,7 +42,7 @@ class LocationBase(object):
         input_record.save()
 
         try:
-            data = self.open_data(input_file_path)
+            data = cls.open_data(input_file_path)
         except ImportException, error:
             models.InputRecord.objects.make_note(
              input_record=input_record,
@@ -55,10 +53,7 @@ class LocationBase(object):
             models.InputRecord.objects.end_import(input_record, models.TRANSFER_STATUS_FAILED)
             raise ImportException("Data load problem: %s" % (error))
 
-    
-        #loc_model = dj_models.get_model('mtlocation', input_record.type) 
-        loc_model = cls.get_model_class()
-        locations = cls(input_record, data, loc_model)
+        locations = cls(input_record, data, )
         stats = locations.process()
     
         
@@ -162,8 +157,8 @@ class JSONLocationBase(LocationBase):
             raise ImportException("JSON missing 'data' element.")     
         return data
 
-
-    def open_data(self, input_file_path):
+    @classmethod
+    def open_data(cls, input_file_path):
 
         try:
             input_file = open(input_file_path,'r')
@@ -184,7 +179,8 @@ class CSVLocationBase(LocationBase):
     def get_iteration_root(self):
         return self.input_data
 
-    def open_data(self, input_file_path):
+    @classmethod
+    def open_data(cls, input_file_path):
 
         try:
             input_file = open(input_file_path,'r')
@@ -218,7 +214,8 @@ class KMLLocationBase(LocationBase):
 
         return placemarks
 
-    def open_data(self, input_file_path):
+    @classmethod
+    def open_data(cls, input_file_path):
 
         try:
             input_file = open(input_file_path,'r')
@@ -258,10 +255,10 @@ class Landmark(JSONLocationBase):
             raise IndexError("id %s: uuid %s" % (id, error))
         
         try:
-            landmark = self.loc_model.objects.get(uuid=uuid)
+            landmark = self.get_model_class().objects.get(uuid=uuid)
             existing = True
         except ObjectDoesNotExist:
-            landmark = self.loc_model(uuid=uuid)
+            landmark = self.get_model_class()(uuid=uuid)
             existing = False
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with uuid %s " % uuid)
@@ -331,10 +328,10 @@ class Library(JSONLocationBase):
             raise IndexError("id %s: uuid %s" % (id, error))
         
         try:
-            library = self.loc_model.objects.get(uuid=uuid)
+            library = self.get_model_class().objects.get(uuid=uuid)
             existing = True
         except ObjectDoesNotExist:
-            library = self.loc_model(uuid=uuid)
+            library = self.get_model_class()(uuid=uuid)
             existing = False
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with uuid %s " % uuid)
@@ -413,10 +410,10 @@ class TransitRoute(CSVLocationBase):
             raise IndexError("%s %s" % (pk, error))
         
         try:
-            transitroute = self.loc_model.objects.get(route_id=pk_val)
+            transitroute = self.get_model_class().objects.get(route_id=pk_val)
             existing = True
         except ObjectDoesNotExist:
-            transitroute = self.loc_model(route_id=pk_val)
+            transitroute = self.get_model_class()(route_id=pk_val)
             existing = False
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with %s %s " % (pk, pk_val))
@@ -488,10 +485,10 @@ class TransitStop(CSVLocationBase):
             raise IndexError("%s %s" % (pk, error))
         
         try:
-            transitstop = self.loc_model.objects.get(stop_id=pk_val)
+            transitstop = self.get_model_class().objects.get(stop_id=pk_val)
             existing = True
         except ObjectDoesNotExist:
-            transitstop = self.loc_model(stop_id=pk_val)
+            transitstop = self.get_model_class()(stop_id=pk_val)
             existing = False
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with %s %s " % (pk, pk_val))
@@ -565,10 +562,10 @@ class Hospital(KMLLocationBase):
         slug = slugify(pk_text)
         
         try:
-            hospital = self.loc_model.objects.get(slug=slug)
+            hospital = self.get_model_class().objects.get(slug=slug)
             existing = True
         except ObjectDoesNotExist:
-            hospital = self.loc_model(slug=slug)
+            hospital = self.get_model_class()(slug=slug)
             existing = False
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with %s %s " % (pk, pk_val))
@@ -642,10 +639,10 @@ class GPlaceLocationBase(LocationBase):
             raise AttributeError("id %s: uuid %s" % (id, error))
         
         try:
-            place = self.loc_model.objects.get(uuid=uuid) 
+            place = self.get_model_class().objects.get(uuid=uuid) 
             existing = True
         except ObjectDoesNotExist:
-            place = self.loc_model(uuid=uuid)
+            place = self.get_model_class()(uuid=uuid)
             existing = False
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with uuid %s " % uuid)
@@ -732,10 +729,10 @@ class Neighborhood(KMLLocationBase):
         slug = slugify(pk_text)
         
         try:
-            neighborhood = self.loc_model.objects.get(slug=slug)
+            neighborhood = self.get_model_class().objects.get(slug=slug)
             existing = True
         except ObjectDoesNotExist:
-            neighborhood = self.loc_model(slug=slug)
+            neighborhood = self.get_model_class()(slug=slug)
             existing = False
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with %s %s " % (pk, pk_val))
@@ -815,10 +812,10 @@ class Zipcode(KMLLocationBase):
         slug = slugify(pk_text)
         
         try:
-            neighborhood = self.loc_model.objects.get(slug=slug)
+            neighborhood = self.get_model_class().objects.get(slug=slug)
             existing = True
         except ObjectDoesNotExist:
-            neighborhood = self.loc_model(slug=slug)
+            neighborhood = self.get_model_class()(slug=slug)
             existing = False
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with %s %s " % (pk, pk_val))
