@@ -1,11 +1,10 @@
 import uuid
 from django.contrib.gis.db import models
 from django.contrib.contenttypes.models import ContentType
-from django_extensions.db import fields as ext_fields
 from django.contrib.sites.models import Site
 from django.conf import settings
 from autoslug import AutoSlugField
-from mobiletrans.mtlocation.fields import SeparatedValuesField 
+from mobiletrans.mtlocation.fields import SeparatedValuesField, UUIDField
 
 TRANSIT_STOP_TYPE_STOP=0
 TRANSIT_STOP_TYPE_STATION=1
@@ -57,7 +56,7 @@ class Location(models.Model):
     name = models.CharField(max_length=255)
     slug = AutoSlugField(populate_from='name', max_length=255)
     point = models.PointField(help_text="Represented as (longitude, lattitude)")
-    uuid = ext_fields.UUIDField(auto=False)
+    uuid = UUIDField(auto=False)
     
     content_type = models.ForeignKey(ContentType,editable=False,null=True)
 
@@ -83,7 +82,7 @@ class Location(models.Model):
     def save(self, *args, **kwargs):
         if(not self.content_type):
             self.content_type = ContentType.objects.get_for_model(self.__class__)
-            super(Location, self).save(*args, **kwargs)
+        super(Location, self).save(*args, **kwargs)
 
     def placemark_icon(self):
         site = Site.objects.get_current()
@@ -191,7 +190,7 @@ class TransitRoute(models.Model):
 
     class_slug = 'transit_route'
 
-    uuid = ext_fields.UUIDField(auto=True)
+    uuid = UUIDField(auto=True)
 
     route_id = models.CharField(max_length=64,
         help_text=("Required. The route_id field contains an ID that uniquely identifies a "
@@ -301,7 +300,7 @@ class Region(models.Model):
     name = models.CharField(max_length=255)
     slug = AutoSlugField(populate_from='name', max_length=255)
     area = models.PolygonField()
-    uuid = ext_fields.UUIDField(auto=False)
+    uuid = UUIDField(auto=False)
     
     content_type = models.ForeignKey(ContentType,editable=False,null=True)
 

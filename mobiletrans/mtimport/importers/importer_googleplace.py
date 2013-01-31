@@ -6,7 +6,7 @@ from mobiletrans.mtlocation import models as loc_models
 from mobiletrans.mtimport import models
 from mobiletrans.mtimport.exceptions import * 
 from django.conf import settings
-from googleplaces import GooglePlaces, types, lang
+from googleplaces import GooglePlaces, types, lang, GooglePlacesError
 
 class GoogleIOImportException(IOImportException):
     pass
@@ -14,10 +14,11 @@ class GoogleIOImportException(IOImportException):
 def search_places_from_lat_long(lag_lng, radius=3200, keyword=None, types=[]):
     google_places = GooglePlaces(settings.GOOGLE_PLACES_API_KEY)
     query_result = google_places.query(
-            lag_lng=lag_lng, keyword=keyword,
+            lat_lng=lag_lng, keyword=keyword,
             radius=radius, types=types)
+    return query_result
   
-class GPlaceLocationBase(LocationBase):
+class GPlaceLocation(LocationBase):
 
     @classmethod
     def get_model_class(cls,):
@@ -25,13 +26,14 @@ class GPlaceLocationBase(LocationBase):
 
     @classmethod
     def open_data(cls, lat_lng, radius):
-
         try:
-            data = self.search_places_from_lat_long(lat_long, radius)
+            data = search_places_from_lat_long(lat_lng, radius)
         except GooglePlacesError, error:
             raise GoogleIOImportException("GooglePlaces lookup error: %s" % (error)) 
         except Exception, error:
             raise ImportException("Unknown import error: lat_lng [%s] radius [%s]: %s" % (lat_lng, radius, error, ))
+        except: 
+            raise ImportException("Unknown import error: lat_lng [%s] radius [%s]" % (lat_lng, radius, ))
         return data
 
     def get_iteration_root(self):
@@ -40,22 +42,23 @@ class GPlaceLocationBase(LocationBase):
         else:
             models.InputRecord.objects.make_note(
              input_record=self.input_record,
-             note="Input file missing 'places' element.",
+             note="query data missing 'places' element.",
              type=models.TRANSFER_NOTE_STATUS_ERROR,    
              )
             models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
-            raise ImportException("JSON missing 'places' element.")     
+            raise ImportException("query data missing 'places' element.")     
         return data
 
     def parse_row(self, row):
         
         existing = False
-        
-        try:
-            id = row.id
-        except AttributeError, error:
-            raise AttributeError("id %s" % error)
-        
+
+        row.get_details()
+
+        print "------------------------------------------------"
+        print "JJJJ", vars(row)
+        print "------------------------------------------------"
+
         try:
             uuid = row.id
         except AttributeError, error:
@@ -126,6 +129,10 @@ class GPlaceLocationBase(LocationBase):
         else:
             self.stats['new'] += 1
         
+        print "------------------------------"
+        print "JJJJAAA", vars(place)
+        print "------------------------------"
+
         return place
 
     

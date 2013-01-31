@@ -27,7 +27,7 @@ class InputRecordManager(models.Manager):
         ir = InputNote(note=note, type=type)
         ir.input_record = input_record
         ir.exception = exception
-        print vars(ir)
+        print "Transfer Note", vars(ir)
         ir.save()
     
     def end_import(self, input_record, status=None):

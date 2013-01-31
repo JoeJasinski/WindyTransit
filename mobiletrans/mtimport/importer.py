@@ -1,9 +1,13 @@
-import json, csv, logging
+import json, csv, logging, traceback
 from xml.dom import minidom
 
 from mobiletrans.mtimport import models
 from mobiletrans.mtimport.exceptions import * 
 
+try:
+    from cStringIO import StringIO
+except:
+    from StringIO import StringIO
 
 
 class LocationBase(object):
@@ -32,11 +36,17 @@ class LocationBase(object):
         try:
             data = cls.open_data(*input_parameters)
         except ImportException, error:
+            
+            stacktrace_file = StringIO()
+            traceback.print_exc(limit=50, file=stacktrace_file)
+            stacktrace_file.seek(0)
+            stacktrace_text = stacktrace_file.read()
+
             models.InputRecord.objects.make_note(
              input_record=input_record,
-             note='Data Error: %s' % (error),
+             note='Data Error: %s\n\n%s' % (error, stacktrace_text),
              type=models.TRANSFER_NOTE_STATUS_ERROR,
-             exception=error.__class__.__name_,
+             exception=error.__class__.__name__,
             )
             models.InputRecord.objects.end_import(input_record, models.TRANSFER_STATUS_FAILED)
             raise ImportException("Data load problem: %s" % (error))
@@ -71,45 +81,82 @@ class LocationBase(object):
             try:
                 location = self.parse_row(row)
             except ValueError, error:
+
+                stacktrace_file = StringIO()
+                traceback.print_exc(limit=50, file=stacktrace_file)
+                stacktrace_file.seek(0)
+                stacktrace_text = stacktrace_file.read()
+
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
-                 note="Row %s: ValueError Parse error: %s" % (count, error),
-                 type=models.TRANSFER_NOTE_STATUS_ERROR,    
+                 note="Row %s: ValueError Parse error: %s\n\n%s" % (count, error, stacktrace_text),
+                 type=models.TRANSFER_NOTE_STATUS_ERROR,
+                 exception=error.__class__.__name__,
                  )
                 self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
             except IndexError, error:
+
+                stacktrace_file = StringIO()
+                traceback.print_exc(limit=50, file=stacktrace_file)
+                stacktrace_file.seek(0)
+                stacktrace_text = stacktrace_file.read()
+
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
-                 note="Row %s: IndexError Parse error: %s" % (count, error),
-                 type=models.TRANSFER_NOTE_STATUS_ERROR,    
+                 note="Row %s: IndexError Parse error: %s\n\n%s" % (count, error, stacktrace_text),
+                 type=models.TRANSFER_NOTE_STATUS_ERROR,   
+                 exception=error.__class__.__name__, 
                  )
                 self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
             except ImportException, error:
+
+                stacktrace_file = StringIO()
+                traceback.print_exc(limit=50, file=stacktrace_file)
+                stacktrace_file.seek(0)
+                stacktrace_text = stacktrace_file.read()
+
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
-                 note="Row %s: Import Exception Parse error: %s" % (count, error),
-                 type=models.TRANSFER_NOTE_STATUS_ERROR,    
+                 note="Row %s: Import Exception Parse error: %s\n\n%s" % (count, error, stacktrace_text),
+                 type=models.TRANSFER_NOTE_STATUS_ERROR, 
+                 exception=error.__class__.__name__,  
                  )
                 self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
             except Exception, error:
+
+                stacktrace_file = StringIO()
+                traceback.print_exc(limit=50, file=stacktrace_file)
+                stacktrace_file.seek(0)
+                stacktrace_text = stacktrace_file.read()
+
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
-                 note="Row %s: Unknown Parse error: %s" % (count, error),
-                 type=models.TRANSFER_NOTE_STATUS_ERROR,    
+                 note="Row %s: Unknown Parse error: %s\n\n%s" % (count, error, stacktrace_text),
+                 type=models.TRANSFER_NOTE_STATUS_ERROR,
+                 exception=error.__class__.__name__,    
                  )
                 self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)               
             else:
                 try:
+                    print "LOCATION", vars(location)
+                    location.full_clean()
                     location.save()
                 except Exception, error: 
+
+                    stacktrace_file = StringIO()
+                    traceback.print_exc(limit=50, file=stacktrace_file)
+                    stacktrace_file.seek(0)
+                    stacktrace_text = stacktrace_file.read()
+
                     models.InputRecord.objects.make_note(
                      input_record=self.input_record,
-                     note="Row %s: Save Error: %s" % (count, error),
-                     type=models.TRANSFER_NOTE_STATUS_ERROR,    
+                     note="Row %s: Save Error: %s\n\n%s" % (count, error, stacktrace_text),
+                     type=models.TRANSFER_NOTE_STATUS_ERROR,
+                     exception=error.__class__.__name__,    
                      )
                     self.stats['errors'] += 1                    
 
