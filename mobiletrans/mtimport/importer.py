@@ -1,4 +1,5 @@
 import json, csv, logging, traceback
+from django.contrib.gis import gdal 
 from xml.dom import minidom
 
 from mobiletrans.mtimport import models
@@ -10,7 +11,7 @@ except:
     from StringIO import StringIO
 
 
-class LocationBase(object):
+class ImportBase(object):
 
     def __init__(self, input_record, input_data):
 
@@ -36,7 +37,7 @@ class LocationBase(object):
         try:
             data = cls.open_data(*input_parameters)
         except ImportException, error:
-            
+
             stacktrace_file = StringIO()
             traceback.print_exc(limit=50, file=stacktrace_file)
             stacktrace_file.seek(0)
@@ -51,8 +52,8 @@ class LocationBase(object):
             models.InputRecord.objects.end_import(input_record, models.TRANSFER_STATUS_FAILED)
             raise ImportException("Data load problem: %s" % (error))
 
-        locations = cls(input_record, data, )
-        stats = locations.process()
+        import_class = cls(input_record, data, )
+        stats = import_class.process()
     
         
         if not input_record.status == models.TRANSFER_STATUS_FAILED:
@@ -79,7 +80,7 @@ class LocationBase(object):
         for row in self.get_iteration_root():
             
             try:
-                location = self.parse_row(row)
+                import_object = self.parse_row(row)
             except ValueError, error:
 
                 stacktrace_file = StringIO()
@@ -142,9 +143,9 @@ class LocationBase(object):
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)               
             else:
                 try:
-                    print "LOCATION", vars(location)
-                    location.full_clean()
-                    location.save()
+                    print "LOCATION", vars(import_object)
+                    import_object.full_clean()
+                    import_object.save()
                 except Exception, error: 
 
                     stacktrace_file = StringIO()
@@ -182,20 +183,7 @@ class LocationBase(object):
 # Format-Specific loader base classes
 ########################################
 
-class JSONLocationBase(LocationBase):
-
-    def get_iteration_root(self):
-        if self.input_data.has_key('data'):
-            data = self.input_data['data']
-        else:
-            models.InputRecord.objects.make_note(
-             input_record=self.input_record,
-             note="Input file missing 'data' element.",
-             type=models.TRANSFER_NOTE_STATUS_ERROR,    
-             )
-            models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
-            raise ImportException("JSON missing 'data' element.")     
-        return data
+class JSONImportBase(ImportBase):
 
     @classmethod
     def open_data(cls, input_file_path):
@@ -213,11 +201,21 @@ class JSONLocationBase(LocationBase):
             input_file.close()
         return input_data
 
-
-class CSVLocationBase(LocationBase):
- 
     def get_iteration_root(self):
-        return self.input_data
+        if self.input_data.has_key('data'):
+            data = self.input_data['data']
+        else:
+            models.InputRecord.objects.make_note(
+             input_record=self.input_record,
+             note="Input file missing 'data' element.",
+             type=models.TRANSFER_NOTE_STATUS_ERROR,    
+             )
+            models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
+            raise ImportException("JSON missing 'data' element.")     
+        return data
+
+
+class CSVImportBase(ImportBase):
 
     @classmethod
     def open_data(cls, input_file_path):
@@ -235,24 +233,12 @@ class CSVLocationBase(LocationBase):
         else:
             input_file.close()
         return data
-
-
-class KMLLocationBase(LocationBase):
-
+ 
     def get_iteration_root(self):
+        return self.input_data
 
-        placemarks = self.input_data.getElementsByTagName("Placemark")
 
-        if not placemarks:            
-            models.InputRecord.objects.make_note(
-             input_record=self.input_record,
-             note="Missing 'Placemark' elements.",
-             type=models.TRANSFER_NOTE_STATUS_ERROR,    
-             )
-            models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
-            raise ImportException("Missing 'Placemark' elements.")  
-
-        return placemarks
+class KMLImportBase(ImportBase):
 
     @classmethod
     def open_data(cls, input_file_path):
@@ -270,7 +256,43 @@ class KMLLocationBase(LocationBase):
             input_file.close()
         return input_data
 
+    def get_iteration_root(self):
 
+        placemarks = self.input_data.getElementsByTagName("Placemark")
+
+        if not placemarks:            
+            models.InputRecord.objects.make_note(
+             input_record=self.input_record,
+             note="Missing 'Placemark' elements.",
+             type=models.TRANSFER_NOTE_STATUS_ERROR,    
+             )
+            models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
+            raise ImportException("Missing 'Placemark' elements.")  
+
+        return placemarks
+
+
+class ShapeFileImportBase(ImportBase):
+
+    @classmethod
+    def open_data(cls, input_file_path):
+
+        try:
+            input_data = gdal.DataSource(input_file_path)
+        except IOError, error:
+            raise IOImportException("Error with ShapeFile read: %s - %s" % (input_file_path, error, ))
+        except gdal.error.OGRException:
+            raise DataFormatImportException("Error with ShapeFile read: %s - %s" % (input_file_path, error, ))
+        except Exception, error:
+            raise ImportException("Unknown import ShapeFile error: %s - %s" % (input_file_path, error, ))
+        return input_data
+
+    def get_iteration_root(self):
+        try:
+            input_data = self.input_data[0]
+        except IndexError, error:
+            raise ImportException("Root element not found: %s"  % (error))  
+        return input_data
 
 ########################################
 

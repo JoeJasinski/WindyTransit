@@ -388,3 +388,43 @@ class GPlace(Location):
         verbose_name_plural = "Google Places" 
 
     objects = models.GeoManager()
+
+
+
+
+
+
+class CTARailLines(models.Model):
+
+    objectid = models.IntegerField()
+    segment_id = models.IntegerField()
+    asset_id = models.IntegerField()
+    transit_lines = models.CharField(max_length=50)
+    description = models.CharField(max_length=100)
+    type = models.IntegerField()
+    legend = models.CharField(max_length=5)
+    alt_legend = models.CharField(max_length=5)
+    branch = models.CharField(max_length=50)
+    shape_len = models.FloatField()
+    line = models.LineStringField()
+    
+    objects = models.GeoManager()
+
+    class Meta:
+        verbose_name = "Transit Line"
+        verbose_name_plural = "Transit Lines"
+
+# Auto-generated `LayerMapping` dictionary for CTA_RailLines2 model
+cta_raillines2_mapping = {
+    'objectid' : 'OBJECTID',
+    'segment_id' : 'SEGMENT_ID',
+    'asset_id' : 'ASSET_ID',
+    'transit_lines' : 'LINES',
+    'description' : 'DESCRIPTIO',
+    'type' : 'TYPE',
+    'legend' : 'LEGEND',
+    'alt_legend' : 'ALT_LEGEND',
+    'branch' : 'BRANCH',
+    'shape_len' : 'SHAPE_LEN',
+    'line' : 'LINESTRING',
+}

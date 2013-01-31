@@ -69,6 +69,10 @@ class GPlaceAdmin(admin.GeoModelAdmin):
     readonly_fields = LocationAdmin.readonly_fields
 
 
+class CTARailLinesAdmin(admin.GeoModelAdmin):
+
+    list_display = ['objectid', 'transit_lines', 'segment_id', 'transit_lines', 'legend']
+
 
 admin.site.register(models.Location, LocationAdmin)
 admin.site.register(models.Landmark, LandmarkAdmin)
@@ -77,6 +81,7 @@ admin.site.register(models.TransitStop, TransitStopAdmin)
 admin.site.register(models.Library, LibraryAdmin)
 admin.site.register(models.Hospital, HospitalAdmin)
 admin.site.register(models.GPlace, GPlaceAdmin)
+admin.site.register(models.CTARailLines, CTARailLinesAdmin)
 
 admin.site.register(models.Region, RegionAdmin)
 admin.site.register(models.Neighborhood, NeighborhoodAdmin)

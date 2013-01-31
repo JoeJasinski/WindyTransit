@@ -1,7 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib.gis.geos import Point, fromstr, fromfile, GEOSGeometry, MultiPoint, MultiPolygon, Polygon
 from autoslug.settings import slugify
-from mobiletrans.mtimport.importer import LocationBase
+from mobiletrans.mtimport.importer import ImportBase
 from mobiletrans.mtlocation import models as loc_models
 from mobiletrans.mtimport import models
 from mobiletrans.mtimport.exceptions import * 
@@ -15,10 +15,10 @@ def search_places_from_lat_long(lag_lng, radius=3200, keyword=None, types=[]):
     google_places = GooglePlaces(settings.GOOGLE_PLACES_API_KEY)
     query_result = google_places.query(
             lat_lng=lag_lng, keyword=keyword,
-            radius=radius, types=types)
+            radius =radius, types=types)
     return query_result
   
-class GPlaceLocation(LocationBase):
+class GPlaceLocation(ImportBase):
 
     @classmethod
     def get_model_class(cls,):
@@ -27,7 +27,7 @@ class GPlaceLocation(LocationBase):
     @classmethod
     def open_data(cls, lat_lng, radius):
         try:
-            data = search_places_from_lat_long(lat_lng, radius)
+            data = search_places_from_lat_long(lat_lng, radius=radius)
         except GooglePlacesError, error:
             raise GoogleIOImportException("GooglePlaces lookup error: %s" % (error)) 
         except Exception, error:

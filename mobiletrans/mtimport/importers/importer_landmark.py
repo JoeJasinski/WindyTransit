@@ -1,12 +1,12 @@
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib.gis.geos import Point, fromstr, fromfile, GEOSGeometry, MultiPoint, MultiPolygon, Polygon
 from autoslug.settings import slugify
-from mobiletrans.mtimport.importer import JSONLocationBase
+from mobiletrans.mtimport.importer import JSONImportBase
 from mobiletrans.mtlocation import models as loc_models
 from mobiletrans.mtimport import models
 from mobiletrans.mtimport.exceptions import * 
 
-class Landmark(JSONLocationBase):
+class Landmark(JSONImportBase):
 
     @classmethod
     def get_model_class(cls,):
