@@ -291,6 +291,24 @@ class Hospital(Location):
         return serialize_parent 
 
 
+class PoliceStation(Location):
+
+    class_slug = 'police_station'
+
+    district = models.CharField(max_length=20, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    zip = models.CharField(max_length=10, blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Police Station Location"
+        verbose_name_plural = "Police Station Locations"
+
+    def serialize(self):
+        serialize_parent = super(self.__class__, self).serialize().copy()
+        return serialize_parent 
+
+
 class Region(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)

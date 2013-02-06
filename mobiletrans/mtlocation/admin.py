@@ -7,7 +7,7 @@ app_renamer.AppLabelRenamer(native_app_label=u'mtlocation', app_label=u'Location
 class LocationAdmin(admin.GeoModelAdmin):
     
     search_fields = ['name','uuid']
-    list_display = ['uuid','name','point',]
+    list_display = ['uuid','name','point','created']
     readonly_fields = ['uuid','slug','created','modified']
 
 
@@ -38,6 +38,14 @@ class LibraryAdmin(admin.GeoModelAdmin):
     search_fields = LocationAdmin.search_fields + ['address','zip']  
     list_display = LocationAdmin.list_display + ['address',]
     readonly_fields = LocationAdmin.readonly_fields
+
+
+class PoliceStationAdmin(admin.GeoModelAdmin):
+
+    search_fields = LocationAdmin.search_fields + ['address','zip']  
+    list_display = LocationAdmin.list_display + ['address',]
+    readonly_fields = LocationAdmin.readonly_fields
+
 
 class HospitalAdmin(admin.GeoModelAdmin):
 
@@ -74,11 +82,14 @@ class CTARailLinesAdmin(admin.GeoModelAdmin):
     list_display = ['objectid', 'transit_lines', 'segment_id', 'transit_lines', 'legend']
 
 
+
+
 admin.site.register(models.Location, LocationAdmin)
 admin.site.register(models.Landmark, LandmarkAdmin)
 admin.site.register(models.TransitRoute, TransitRouteAdmin)
 admin.site.register(models.TransitStop, TransitStopAdmin)
 admin.site.register(models.Library, LibraryAdmin)
+admin.site.register(models.PoliceStation, PoliceStationAdmin)
 admin.site.register(models.Hospital, HospitalAdmin)
 admin.site.register(models.GPlace, GPlaceAdmin)
 admin.site.register(models.CTARailLines, CTARailLinesAdmin)
