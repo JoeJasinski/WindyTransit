@@ -1,8 +1,7 @@
 import os
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from mtimport import importer, models
-from mtlocation import models as loc_models
+from mobiletrans.mtimport.importers import importer_zipcode as importer
 
 class Command(BaseCommand):
     args = '<zipcodes.kml>'
@@ -12,10 +11,7 @@ class Command(BaseCommand):
         if not input_file_path:
             input_file_path = "%s" % os.path.join(settings.VENV_ROOT, "data", "zipcodes.kml")
         self.stdout.write("Import %s \n" % input_file_path)
-        input_record = models.InputRecord()
-        input_record.type = loc_models.Zipcode.__name__
-        input_record.save()
-        importer.Zipcode.data_import(input_file_path, input_record)
+        input_record = importer.Zipcode.data_import(input_file_path)
         print input_file_path 
 
 

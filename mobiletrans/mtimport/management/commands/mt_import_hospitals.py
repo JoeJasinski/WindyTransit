@@ -1,8 +1,7 @@
 import os, json
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from mtimport import importer, models
-from mtlocation import models as loc_models
+from mobiletrans.mtimport.importers import importer_hospital as importer
 
 class Command(BaseCommand):
     args = '<hostpitals.kml>'
@@ -12,10 +11,7 @@ class Command(BaseCommand):
         if not input_file_path:
             input_file_path = "%s" % os.path.join(settings.VENV_ROOT, "data", "hospitals.kml")
         self.stdout.write("Import %s \n" % input_file_path)
-        input_record = models.InputRecord()
-        input_record.type = loc_models.Hospital.__name__
-        input_record.save()
-        importer.Hospital.data_import(input_file_path, input_record)
+        input_record = importer.Hospital.data_import(input_file_path)
         print input_file_path 
 
 

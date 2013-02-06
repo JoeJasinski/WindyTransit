@@ -1,5 +1,5 @@
 ENVIRONMENT SETUP
-
+-------
 1. virtualenv --no-site-packages windytransit
 
 2. cd windytransit; . ./bin/activate

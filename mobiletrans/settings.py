@@ -24,7 +24,7 @@ from mtsettings.local_settings import (VENV_ROOT, PROJECT_ROOT )
 #        'PORT': '',
 #    }
 #}
-
+GOOGLE_PLACES_API_KEY = ''
 #######################
 #####  END These settings should go in local_settings.py
 ####################
@@ -123,11 +123,11 @@ MIDDLEWARE_CLASSES = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
-    "django.core.context_processors.auth",
+    "django.contrib.auth.context_processors.auth",
     'django.core.context_processors.request',
     "django.core.context_processors.media",
     'django.core.context_processors.static',
-    'mtcore.context_processors.site',
+    'mobiletrans.mtcore.context_processors.site',
 )
 
 
@@ -150,11 +150,12 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.gis',
     'django_extensions',
+    "south", 
     "compressor",
     
-    'mtcore',
-    'mtlocation',
-    'mtimport',
+    'mobiletrans.mtcore',
+    'mobiletrans.mtlocation',
+    'mobiletrans.mtimport',
 
 )
 

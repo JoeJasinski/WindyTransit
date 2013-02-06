@@ -1,10 +1,10 @@
+import uuid
 from django.contrib.gis.db import models
 from django.contrib.contenttypes.models import ContentType
-from django_extensions.db import fields as ext_fields
 from django.contrib.sites.models import Site
-import uuid
 from django.conf import settings
 from autoslug import AutoSlugField
+from mobiletrans.mtlocation.fields import SeparatedValuesField, UUIDField
 
 TRANSIT_STOP_TYPE_STOP=0
 TRANSIT_STOP_TYPE_STATION=1
@@ -56,7 +56,7 @@ class Location(models.Model):
     name = models.CharField(max_length=255)
     slug = AutoSlugField(populate_from='name', max_length=255)
     point = models.PointField(help_text="Represented as (longitude, lattitude)")
-    uuid = ext_fields.UUIDField(auto=False)
+    uuid = UUIDField(auto=False)
     
     content_type = models.ForeignKey(ContentType,editable=False,null=True)
 
@@ -82,7 +82,7 @@ class Location(models.Model):
     def save(self, *args, **kwargs):
         if(not self.content_type):
             self.content_type = ContentType.objects.get_for_model(self.__class__)
-            super(Location, self).save(*args, **kwargs)
+        super(Location, self).save(*args, **kwargs)
 
     def placemark_icon(self):
         site = Site.objects.get_current()
@@ -134,7 +134,7 @@ class TransitStop(Location):
         help_text=("Optional. The stop_desc field contains a description of a stop. "
                    "Please provide useful, quality information. Do not simply "
                    "duplicate the name of the stop."))
-    url = models.URLField(verify_exists=True, blank=True, null=True,
+    url = models.URLField(blank=True, null=True,
         help_text=("Optional. The stop_url field contains the URL of a web page about "
                    "a particular stop. This should be different from the agency_url "
                    "and the route_url fields. "))
@@ -190,7 +190,7 @@ class TransitRoute(models.Model):
 
     class_slug = 'transit_route'
 
-    uuid = ext_fields.UUIDField(auto=True)
+    uuid = UUIDField(auto=True)
 
     route_id = models.CharField(max_length=64,
         help_text=("Required. The route_id field contains an ID that uniquely identifies a "
@@ -226,7 +226,7 @@ class TransitRoute(models.Model):
                    "text drawn against a background of route_color. The color must be provided as a "
                    "six-character hexadecimal number, for example, FFD700. If no color is specified, the "
                    "default text color is black (000000)."))
-    url = models.URLField(verify_exists=False, blank=True, null=True,
+    url = models.URLField(blank=True, null=True,
         help_text=("Optional. The route_url field contains the URL of a web page about that particular "
                    "route. This should be different from the agency_url."))
 
@@ -257,7 +257,7 @@ class Library(Location):
     zip = models.CharField(max_length=10, blank=True, null=True)
     hours = models.TextField(blank=True, null=True)
     phone = models.CharField(max_length=64, blank=True, null=True)
-    website = models.URLField(verify_exists=False, blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
 
     objects = LocationManager()
         
@@ -291,6 +291,24 @@ class Hospital(Location):
         return serialize_parent 
 
 
+class PoliceStation(Location):
+
+    class_slug = 'police_station'
+
+    district = models.CharField(max_length=20, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    zip = models.CharField(max_length=10, blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Police Station Location"
+        verbose_name_plural = "Police Station Locations"
+
+    def serialize(self):
+        serialize_parent = super(self.__class__, self).serialize().copy()
+        return serialize_parent 
+
+
 class Region(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
@@ -300,7 +318,7 @@ class Region(models.Model):
     name = models.CharField(max_length=255)
     slug = AutoSlugField(populate_from='name', max_length=255)
     area = models.PolygonField()
-    uuid = ext_fields.UUIDField(auto=False)
+    uuid = UUIDField(auto=False)
     
     content_type = models.ForeignKey(ContentType,editable=False,null=True)
 
@@ -369,3 +387,62 @@ class Zipcode(Region):
     def serialize(self):
         serialize_parent = super(self.__class__, self).serialize().copy()
         return serialize_parent 
+
+
+class GPlace(Location):
+
+    rating = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
+    vicinity = models.TextField(blank=True, null=True)
+    types = SeparatedValuesField(blank=True, null=True)
+    reference = models.CharField(max_length=1024, blank=True, null=True)
+    international_phone_number = models.CharField(max_length=30, blank=True, null=True)
+    local_phone_number = models.CharField(max_length=30, blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    url = models.URLField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Google Place"
+        verbose_name_plural = "Google Places" 
+
+    objects = models.GeoManager()
+
+
+
+
+
+
+class CTARailLines(models.Model):
+
+    objectid = models.IntegerField()
+    segment_id = models.IntegerField()
+    asset_id = models.IntegerField()
+    transit_lines = models.CharField(max_length=50)
+    description = models.CharField(max_length=100)
+    type = models.IntegerField()
+    legend = models.CharField(max_length=5)
+    alt_legend = models.CharField(max_length=5)
+    branch = models.CharField(max_length=50)
+    shape_len = models.FloatField()
+    line = models.LineStringField()
+    
+    objects = models.GeoManager()
+
+    class Meta:
+        verbose_name = "Transit Line"
+        verbose_name_plural = "Transit Lines"
+
+# Auto-generated `LayerMapping` dictionary for CTA_RailLines2 model
+cta_raillines2_mapping = {
+    'objectid' : 'OBJECTID',
+    'segment_id' : 'SEGMENT_ID',
+    'asset_id' : 'ASSET_ID',
+    'transit_lines' : 'LINES',
+    'description' : 'DESCRIPTIO',
+    'type' : 'TYPE',
+    'legend' : 'LEGEND',
+    'alt_legend' : 'ALT_LEGEND',
+    'branch' : 'BRANCH',
+    'shape_len' : 'SHAPE_LEN',
+    'line' : 'LINESTRING',
+}

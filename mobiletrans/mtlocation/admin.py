@@ -1,13 +1,13 @@
 from django.contrib.gis import admin
-from . import models
-from mtcore import app_renamer
+from mobiletrans.mtlocation import models
+from mobiletrans.mtcore import app_renamer
 
 app_renamer.AppLabelRenamer(native_app_label=u'mtlocation', app_label=u'Location').main()
 
 class LocationAdmin(admin.GeoModelAdmin):
     
     search_fields = ['name','uuid']
-    list_display = ['uuid','name','point',]
+    list_display = ['uuid','name','point','created']
     readonly_fields = ['uuid','slug','created','modified']
 
 
@@ -39,6 +39,14 @@ class LibraryAdmin(admin.GeoModelAdmin):
     list_display = LocationAdmin.list_display + ['address',]
     readonly_fields = LocationAdmin.readonly_fields
 
+
+class PoliceStationAdmin(admin.GeoModelAdmin):
+
+    search_fields = LocationAdmin.search_fields + ['address','zip']  
+    list_display = LocationAdmin.list_display + ['address',]
+    readonly_fields = LocationAdmin.readonly_fields
+
+
 class HospitalAdmin(admin.GeoModelAdmin):
 
     search_fields = LocationAdmin.search_fields
@@ -62,13 +70,29 @@ class ZipcodeAdmin(admin.GeoModelAdmin):
     search_fields = RegionAdmin.search_fields
     list_display = RegionAdmin.list_display
 
+class GPlaceAdmin(admin.GeoModelAdmin):
+
+    search_fields = LocationAdmin.search_fields
+    list_display = LocationAdmin.list_display 
+    readonly_fields = LocationAdmin.readonly_fields
+
+
+class CTARailLinesAdmin(admin.GeoModelAdmin):
+
+    list_display = ['objectid', 'transit_lines', 'segment_id', 'transit_lines', 'legend']
+
+
+
 
 admin.site.register(models.Location, LocationAdmin)
 admin.site.register(models.Landmark, LandmarkAdmin)
 admin.site.register(models.TransitRoute, TransitRouteAdmin)
 admin.site.register(models.TransitStop, TransitStopAdmin)
 admin.site.register(models.Library, LibraryAdmin)
+admin.site.register(models.PoliceStation, PoliceStationAdmin)
 admin.site.register(models.Hospital, HospitalAdmin)
+admin.site.register(models.GPlace, GPlaceAdmin)
+admin.site.register(models.CTARailLines, CTARailLinesAdmin)
 
 admin.site.register(models.Region, RegionAdmin)
 admin.site.register(models.Neighborhood, NeighborhoodAdmin)
