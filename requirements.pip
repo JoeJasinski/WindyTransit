@@ -1,4 +1,4 @@
-Django==1.5c1
+https://www.djangoproject.com/download/1.5c1/tarball/
 PIL==1.1.7
 South==0.7.3
 argparse==1.2.1

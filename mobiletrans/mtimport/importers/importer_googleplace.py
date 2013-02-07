@@ -98,7 +98,7 @@ class GPlaceLocation(ImportBase):
         place.point = point
  
         if hasattr(row, 'rating'):
-            place.rating = row.rating 
+            place.rating = "%s" % row.rating 
 
         if hasattr(row, 'vicinity'):
             place.vicinity = row.vicinity
