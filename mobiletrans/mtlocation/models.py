@@ -408,7 +408,12 @@ class GPlace(Location):
     objects = models.GeoManager()
 
 
-
+    def placemark_icon(self):
+        site = Site.objects.get_current()
+        static_url = settings.STATIC_URL
+        return_value = "http://%s%simage/location-place.png" % (site, static_url)
+        return return_value 
+ 
 
 
 
