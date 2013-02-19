@@ -1,3 +1,4 @@
+import decimal
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib.gis.geos import Point, fromstr, fromfile, GEOSGeometry, MultiPoint, MultiPolygon, Polygon
 from autoslug.settings import slugify
@@ -98,7 +99,12 @@ class GPlaceLocation(ImportBase):
         place.point = point
  
         if hasattr(row, 'rating'):
-            place.rating = "%s" % row.rating 
+            try:
+                d = decimal.Decimal("%s" % row.rating)
+            except decimal.InvalidOperation:
+                pass
+            else:
+                place.rating = d
 
         if hasattr(row, 'vicinity'):
             place.vicinity = row.vicinity
