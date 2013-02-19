@@ -76,7 +76,7 @@ def shortestPath(G,start,end):
 	The output is a list of the vertices in order along
 	the shortest path.
 	"""
-
+	initial_end = end
 	D,P = Dijkstra(G,start,end)
 	Path = []
 	while 1:
@@ -84,4 +84,44 @@ def shortestPath(G,start,end):
 		if end == start: break
 		end = P[end]
 	Path.reverse()
-	return Path
+	return Path, D[initial_end]
+
+
+
+"""
+from dijkstra import shortestPath
+
+class Station(object):
+    def __init__(self, name):
+        self.name = name
+    def __repr__(self):
+        return 'Station(name=%s)' % (self.name,)
+
+a = Station('a')
+b = Station('b')
+c = Station('c')
+d = Station('d')
+e = Station('e')
+f = Station('f')
+g = Station('g')
+h = Station('h')
+i = Station('i')
+j = Station('j')
+k = Station('k')
+
+G = {
+ a:{b:5}, 
+ b:{a:5, c:3},
+ c:{b:3, d:3},
+ d:{c:3, h:10, e:2},
+ e:{d:2, f:2, k:10},
+ f:{e:2, g:5},
+ g:{f:5, i:3}, 
+ h:{d:10, i:1}, 
+ i:{g:3, h:1, j:2},
+ j:{i:2},
+ k:{e:10}, 
+ }
+
+shortestPath(G, a, j)
+"""
