@@ -41,7 +41,8 @@ class TransitNetwork(DictMixin):
     def keys(self):
         keys = self.station_dict.keys()
         return keys
-    def add_station(self, line, name, links):
+    def add_station(self, key, links):
+        line, name = self.disjoin(key)
         station = Station(line, name, links)
         if not self.station_dict.has_key(line):
             self.station_dict[line] = {name:station}
@@ -58,41 +59,43 @@ class TransitNetwork(DictMixin):
             if v.has_key(name):
                 keys.append(self.rejoin(line,name))
         return keys 
+    def shortest_path(self, start, end):
+        return shortestPath(self, start, end)
     def __repr__(self):
         return 'TransitNetwork(<>)'
 
 
 tn = TransitNetwork() 
-tn.add_station('red', 'b', {'red_d':5}) 
-tn.add_station('red', 'd', {'red_g':1, 'green_d':5, 'brown_d':5}) 
-tn.add_station('red', 'g', {'red_d':1, 'red_i':1}) 
-tn.add_station('red', 'i', {'red_k':1, 'blue_i':5}) 
-tn.add_station('red', 'k', {'red_i':1, 'red_l':3, 'brown_k':5, }) 
-tn.add_station('red', 'l', {'red_k':3}) 
+tn.add_station('red_b', {'red_d':5}) 
+tn.add_station('red_d', {'red_g':1, 'green_d':5, 'brown_d':5}) 
+tn.add_station('red_g', {'red_d':1, 'red_i':1}) 
+tn.add_station('red_i', {'red_k':1, 'blue_i':5}) 
+tn.add_station('red_k', {'red_i':1, 'red_l':3, 'brown_k':5, }) 
+tn.add_station('red_l', {'red_k':3}) 
 
-tn.add_station('green', 'c', {'green_e':2})
-tn.add_station('green', 'e', {'green_c':2, 'green_d':1, 'brown_e':5, 'blue_e':5})
-tn.add_station('green', 'd', {'green_e':1, 'red_d':5, 'brown_d':5, 'green_h':3})
-tn.add_station('green', 'h', {'green_d':3, 'green_j':2, 'brown_h':5})
-tn.add_station('green', 'j', {'green_h':2, 'green_m':5, 'brown_j':5})
-tn.add_station('green', 'm', {'green_j':5})
+tn.add_station('green_c', {'green_e':2})
+tn.add_station('green_e', {'green_c':2, 'green_d':1, 'brown_e':5, 'blue_e':5})
+tn.add_station('green_d', {'green_e':1, 'red_d':5, 'brown_d':5, 'green_h':3})
+tn.add_station('green_h', {'green_d':3, 'green_j':2, 'brown_h':5})
+tn.add_station('green_j', {'green_h':2, 'green_m':5, 'brown_j':5})
+tn.add_station('green_m', {'green_j':5})
 
-tn.add_station('blue', 'n', {'blue_e':2})
-tn.add_station('blue', 'e', {'blue_n':2, 'blue_i':2, 'green_e':5, 'brown_e':5})
-tn.add_station('blue', 'i', {'blue_e':2, 'blue_o':5, 'red_i':5})
-tn.add_station('blue', 'o', {'blue_i':5})
+tn.add_station('blue_n', {'blue_e':2})
+tn.add_station('blue_e', {'blue_n':2, 'blue_i':2, 'green_e':5, 'brown_e':5})
+tn.add_station('blue_i', {'blue_e':2, 'blue_o':5, 'red_i':5})
+tn.add_station('blue_o', {'blue_i':5})
 
-tn.add_station('brown', 'a', {'brown_f':2})
-tn.add_station('brown', 'f', {'brown_k':3})
-tn.add_station('brown', 'k', {'brown_j':2, 'red_k':5})
-tn.add_station('brown', 'j', {'brown_h':2, 'green_j':5})
-tn.add_station('brown', 'h', {'brown_d':3, 'green_h':5})
-tn.add_station('brown', 'd', {'brown_e':1, 'red_d':5, 'green_d':5})
-tn.add_station('brown', 'e', {'brown_a':2, 'blue_e':5, 'green_e':5})
+tn.add_station('brown_a', {'brown_f':2})
+tn.add_station('brown_f', {'brown_k':3})
+tn.add_station('brown_k', {'brown_j':2, 'red_k':5})
+tn.add_station('brown_j', {'brown_h':2, 'green_j':5})
+tn.add_station('brown_h', {'brown_d':3, 'green_h':5})
+tn.add_station('brown_d', {'brown_e':1, 'red_d':5, 'green_d':5})
+tn.add_station('brown_e', {'brown_a':2, 'blue_e':5, 'green_e':5})
 
 
 
-shortestPath(tn, 'green_c', 'red_k')
+tn.shortest_path('green_c', 'red_k')
 tn.get_stops_on_line('green')
 tn.get_stops_at_station('e')
 
