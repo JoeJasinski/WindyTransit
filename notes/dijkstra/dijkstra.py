@@ -1,9 +1,12 @@
+from __future__ import division
 # Dijkstra's algorithm for shortest paths
 # David Eppstein, UC Irvine, 4 April 2002
 
 # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/117228
 # http://code.activestate.com/recipes/119466-dijkstras-algorithm-for-shortest-paths/
 from priodict import priorityDictionary
+
+NODE_VISIT_COST = 0.5
 
 def Dijkstra(G,start,end=None):
 	"""
@@ -58,7 +61,7 @@ def Dijkstra(G,start,end=None):
 		if v == end: break
 		
 		for w in G[v]:
-			vwLength = D[v] + G[v][w]
+			vwLength = D[v] + G[v][w] + NODE_VISIT_COST
 			if w in D:
 				if vwLength < D[w]:
 					raise ValueError, \
