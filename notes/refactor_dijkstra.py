@@ -2,10 +2,11 @@ from dijkstra import shortestPath
 from UserDict import DictMixin
 
 class Station(DictMixin):
-    def __init__(self, line, name, links):
+    def __init__(self, line, name, links, *args, **kwargs):
         self.line = line
         self.name = name
         self.links = links
+        self.desc = kwargs.get('desc', None)
     def __getitem__(self, key):
         return self.links[key]
     def __setitem__(self, key, item):
@@ -44,7 +45,7 @@ class TransitNetwork(DictMixin):
         return keys
     def add_station(self, key, links, *args, **kwargs):
         line, name = self.disjoin(key)
-        station = Station(line, name, links)
+        station = Station(line, name, links, *args, **kwargs)
         if not self.station_dict.has_key(line):
             self.station_dict[line] = {name:station}
         else:
