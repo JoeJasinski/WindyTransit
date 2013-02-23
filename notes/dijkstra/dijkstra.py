@@ -6,7 +6,7 @@ from __future__ import division
 # http://code.activestate.com/recipes/119466-dijkstras-algorithm-for-shortest-paths/
 from priodict import priorityDictionary
 
-NODE_VISIT_COST = 0.5
+NODE_VISIT_COST = 0.0
 
 def Dijkstra(G,start,end=None):
 	"""

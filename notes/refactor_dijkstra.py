@@ -79,6 +79,12 @@ class TransitNetwork(DictMixin):
 
 tn = TransitNetwork() 
 wait_time = 5.0
+# transfer time for blue line to library at Jackson
+bluelib_wait_time = 10.0
+# transfer time for red line to library at Jackson
+redlib_wait_time = 10.0
+# 
+red_blue_jackson_wait_time = 10.0
 
 #>>> trans(['Brn', 'P'], '40460', desc="Merchandise Mart")
 tn.add_station('Brn_40460', {'P_40460':wait_time, 'Brn_40730':2}, desc='Merchandise Mart')  # done
@@ -88,7 +94,7 @@ tn.add_station('P_40460', {'Brn_40460':wait_time, }, desc='Merchandise Mart')   
 tn.add_station('Brn_40730', {'Org_40730':wait_time, 'P_40730':wait_time, 'Pink_40730':wait_time, 'Brn_40040':1, }, desc='Washington/Wells') # done
 tn.add_station('P_40730', {'Brn_40730':wait_time, 'Org_40730':wait_time, 'Pink_40730':wait_time, 'P_40460':2, }, desc='Washington/Wells')   # done
 tn.add_station('Org_40730', {'Brn_40730':wait_time, 'P_40730':wait_time, 'Pink_40730':wait_time, 'Org_40380':3 }, desc='Washington/Wells')  # done
-tn.add_station('Pink_40730', {'Brn_40730':wait_time, 'Org_40730':wait_time, 'P_40730':wait_time, }, desc='Washington/Wells')
+tn.add_station('Pink_40730', {'Brn_40730':wait_time, 'Org_40730':wait_time, 'P_40730':wait_time, 'Pink_41160':3}, desc='Washington/Wells')  # done clinton estimate
 
 #>>> trans(['Brn', 'P', 'Org', 'Pink'], '40040', desc="Quincy")
 tn.add_station('Brn_40040', {'Pink_40040':wait_time, 'P_40040':wait_time, 'Org_40040':wait_time, 'Brn_40160':1, }, desc='Quincy') # done
@@ -103,10 +109,10 @@ tn.add_station('Org_40160', {'P_40160':wait_time, 'Pink_40160':wait_time, 'Brn_4
 tn.add_station('Pink_40160', {'P_40160':wait_time, 'Brn_40160':wait_time, 'Org_40160':wait_time, 'Pink_40040':1 }, desc='LaSalle') # done
 
 #>>> trans(['Brn', 'P', 'Org', 'Pink'], '40850', desc="Library")
-tn.add_station('Brn_40850', {'Pink_40850':wait_time, 'P_40850':wait_time, 'Org_40850':wait_time, 'Red_40560':10, 'Brn_40680':2, }, desc='Library') # partial
-tn.add_station('P_40850', {'Brn_40850':wait_time, 'Pink_40850':wait_time, 'Org_40850':wait_time, 'Red_40560':10, 'P_40160':1, }, desc='Library')  # partial
-tn.add_station('Org_40850', {'Brn_40850':wait_time, 'Pink_40850':wait_time, 'P_40850':wait_time, 'Red_40560':10, 'Org_40160':1, }, desc='Library')  # partial
-tn.add_station('Pink_40850', {'Brn_40850':wait_time, 'P_40850':wait_time, 'Org_40850':wait_time, 'Red_40560':10, 'Pink_40160':1, }, desc='Library') # partial
+tn.add_station('Brn_40850', {'Pink_40850':wait_time, 'P_40850':wait_time, 'Org_40850':wait_time, 'Blue_40070':bluelib_wait_time, 'Red_40560':redlib_wait_time, 'Brn_40680':2, }, desc='Library') # done
+tn.add_station('P_40850', {'Brn_40850':wait_time, 'Pink_40850':wait_time, 'Org_40850':wait_time, 'Blue_40070':bluelib_wait_time, 'Red_40560':redlib_wait_time, 'P_40160':1, }, desc='Library')  # done
+tn.add_station('Org_40850', {'Brn_40850':wait_time, 'Pink_40850':wait_time, 'P_40850':wait_time, 'Blue_40070':bluelib_wait_time, 'Red_40560':redlib_wait_time, 'Org_40160':1, }, desc='Library')  # done
+tn.add_station('Pink_40850', {'Brn_40850':wait_time, 'P_40850':wait_time, 'Org_40850':wait_time, 'Blue_40070':bluelib_wait_time, 'Red_40560':redlib_wait_time, 'Pink_40160':1, }, desc='Library') # done
 
 #>>> trans(['Brn', 'P', 'Org', 'G', 'Pink'], '40680', desc="Adams/Wabash")
 tn.add_station('Brn_40680', {'P_40680':wait_time, 'G_40680':wait_time, 'Org_40680':wait_time, 'Pink_40680':wait_time, 'Brn_40640':1, }, desc='Adams/Wabash') # done
@@ -137,12 +143,12 @@ tn.add_station('G_40260', {'Org_40260':wait_time, 'Pink_40260':wait_time, 'Brn_4
 tn.add_station('Pink_40260', {'G_40260':wait_time, 'Org_40260':wait_time, 'Brn_40260':wait_time, 'P_40260':wait_time, 'Red_41660':wait_time, 'Pink_40200':1 }, desc='State/Lake')  # done
 
 #>>> trans(['Brn', 'P', 'Org', 'G', 'Blue', 'Pink'], '40380', desc="Clark/Lake")
-tn.add_station('Brn_40380', {'Blue_40380':wait_time, 'Pink_40380':wait_time, 'Org_40380':wait_time, 'G_40380':wait_time, 'P_40380':wait_time, 'Brn_40460':4, }, desc='Clark/Lake')  # partial
-tn.add_station('P_40380', {'Blue_40380':wait_time, 'Brn_40380':wait_time, 'Pink_40380':wait_time, 'Org_40380':wait_time, 'G_40380':wait_time, 'P_40260':1, }, desc='Clark/Lake')  # partial
-tn.add_station('Org_40380', {'Blue_40380':wait_time, 'Brn_40380':wait_time, 'Pink_40380':wait_time, 'G_40380':wait_time, 'P_40380':wait_time, 'Org_40260':1, }, desc='Clark/Lake')  # partial
-tn.add_station('G_40380', {'Blue_40380':wait_time, 'Brn_40380':wait_time, 'Pink_40380':wait_time, 'Org_40380':wait_time, 'P_40380':wait_time, 'G_40260': 1, 'G_41160':2 }, desc='Clark/Lake')  # partial
-tn.add_station('Blue_40380', {'Brn_40380':wait_time, 'Pink_40380':wait_time, 'Org_40380':wait_time, 'G_40380':wait_time, 'P_40380':wait_time, }, desc='Clark/Lake')
-tn.add_station('Pink_40380', {'Blue_40380':wait_time, 'Brn_40380':wait_time, 'Org_40380':wait_time, 'G_40380':wait_time, 'P_40380':wait_time, 'Pink_40260':1, }, desc='Clark/Lake') # partial
+tn.add_station('Brn_40380', {'Blue_40380':wait_time, 'Pink_40380':wait_time, 'Org_40380':wait_time, 'G_40380':wait_time, 'P_40380':wait_time, 'Brn_40460':4, }, desc='Clark/Lake')  # done
+tn.add_station('P_40380', {'Blue_40380':wait_time, 'Brn_40380':wait_time, 'Pink_40380':wait_time, 'Org_40380':wait_time, 'G_40380':wait_time, 'P_40260':1, }, desc='Clark/Lake')  # done
+tn.add_station('Org_40380', {'Blue_40380':wait_time, 'Brn_40380':wait_time, 'Pink_40380':wait_time, 'G_40380':wait_time, 'P_40380':wait_time, 'Org_40260':1, }, desc='Clark/Lake')  # done
+tn.add_station('G_40380', {'Blue_40380':wait_time, 'Brn_40380':wait_time, 'Pink_40380':wait_time, 'Org_40380':wait_time, 'P_40380':wait_time, 'G_40260': 1, 'G_41160':2 }, desc='Clark/Lake')  # done
+tn.add_station('Blue_40380', {'Brn_40380':wait_time, 'Pink_40380':wait_time, 'Org_40380':wait_time, 'G_40380':wait_time, 'P_40380':wait_time, 'Blue_40490':2, 'Blue_40370':2 }, desc='Clark/Lake') # done
+tn.add_station('Pink_40380', {'Blue_40380':wait_time, 'Brn_40380':wait_time, 'Org_40380':wait_time, 'G_40380':wait_time, 'P_40380':wait_time, 'Pink_40260':1, }, desc='Clark/Lake') # done
 
 #>>> trans(['Red', 'Org', 'G', ], '41400', desc="Roosevelt")
 tn.add_station('Red_41400', {'Org_41400':wait_time, 'G_41400':wait_time, }, desc='Roosevelt')
@@ -157,7 +163,7 @@ tn.add_station('G_41160', {'Pink_41160':wait_time, 'G_40380':2, }, desc='Clinton
 tn.add_station('Red_41490', { 'Red_41400':1, 'Red_40560':1 }, desc='Harrison')  # done
 
 # Jackson Red
-tn.add_station('Red_40560', { 'Red_41490':1, 'Red_41090':2, 'Brn_40850':10, 'P_40850':10, 'Org_40850':10, 'Pink_40850':10 }, desc='Jackson')  # done
+tn.add_station('Red_40560', { 'Red_41490':1, 'Red_41090':2, 'Blue_40070':red_blue_jackson_wait_time, 'Brn_40850':redlib_wait_time, 'P_40850':redlib_wait_time, 'Org_40850':redlib_wait_time, 'Pink_40850':redlib_wait_time }, desc='Jackson')  # done
 
 # Monroe Red
 tn.add_station('Red_41090', { 'Red_40560':2, 'Red_41660':1 }, desc='Monroe')  # done
@@ -168,6 +174,20 @@ tn.add_station('Red_41660', { 'Red_41090':1, 'Red_40330':1,'Brn_40260':wait_time
 # Grand Red
 tn.add_station('Red_40330', { 'Red_41660':1, }, desc='Grand Red')  # done loop
 
+# Grand Blue
+tn.add_station('Blue_40490', { 'Blue_40380':2, }, desc='Grand Blue')  # done loop
+
+# Washington Blue
+tn.add_station('Blue_40370', { 'Blue_40380':2, 'Blue_41330':1 }, desc='Washington')  # done
+
+# Monroe Blue
+tn.add_station('Blue_41330', { 'Blue_40070':1, 'Blue_40370':1 }, desc='Monroe')  # done
+
+# Jackson Blue
+tn.add_station('Blue_40070', { 'Blue_41330':1, 'Blue_41340':1, 'Red_40560':red_blue_jackson_wait_time, 'Brn_40850':bluelib_wait_time, 'P_40850':bluelib_wait_time, 'Org_40850':bluelib_wait_time, 'Pink_40850':bluelib_wait_time}, desc='Jackson')  # done
+
+# VanBuren Blue
+tn.add_station('Blue_41340', { 'Blue_40070':1, }, desc='VanBuren')  # done loop
 
 
 tn.shortest_path('Red_40330', 'Red_41400')
