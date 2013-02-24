@@ -6,7 +6,7 @@ class Station(DictMixin):
         self.line = line
         self.name = name
         self.links = links
-        self.desc = kwargs.get('desc', None)
+        self.desc = kwargs.get('desc', "")
     def __getitem__(self, key):
         return self.links[key]
     def __setitem__(self, key, item):
@@ -16,7 +16,7 @@ class Station(DictMixin):
     def keys(self):
         return self.links.keys()
     def __repr__(self):
-        return 'Station(line=%s name=%s)' % (self.line, self.name,)
+        return 'Station(line=%s name=%s desc=%s)' % (self.line, self.name, self.desc)
     def get_unique_name(self):
         return "%s_%s" % (self.line, self.name)
 
