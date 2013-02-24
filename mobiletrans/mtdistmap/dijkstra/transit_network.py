@@ -1,5 +1,6 @@
 from mobiletrans.mtdistmap.dijkstra.dijkstra import shortestPath
 from UserDict import DictMixin
+from pprint import pprint
 
 class Station(DictMixin):
     def __init__(self, line, name, links, *args, **kwargs):
@@ -19,6 +20,18 @@ class Station(DictMixin):
         return 'Station(line=%s name=%s desc=%s)' % (self.line, self.name, self.desc)
     def get_unique_name(self):
         return "%s_%s" % (self.line, self.name)
+
+class Path(object):
+    def __init__(self, tn, stops, total_time):
+        self.tn = tn
+        self.stops = stops
+        self.total_time = total_time
+    def as_stations(self):
+        return [ self.tn[stop] for stop in self.stops ]
+    def __repr__(self):
+        return "Path(stops=%s total_time=%s)" % (self.stops, self.total_time)
+    def pprint(self):
+        return pprint(self.as_stations())
 
 class TransitNetwork(DictMixin):
     def disjoin(self, key):
@@ -70,7 +83,7 @@ class TransitNetwork(DictMixin):
         else:
             return_value = self._shortest_path(start, end)
             self._path_cache[cache_key] = return_value
-        return return_value
+        return Path(self, return_value[0], return_value[1])
     def clear_path_cache(self):
         self.path_cache = {}
     def __repr__(self):
