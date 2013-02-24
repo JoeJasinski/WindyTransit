@@ -76,7 +76,11 @@ class TransitNetwork(DictMixin):
         return keys 
     def _shortest_path(self, start, end):
         return shortestPath(self, start, end)
-    def shortest_path(self, start, end):
+    def shortest_path(self, start, end, reverse=False):
+        if reverse:
+            tmp=start
+            start=end
+            end=tmp
         cache_key = "%s.%s" % (start, end)
         if self._path_cache.has_key(cache_key):
             return_value = self._path_cache[cache_key]
