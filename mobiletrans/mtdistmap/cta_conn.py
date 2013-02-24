@@ -13,8 +13,8 @@ tn.shortest_path("Red_40650", 'Red_41320')
 tn.shortest_path("Brn_41290", 'Brn_40710')
 tn.shortest_path('Brn_40710', 'Brn_41290')
 
-tn.shortest_path("Brn_41320", 'Brn_40360')
-tn.shortest_path('Brn_40360', 'Brn_41320')
+tn.shortest_path("Red_41090", 'Brn_41440')
+
 
 """
 
@@ -143,10 +143,10 @@ def load_transitnetwork():
     tn.add_station('Red_40650', { 'Red_40630':3, 'Red_41220':2 }, desc='North/Clybourn Red')   # done
     
     # Fullerton 
-    tn.add_station('Red_41220', { 'Red_40650':2, 'Red_41320':3 }, desc='Fullerton')  # partial 
+    tn.add_station('Red_41220', { 'Red_40650':2, 'Red_41320':3, 'Brn_41220':wait_time }, desc='Fullerton')  # partial - needs purple
 
     # Belmont 
-    tn.add_station('Red_41320', { 'Red_41220':3, 'Red_41420':2 }, desc='Belmont')  # partial 
+    tn.add_station('Red_41320', { 'Red_41220':3, 'Red_41420':2, 'Brn_41320':wait_time, }, desc='Belmont')  # partial - needs purple
 
     # Addison Red  
     tn.add_station('Red_41420', { 'Red_41320':2, 'Red_40080':2 }, desc='Addison Red')  # done 
@@ -199,7 +199,7 @@ def load_transitnetwork():
     tn.add_station('Brn_40660', { 'Brn_40800':3, 'Brn_41220':2, }, desc='Armitage Brown')  # partial - needs purple   
     
     # Fullerton Brown
-    tn.add_station('Brn_41220', { 'Brn_40660':2, 'Brn_40530':1, }, desc='Fullerton Brown')  # partial - needs purple/red transfer    
+    tn.add_station('Brn_41220', { 'Brn_40660':2, 'Brn_40530':1,  'Red_41220':wait_time,}, desc='Fullerton Brown')  # partial - needs purpletransfer    
     
     # Diversey Brown
     tn.add_station('Brn_40530', { 'Brn_41220':1, 'Brn_41210':1, }, desc='Diversey Brown')  # partial - needs purple 
@@ -208,7 +208,7 @@ def load_transitnetwork():
     tn.add_station('Brn_41210', { 'Brn_40530':1, 'Brn_41320':1, }, desc='Wellington Brown')  # partial - needs purple 
     
     # Belmont Brown
-    tn.add_station('Brn_41320', { 'Brn_41210':1, 'Brn_40360':2, }, desc='Belmont Brown')  # partial - needs purple/red transfer
+    tn.add_station('Brn_41320', { 'Brn_41210':1, 'Brn_40360':2, 'Red_41320':wait_time, }, desc='Belmont Brown')  # partial - needs purpletransfer
     
     # Southbort Brown
     tn.add_station('Brn_40360', { 'Brn_41320':2, 'Brn_41310':1, }, desc='Southport Brown')  # done 
@@ -237,10 +237,14 @@ def load_transitnetwork():
     # Fransisco Brown
     tn.add_station('Brn_40870', { 'Brn_41010':1, 'Brn_41180':1, }, desc='Fransisco Brown')  # done
 
-   # Kedzie Brown
+    # Kedzie Brown
     tn.add_station('Brn_41180', { 'Brn_40870':1, 'Brn_41290':2, }, desc='Kedzie Brown')  # done
 
-   # Kimball Brown
+    # Kimball Brown
     tn.add_station('Brn_41290', { 'Brn_41180':2,  }, desc='Kimball Brown')  # done
+
+    ### Purple North Side ###########################################################
+
+    
 
     return tn
