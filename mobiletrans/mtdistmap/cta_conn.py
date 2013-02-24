@@ -8,6 +8,14 @@ tn.shortest_path("Red_40900", 'Red_40330')
 
 tn.shortest_path("Red_41320", 'Red_40650')
 tn.shortest_path("Red_40650", 'Red_41320')
+
+
+tn.shortest_path("Brn_41290", 'Brn_40710')
+tn.shortest_path('Brn_40710', 'Brn_41290')
+
+tn.shortest_path("Brn_41320", 'Brn_40360')
+tn.shortest_path('Brn_40360', 'Brn_41320')
+
 """
 
 def load_transitnetwork():
@@ -21,8 +29,8 @@ def load_transitnetwork():
     red_blue_jackson_wait_time = 10.0
     
     #>>> trans(['Brn', 'P'], '40460', desc="Merchandise Mart")
-    tn.add_station('Brn_40460', {'P_40460':wait_time, 'Brn_40730':2}, desc='Merchandise Mart')  # done
-    tn.add_station('P_40460', {'Brn_40460':wait_time, }, desc='Merchandise Mart')   # done loop
+    tn.add_station('Brn_40460', {'P_40460':wait_time, 'Brn_40730':2, 'Brn_40710':2, }, desc='Merchandise Mart')  # done
+    tn.add_station('P_40460', {'Brn_40460':wait_time, 'P_40380':3 }, desc='Merchandise Mart')   # done loop
     
     #>>> trans(['Brn', 'P', 'Org', 'Pink'], '40730', desc="Washington/Wells")
     tn.add_station('Brn_40730', {'Org_40730':wait_time, 'P_40730':wait_time, 'Pink_40730':wait_time, 'Brn_40040':1, }, desc='Washington/Wells') # done
@@ -123,7 +131,7 @@ def load_transitnetwork():
     # VanBuren Blue
     tn.add_station('Blue_41340', { 'Blue_40070':1, }, desc='VanBuren')  # done loop
     
-    ##############################################################
+    ### Red North Side ###########################################################
     
     # Chicago Red
     tn.add_station('Red_41450', { 'Red_40330':1, 'Red_40630':2 }, desc='Chicago Red')     # done
@@ -178,5 +186,61 @@ def load_transitnetwork():
 
     # Howard Red 
     tn.add_station('Red_40900', { 'Red_41190':2, }, desc='Howard Red')  # partial
+
+    ### Brown North Side ###########################################################
+    
+    # Chicago Brown
+    tn.add_station('Brn_40710', { 'Brn_40460':2, 'Brn_40800':4, }, desc='Chicago Brown')  # partial  - needs puprole
+    
+    # Sedgwic Brown
+    tn.add_station('Brn_40800', { 'Brn_40710':4, 'Brn_40660':3, }, desc='Sedgwic Brown')  # partial - needs purple
         
+    # Armitage Brown
+    tn.add_station('Brn_40660', { 'Brn_40800':3, 'Brn_41220':2, }, desc='Armitage Brown')  # partial - needs purple   
+    
+    # Fullerton Brown
+    tn.add_station('Brn_41220', { 'Brn_40660':2, 'Brn_40530':1, }, desc='Fullerton Brown')  # partial - needs purple/red transfer    
+    
+    # Diversey Brown
+    tn.add_station('Brn_40530', { 'Brn_41220':1, 'Brn_41210':1, }, desc='Diversey Brown')  # partial - needs purple 
+    
+    # Wellington Brown
+    tn.add_station('Brn_41210', { 'Brn_40530':1, 'Brn_41320':1, }, desc='Wellington Brown')  # partial - needs purple 
+    
+    # Belmont Brown
+    tn.add_station('Brn_41320', { 'Brn_41210':1, 'Brn_40360':2, }, desc='Belmont Brown')  # partial - needs purple/red transfer
+    
+    # Southbort Brown
+    tn.add_station('Brn_40360', { 'Brn_41320':2, 'Brn_41310':1, }, desc='Southport Brown')  # done 
+
+    # Paulina Brown
+    tn.add_station('Brn_41310', { 'Brn_40360':1, 'Brn_41440':2, }, desc='Paulina Brown')  # done
+
+    # Addison Brown
+    tn.add_station('Brn_41440', { 'Brn_41310':2, 'Brn_41460':1, }, desc='Addison Brown')  # done
+
+    # Irving Park Brown
+    tn.add_station('Brn_41460', { 'Brn_41440':1, 'Brn_41500':1, }, desc='Irving Park Brown')  # done
+
+    # Montrose Brown
+    tn.add_station('Brn_41500', { 'Brn_41460':1, 'Brn_40090':2, }, desc='Montrose Brown')  # done
+
+    # Damen Brown
+    tn.add_station('Brn_40090', { 'Brn_41500':2, 'Brn_41480':1, }, desc='Damen Brown')  # done
+
+    # Western Brown
+    tn.add_station('Brn_41480', { 'Brn_40090':1, 'Brn_41010':2, }, desc='Western Brown')  # done 
+
+    # Rockwell Brown
+    tn.add_station('Brn_41010', { 'Brn_41480':2, 'Brn_40870':1, }, desc='Rockwell Brown')  # done
+
+    # Fransisco Brown
+    tn.add_station('Brn_40870', { 'Brn_41010':1, 'Brn_41180':1, }, desc='Fransisco Brown')  # done
+
+   # Kedzie Brown
+    tn.add_station('Brn_41180', { 'Brn_40870':1, 'Brn_41290':2, }, desc='Kedzie Brown')  # done
+
+   # Kimball Brown
+    tn.add_station('Brn_41290', { 'Brn_41180':2,  }, desc='Kimball Brown')  # done
+
     return tn
