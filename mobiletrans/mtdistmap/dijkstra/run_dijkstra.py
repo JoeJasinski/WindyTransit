@@ -1,4 +1,4 @@
-from dijkstra import shortestPath
+from mobiletrans.mtdistmapt.dijkstra import shortestPath
 from UserDict import DictMixin
 
 class Station(DictMixin):
@@ -193,50 +193,3 @@ tn.add_station('Blue_41340', { 'Blue_40070':1, }, desc='VanBuren')  # done loop
 
 tn.shortest_path('Red_40330', 'Red_41400')
 
-
-
-##################################################
-
-tn = TransitNetwork() 
-tn.add_station('red_b', {'red_d':5}) 
-tn.add_station('red_d', {'red_g':1, 'green_d':5, 'brown_d':5}) 
-tn.add_station('red_g', {'red_d':1, 'red_i':1}) 
-tn.add_station('red_i', {'red_k':1, 'blue_i':5}) 
-tn.add_station('red_k', {'red_i':1, 'red_l':3, 'brown_k':5, }) 
-tn.add_station('red_l', {'red_k':3}) 
-
-tn.add_station('green_c', {'green_e':2})
-tn.add_station('green_e', {'green_c':2, 'green_d':1, 'brown_e':5, 'blue_e':5})
-tn.add_station('green_d', {'green_e':1, 'red_d':5, 'brown_d':5, 'green_h':3})
-tn.add_station('green_h', {'green_d':3, 'green_j':2, 'brown_h':5})
-tn.add_station('green_j', {'green_h':2, 'green_m':5, 'brown_j':5})
-tn.add_station('green_m', {'green_j':5})
-
-tn.add_station('blue_n', {'blue_e':2})
-tn.add_station('blue_e', {'blue_n':2, 'blue_i':2, 'green_e':5, 'brown_e':5})
-tn.add_station('blue_i', {'blue_e':2, 'blue_o':5, 'red_i':5})
-tn.add_station('blue_o', {'blue_i':5})
-
-tn.add_station('brown_a', {'brown_f':2})
-tn.add_station('brown_f', {'brown_k':3})
-tn.add_station('brown_k', {'brown_j':2, 'red_k':5})
-tn.add_station('brown_j', {'brown_h':2, 'green_j':5})
-tn.add_station('brown_h', {'brown_d':3, 'green_h':5})
-tn.add_station('brown_d', {'brown_e':1, 'red_d':5, 'green_d':5})
-tn.add_station('brown_e', {'brown_a':2, 'blue_e':5, 'green_e':5})
-
-
-
-tn.shortest_path('green_c', 'red_k')
-tn.get_stops_on_line('green')
-tn.get_stops_at_station('e')
-
-
-
-
-tn = TransitNetwork() 
-tn.add_station('red_a', {'red_b':1, })
-tn.add_station('red_b', {'red_a':1, 'red_c':1,} )
-tn.add_station('red_c', {'red_b':1, 'red_d':1,} )
-tn.add_station('red_d', {'red_c':1, } )
-tn.shortest_path('red_a', 'red_d')

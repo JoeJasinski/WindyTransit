@@ -156,6 +156,7 @@ INSTALLED_APPS = (
     'mobiletrans.mtcore',
     'mobiletrans.mtlocation',
     'mobiletrans.mtimport',
+    'mobiletrans.mtdistmap',
 
 )
 
