@@ -3,8 +3,11 @@ from mobiletrans.mtdistmap.dijkstra.transit_network import TransitNetwork
 """
 from mobiletrans.mtdistmap import cta_conn
 tn = cta_conn.load_transitnetwork()
-tn.shortest_path("Red_40100", 'Red_40900')
-tn.shortest_path("Red_40900", 'Red_40100')
+tn.shortest_path("Red_40330", 'Red_40900')
+tn.shortest_path("Red_40900", 'Red_40330')
+
+tn.shortest_path("Red_41320", 'Red_40650')
+tn.shortest_path("Red_40650", 'Red_41320')
 """
 
 def load_transitnetwork():
@@ -129,7 +132,7 @@ def load_transitnetwork():
     tn.add_station('Red_40630', { 'Red_41450':2, 'Red_40650':3 }, desc='Clark/Division Red')  # done
 
     # North/Clybourn Red 
-    tn.add_station('Red_40650', { 'Red_40630':2, 'Red_41220':2 }, desc='North/Clybourn Red')   # done
+    tn.add_station('Red_40650', { 'Red_40630':3, 'Red_41220':2 }, desc='North/Clybourn Red')   # done
     
     # Fullerton 
     tn.add_station('Red_41220', { 'Red_40650':2, 'Red_41320':3 }, desc='Fullerton')  # partial 
@@ -174,6 +177,6 @@ def load_transitnetwork():
     tn.add_station('Red_41190', { 'Red_40100':1, 'Red_40900':2 }, desc='Jarvis Red')  # done
 
     # Howard Red 
-    tn.add_station('Red_40900', { 'Red_41190':1, }, desc='Howard Red')  # partial
+    tn.add_station('Red_40900', { 'Red_41190':2, }, desc='Howard Red')  # partial
         
     return tn
