@@ -188,7 +188,7 @@ def load_transitnetwork():
     tn.add_station('Red_41190', { 'Red_40100':1, 'Red_40900':2 }, desc='Jarvis Red')  # done
 
     # Howard Red 
-    tn.add_station('Red_40900', { 'Red_41190':2, }, desc='Howard Red')  # partial
+    tn.add_station('Red_40900', { 'Red_41190':2, 'P_40900':wait_time, }, desc='Howard Red')  # done north side
 
     ### Brown North Side ###########################################################
     
