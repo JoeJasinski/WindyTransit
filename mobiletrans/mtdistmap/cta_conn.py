@@ -16,6 +16,9 @@ tn.shortest_path('Brn_40710', 'Brn_41290')
 tn.shortest_path("Red_41090", 'Brn_41440').pprint()
 tn.shortest_path("Red_41090", 'Brn_41440', reverse=True).pprint()
 
+tn.shortest_path("Blue_40890", 'Blue_40490', reverse=False).pprint()
+tn.shortest_path("Blue_40890", 'Blue_40490', reverse=True).pprint()
+
 """
 
 def load_transitnetwork():
@@ -99,7 +102,7 @@ def load_transitnetwork():
     
     #>>> trans(['Pink', 'G', ], '41160', desc="Clinton")
     tn.add_station('Pink_41160', {'G_41160':wait_time, 'Pink_40380':2, }, desc='Clinton') # done loop
-    tn.add_station('G_41160', {'Pink_41160':wait_time, 'G_40380':2, }, desc='Clinton') # done loop
+    tn.add_station('G_41160', {'Pink_41160':wait_time, 'G_40380':2, 'G_morgan':1, }, desc='Clinton') # done loop
     
     # Harrison Red
     tn.add_station('Red_41490', { 'Red_41400':1, 'Red_40560':1 }, desc='Harrison')  # done
@@ -117,19 +120,19 @@ def load_transitnetwork():
     tn.add_station('Red_40330', { 'Red_41660':1, 'Red_41450':1, }, desc='Grand Red')  # done loop
     
     # Grand Blue
-    tn.add_station('Blue_40490', { 'Blue_40380':2, }, desc='Grand Blue')  # done loop
+    tn.add_station('Blue_40490', { 'Blue_40380':2, 'Blue_41410':2 }, desc='Grand Blue')  # done loop
     
     # Washington Blue
-    tn.add_station('Blue_40370', { 'Blue_40380':2, 'Blue_41330':1 }, desc='Washington')  # done
+    tn.add_station('Blue_40370', { 'Blue_40380':2, 'Blue_40790':1 }, desc='Washington')  # done
     
     # Monroe Blue
-    tn.add_station('Blue_41330', { 'Blue_40070':1, 'Blue_40370':1 }, desc='Monroe')  # done
+    tn.add_station('Blue_40790', { 'Blue_40070':1, 'Blue_40370':1 }, desc='Monroe')  # done
     
     # Jackson Blue
-    tn.add_station('Blue_40070', { 'Blue_41330':1, 'Blue_41340':1, 'Red_40560':red_blue_jackson_wait_time, 'Brn_40850':bluelib_wait_time, 'P_40850':bluelib_wait_time, 'Org_40850':bluelib_wait_time, 'Pink_40850':bluelib_wait_time}, desc='Jackson')  # done
+    tn.add_station('Blue_40070', { 'Blue_40790':1, 'Blue_41340':1, 'Red_40560':red_blue_jackson_wait_time, 'Brn_40850':bluelib_wait_time, 'P_40850':bluelib_wait_time, 'Org_40850':bluelib_wait_time, 'Pink_40850':bluelib_wait_time}, desc='Jackson')  # done
     
     # VanBuren Blue
-    tn.add_station('Blue_41340', { 'Blue_40070':1, }, desc='VanBuren')  # done loop
+    tn.add_station('Blue_41340', { 'Blue_40070':1, 'Blue_40430':1, }, desc='VanBuren')  # done loop
     
     ### Red North Side ###########################################################
     
@@ -269,4 +272,130 @@ def load_transitnetwork():
     # Howard Purple
     tn.add_station('P_40900', { 'P_41320':14, 'Red_40900':wait_time }, desc='Howard Purple')  # done with north side, needs purple north
 
+    ### Blue West Side ###########################################################
+    
+    # O'Hare Blue
+    tn.add_station('Blue_40890', { 'Blue_40820':5, }, desc="O'Hare Blue")  # done 
+ 
+    # Rosemont Blue
+    tn.add_station('Blue_40820', { 'Blue_40890':5, 'Blue_40230':2  }, desc="Rosemont Blue")   # done
+
+    # Cumberland Blue
+    tn.add_station('Blue_40230', { 'Blue_40820':2, 'Blue_40750':3  }, desc="Cumberland Blue")   # done
+
+    # Harlem Blue
+    tn.add_station('Blue_40750', { 'Blue_40230':3, 'Blue_41280':4  }, desc="Harlem Blue")  # done
+
+    # Jefferson Park Blue
+    tn.add_station('Blue_41280', { 'Blue_40750':4, 'Blue_41330':2  }, desc="Jefferson Park Blue")  # done
+
+    # Montrose Blue
+    tn.add_station('Blue_41330', { 'Blue_41280':2, 'Blue_40550':2  }, desc="Montrose Blue")  # done 
+
+    # Irving Park Blue
+    tn.add_station('Blue_40550', { 'Blue_41330':2, 'Blue_41240':2  }, desc="Irving Park Blue")  # done
+
+    # Addison Blue
+    tn.add_station('Blue_41240', { 'Blue_40550':2, 'Blue_40060':2  }, desc="Addison Blue")  # done
+
+    # Belmont Blue
+    tn.add_station('Blue_40060', { 'Blue_41240':2, 'Blue_41020':2  }, desc="Belmont Blue")  # done
+
+    # Logan Square Blue
+    tn.add_station('Blue_41020', { 'Blue_40060':2, 'Blue_40570':2  }, desc="Logan Square Blue")  # done
+
+    # California Blue
+    tn.add_station('Blue_40570', { 'Blue_41020':2, 'Blue_40670':2  }, desc="California Blue")  # done
+
+    # Western Blue
+    tn.add_station('Blue_40670', { 'Blue_40570':2, 'Blue_40590':1  }, desc="Western Blue")  # done
+
+    # Damen Blue
+    tn.add_station('Blue_40590', { 'Blue_40670':1, 'Blue_40320':1  }, desc="Damen Blue")  # done
+
+    # Division Blue
+    tn.add_station('Blue_40320', { 'Blue_40590':1, 'Blue_41410':2  }, desc="Division Blue")  # done
+
+    # Chicago Blue
+    tn.add_station('Blue_41410', { 'Blue_40320':2, 'Blue_40490':2  }, desc="Chicago Blue")  # done
+
+    ### Green West Side ###########################################################
+
+    # Harlem/Lake Green
+    tn.add_station('G_40020', { 'G_41350':1, }, desc="Harlem/Lake Green")  # done
+
+    # Oak Park Green
+    tn.add_station('G_41350', { 'G_40020':1, 'G_40610':2 }, desc="Oak Park Green")  # done
+
+    # Ridgeland Green
+    tn.add_station('G_40610', { 'G_41350':2, 'G_41260':1 }, desc="Ridgeland Green")  # done
+
+    # Austin Green
+    tn.add_station('G_41260', { 'G_40610':1, 'G_40280':2 }, desc="Austin Green")  # done
+
+    # Central Green
+    tn.add_station('G_40280', { 'G_41260':2, 'G_40700':2 }, desc="Central Green")  # done
+
+    # Laramie Green
+    tn.add_station('G_40700', { 'G_40280':2, 'G_40480':1 }, desc="Laramie Green")  # done
+
+    # Cicero Green
+    tn.add_station('G_40480', { 'G_40700':1, 'G_40030':2 }, desc="Cicero Green")  # done
+
+    # Pulaski Green
+    tn.add_station('G_40030', { 'G_40480':2, 'G_41670':2 }, desc="Pulaski Green")  # done
+
+    # Conservatory Green
+    tn.add_station('G_41670', { 'G_40030':2, 'G_41070':1 }, desc="Conservatory Green")  # done
+
+    # Kedzie Green
+    tn.add_station('G_41070', { 'G_41670':1, 'G_41360':1 }, desc="Kedzie Green")  # done
+
+    # California Green
+    tn.add_station('G_41360', { 'G_41070':1, 'G_40170':3 }, desc="California Green")  # done
+
+    # Ashland Green
+    tn.add_station('G_40170', { 'G_41360':3, 'G_morgan':2 }, desc="Ashland Green")  # partial
+
+    # Morgan Green
+    tn.add_station('G_morgan', { 'G_40170':2, 'G_41160':1 }, desc="Morgan Green")  # partial
+
+    ### Blue South West Side ###########################################################
+
+    # Forest Park Blue
+    tn.add_station('Blue_40390', { 'Blue_40980':2,  }, desc="Forest Park Blue")  # done  
+
+    # Harlem Blue
+    tn.add_station('Blue_40980', { 'Blue_40390':2, 'Blue_40180':2 }, desc="Harlem Blue")  # done  
+
+    # Oak Park Blue
+    tn.add_station('Blue_40180', { 'Blue_40980':2, 'Blue_40010':2 }, desc="Oak Park Blue")  # done
+
+    # Austin Blue
+    tn.add_station('Blue_40010', { 'Blue_40180':2, 'Blue_40970':3 }, desc="Austin Blue")  # done
+
+    # Cicero Blue
+    tn.add_station('Blue_40970', { 'Blue_40010':3, 'Blue_40920':3 }, desc="Cicero Blue")  # done
+
+    # Pulaski Blue
+    tn.add_station('Blue_40920', { 'Blue_40970':3, 'Blue_40250':2 }, desc="Pulaski Blue")  # done
+
+    # Kedzie Blue
+    tn.add_station('Blue_40250', { 'Blue_40920':2, 'Blue_40220':3 }, desc="Kedzie Blue")  # done
+
+    # Western Blue
+    tn.add_station('Blue_40220', { 'Blue_40250':3, 'Blue_40810':3 }, desc="Western Blue")  # done
+
+    # Illinois Medical Center Blue
+    tn.add_station('Blue_40810', { 'Blue_40220':3, 'Blue_40470':3 }, desc="Illinois Medical Center Blue")   # done
+
+    # Racine Blue
+    tn.add_station('Blue_40470', { 'Blue_40810':3, 'Blue_40350':1 }, desc="Racine Blue")  # done
+
+    # UIC Blue
+    tn.add_station('Blue_40350', { 'Blue_40470':1, 'Blue_40430':2 }, desc="UIC Blue")  # done
+
+    # Clinton Blue
+    tn.add_station('Blue_40430', { 'Blue_40350':2, 'Blue_41340':1 }, desc="Clinton Blue")  # done
+    
     return tn
