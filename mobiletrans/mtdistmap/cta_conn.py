@@ -101,7 +101,7 @@ def load_transitnetwork():
     tn.add_station('G_41400', {'Org_41400':wait_time, 'Red_41400':wait_time, 'G_40680':3, }, desc='Roosevelt')  # done loop
     
     #>>> trans(['Pink', 'G', ], '41160', desc="Clinton")
-    tn.add_station('Pink_41160', {'G_41160':wait_time, 'Pink_40380':2, }, desc='Clinton') # done loop
+    tn.add_station('Pink_41160', {'G_41160':wait_time, 'Pink_40380':2, 'Pink_morgan':1}, desc='Clinton') # done loop
     tn.add_station('G_41160', {'Pink_41160':wait_time, 'G_40380':2, 'G_morgan':1, }, desc='Clinton') # done loop
     
     # Harrison Red
@@ -355,7 +355,7 @@ def load_transitnetwork():
     tn.add_station('G_41360', { 'G_41070':1, 'G_40170':3 }, desc="California Green")  # done
 
     # Ashland Green
-    tn.add_station('G_40170', { 'G_41360':3, 'G_morgan':2 }, desc="Ashland Green")  # partial
+    tn.add_station('G_40170', { 'G_41360':3, 'G_morgan':2, 'Pink_40170':wait_time }, desc="Ashland Green")  # partial
 
     # Morgan Green
     tn.add_station('G_morgan', { 'G_40170':2, 'G_41160':1 }, desc="Morgan Green")  # partial
@@ -397,5 +397,46 @@ def load_transitnetwork():
 
     # Clinton Blue
     tn.add_station('Blue_40430', { 'Blue_40350':2, 'Blue_41340':1 }, desc="Clinton Blue")  # done
-    
+
+   ### Pink Side ###########################################################
+
+    # 54th/Cermac Pink
+    tn.add_station('Pink_40580', { 'Pink_40420':1, }, desc="54th/Cermac Pink")  # done
+
+    # Cicero Pink
+    tn.add_station('Pink_40420', { 'Pink_40580':1, 'Pink_40600':2 }, desc="Cicero Pink")  # done
+
+    # Kostner Pink
+    tn.add_station('Pink_40600', { 'Pink_40420':2, 'Pink_40150':1 }, desc="Kostner Pink")  # done
+
+    # Pulaski Pink
+    tn.add_station('Pink_40150', { 'Pink_40600':1, 'Pink_40780':2 }, desc="Pulaski Pink")  # done
+
+    # Central Park Pink
+    tn.add_station('Pink_40780', { 'Pink_40150':2, 'Pink_41040':1 }, desc="Central Park Pink")  # done
+
+    # Kedzie Pink
+    tn.add_station('Pink_41040', { 'Pink_40780':1, 'Pink_40440':2 }, desc="Kedzie Pink")  # done
+
+    # California Pink
+    tn.add_station('Pink_40440', { 'Pink_41040':2, 'Pink_40740':2 }, desc="California Pink")  # done
+
+    # Western Pink
+    tn.add_station('Pink_40740', { 'Pink_40440':2, 'Pink_40210':1 }, desc="Western Pink")  # done
+
+    # Damen Pink
+    tn.add_station('Pink_40210', { 'Pink_40740':1, 'Pink_40830':2 }, desc="Damen Pink")  # done
+
+    # 18th Pink
+    tn.add_station('Pink_40830', { 'Pink_40210':2, 'Pink_41030':2 }, desc="18th Pink")  # done
+
+    # Polk Pink
+    tn.add_station('Pink_41030', { 'Pink_40830':2, 'Pink_40170':3 }, desc="Polk Pink")  # done
+
+    # Ashland Pink
+    tn.add_station('Pink_40170', { 'Pink_41030':3, 'Pink_morgan':2, 'G_40170':wait_time}, desc="Ashland Pink")  # done
+
+    # Morgan Pink
+    tn.add_station('Pink_morgan', { 'Pink_40170':2, 'Pink_41160':1, 'G_morgan':wait_time}, desc="Morgan Pink")
+
     return tn
