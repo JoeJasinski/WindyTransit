@@ -451,3 +451,18 @@ cta_raillines2_mapping = {
     'shape_len' : 'SHAPE_LEN',
     'line' : 'LINESTRING',
 }
+
+
+
+class CityBorder(models.Model):
+    objectid = models.IntegerField()
+    name = models.CharField(max_length=25, blank=True, null=True)
+    shape_area = models.FloatField(blank=True, null=True)
+    shape_len = models.FloatField(blank=True, null=True)
+    area = models.MultiPolygonField(srid=4326)
+    
+    objects = models.GeoManager()
+    
+    class Meta:
+        verbose_name = "City Border"
+        verbose_name_plural = "City Borders"
