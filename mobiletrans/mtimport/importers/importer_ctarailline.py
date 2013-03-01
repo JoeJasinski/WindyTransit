@@ -13,6 +13,9 @@ class CTARailLines(ShapeFileImportBase):
     def get_model_class(cls,):
         return loc_models.CTARailLines
 
+    def get_geo_field(self):
+        return "line"
+
     def parse_row(self, row):
         
         existing = False
@@ -77,7 +80,9 @@ class CTARailLines(ShapeFileImportBase):
             raise ImportException("field 'SHAPE_LEN' not available", error)            
 
         try:
-            ctarailline.line = row.geom.wkt
+            geom = row.geom
+            geom.transform(self.coord_transform)
+            ctarailline.line = geom.wkt
         except Exception, error:
             raise ImportException("attribute 'geom' not available", error)     
         
