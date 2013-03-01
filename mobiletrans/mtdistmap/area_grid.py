@@ -23,11 +23,11 @@ class GridPoint(object):
     
     @property
     def geo_coords(self):
-        return_value = (self.point.x, self.point.y)
+        return self.point.x, self.point.y
     
     @property
     def geo_coords_r(self):
-        return_value = (self.point.y, self.point.x)
+        return self.point.y, self.point.x
     
     def __repr__(self):
         return "GridPoint(lng=%s (%s), lat=%s (%s))" % (
@@ -78,7 +78,7 @@ class Grid(DictMixin):
         features = []
         for k, point in self.items():
             d = { "type": "Feature",
-                   "geometry": {"type": "Point", "coordinates": point.geo_coords()},
+                   "geometry": {"type": "Point", "coordinates": point.geo_coords},
             }
             features.append(d)
               
