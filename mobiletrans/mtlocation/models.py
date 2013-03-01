@@ -39,7 +39,7 @@ class SubclassingQuerySet(models.query.GeoQuerySet):
 
 class LocationSubclassingManager(models.GeoManager):
     def get_query_set(self):
-        return LocationSubclassingQuerySet(self.model)
+        return SubclassingQuerySet(self.model)
 
 
 class LocationQuerySet(models.query.GeoQuerySet):
