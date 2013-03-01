@@ -82,7 +82,9 @@ class CTARailLinesAdmin(admin.GeoModelAdmin):
     list_display = ['objectid', 'transit_lines', 'segment_id', 'transit_lines', 'legend']
 
 
+class CityBorderAdmin(admin.GeoModelAdmin):
 
+    list_display = ['objectid', 'name']
 
 admin.site.register(models.Location, LocationAdmin)
 admin.site.register(models.Landmark, LandmarkAdmin)
@@ -97,3 +99,4 @@ admin.site.register(models.CTARailLines, CTARailLinesAdmin)
 admin.site.register(models.Region, RegionAdmin)
 admin.site.register(models.Neighborhood, NeighborhoodAdmin)
 admin.site.register(models.Zipcode, ZipcodeAdmin)
+admin.site.register(models.CityBorder, CityBorderAdmin) 
