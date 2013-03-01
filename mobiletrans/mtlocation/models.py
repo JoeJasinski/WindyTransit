@@ -36,16 +36,25 @@ class SubclassingQuerySet(models.query.GeoQuerySet):
         for item in super(SubclassingQuerySet, self).__iter__():
             yield item.as_leaf_class()
 
-
-class LocationSubclassingQuerySet(SubclassingQuerySet):
-    def displayable(self):
-        transit_stop = ContentType.objects.get_for_model(models.TransitStop)
-        return super(LocationSubclassingQuerySet, self).exclude(content_type__in=[transit_stop])
-    
-
-class LocationManager(models.GeoManager):
+class LocationSubclassingManager(models.GeoManager):
     def get_query_set(self):
         return LocationSubclassingQuerySet(self.model)
+
+
+class LocationQuerySet(models.query.GeoQuerySet):
+    def displayable(self):
+        transit_stop = ContentType.objects.get_for_model(TransitStop)
+        return super(LocationQuerySet, self).exclude(content_type__in=[transit_stop])
+    
+class LocationManager(models.GeoManager):
+    def get_query_set(self):
+        return LocationQuerySet(self.model)
+
+    def __getattr__(self, attr, *args):
+        try:
+            return getattr(self.__class__, attr, *args)
+        except AttributeError:
+            return getattr(self.get_query_set(), attr, *args)
 
 class RegionManager(models.GeoManager):
     def get_query_set(self):
@@ -67,8 +76,8 @@ class Location(models.Model):
     
     content_type = models.ForeignKey(ContentType,editable=False,null=True)
 
-    sub_objects = LocationManager()
-    objects = models.GeoManager()
+    sub_objects = LocationSubclassingManager()
+    objects = LocationManager()
     
     class Meta:
         verbose_name = "Location"
