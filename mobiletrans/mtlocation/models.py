@@ -308,6 +308,12 @@ class PoliceStation(Location):
         serialize_parent = super(self.__class__, self).serialize().copy()
         return serialize_parent 
 
+    def placemark_icon(self):
+        site = Site.objects.get_current()
+        static_url = settings.STATIC_URL
+        return_value = "http://%s%simage/location-police.png" % (site, static_url)
+        return return_value 
+ 
 
 class Region(models.Model):
 
@@ -411,7 +417,7 @@ class GPlace(Location):
     def placemark_icon(self):
         site = Site.objects.get_current()
         static_url = settings.STATIC_URL
-        return_value = "http://%s%simage/location-place.png" % (site, static_url)
+        return_value = "http://%s%simage/location-places.png" % (site, static_url)
         return return_value 
  
 
