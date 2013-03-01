@@ -281,8 +281,10 @@ class ShapeFileImportBase(ImportBase):
         raise NotImplementedError("subclasses must implement this to specify a field name string of the geography field.")
 
     def prepare_srid_transform(self, source_srs, model_class, geo_field, ):
-        using = router.db_for_write()
+        using = router.db_for_write(model_class)
         spatial_backend = connections[using].ops
+        opts = model_class._meta
+        geo_field, model, direct, m2m = opts.get_field_by_name(geom_field)
         SpatialRefSys = spatial_backend.spatial_ref_sys()
         target_srs = SpatialRefSys.objects.using(using).get(srid=geo_field.srid).srs
         return gdal.CoordTransform(source_srs, target_srs)
