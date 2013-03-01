@@ -277,10 +277,10 @@ from django.db import connections, router
 
 class ShapeFileImportBase(ImportBase):
 
-    def get_geo_field(self):
+    def get_geom_field(self):
         raise NotImplementedError("subclasses must implement this to specify a field name string of the geography field.")
 
-    def prepare_srid_transform(self, source_srs, model_class, geo_field, ):
+    def prepare_srid_transform(self, source_srs, model_class, geom_field, ):
         using = router.db_for_write(model_class)
         spatial_backend = connections[using].ops
         opts = model_class._meta
@@ -311,7 +311,7 @@ class ShapeFileImportBase(ImportBase):
         self.coord_transform = self.prepare_srid_transform(
                                     source_srs=input_data.srs, 
                                     model_class=self.get_model_class(),
-                                    geo_field=self.get_geo_field(), 
+                                    geom_field=self.get_geom_field(), 
                                     )
         return input_data
 

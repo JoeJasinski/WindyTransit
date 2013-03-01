@@ -13,7 +13,7 @@ class CityBorder(ShapeFileImportBase):
     def get_model_class(cls,):
         return loc_models.CityBorder
 
-    def get_geo_field(self):
+    def get_geom_field(self):
         return "area"
 
     def parse_row(self, row):

@@ -13,7 +13,7 @@ class CTARailLines(ShapeFileImportBase):
     def get_model_class(cls,):
         return loc_models.CTARailLines
 
-    def get_geo_field(self):
+    def get_geom_field(self):
         return "line"
 
     def parse_row(self, row):
