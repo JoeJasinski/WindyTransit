@@ -98,12 +98,29 @@ class TransitNetwork(DictMixin):
         must be made separately. 
         
         """
+        root_cost = 0
         line, name = self.disjoin(key)
+        station_root_key = self.rejoin("", name)
+        
+        links.update({station_root_key:root_cost})
+        
         station = Station(line, name, links, *args, **kwargs)
         if not self.station_dict.has_key(line):
             self.station_dict[line] = {name:station}
         else:
             self.station_dict[line].update({name:station})
+            
+        if not self.has_key(station_root_key):
+            station_root = Station("", name, links={key:root_cost})
+            
+            if not self.station_dict.has_key(""):
+                self.station_dict[""] = {name:station_root}
+            else:
+                self.station_dict[""].update({name:station_root})
+ 
+        else:
+            self[station_root_key].links.update({key:root_cost})
+            
     def get_stops_on_line(self, line):
         """
         This method takes a line identifier and returns
