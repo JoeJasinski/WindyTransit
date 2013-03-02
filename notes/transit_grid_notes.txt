@@ -1,0 +1,179 @@
+from django.contrib.gis.gdal import DataSource
+ds = DataSource('/home/jjasinski/Sites/windytransit/data/City_Boundary/City_Boundary.shp')
+layer = ds[0]
+
+from django.contrib.gis.gdal import SpatialReference, CoordTransform
+from django.contrib.gis.geos import Point
+gcoord = SpatialReference(4326)
+mycoord = SpatialReference(102671)
+trans = CoordTransform(gcoord, mycoord)
+object = layer[0]
+object.geom.transform(trans)
+
+
+
+from django.contrib.gis.utils import LayerMapping
+from django.contrib.gis.gdal import DataSource
+ds = DataSource('/home/jjasinski/Sites/windytransit/data/City_Boundary/City_Boundary.shp')
+layer = ds[0]
+from mobiletrans.mtlocation import models
+mapping = models.cityborder_mapping
+lm = LayerMapping(models.CityBorder, '/home/jjasinski/Sites/windytransit/data/City_Boundary/City_Boundary.shp', mapping)
+lm.save(verbose=True)
+
+
+from django.contrib.gis.gdal import DataSource
+from django.db import connections, router
+from mobiletrans.mtlocation import models
+from django.contrib.gis.gdal import CoordTransform
+ds = DataSource('/home/jjasinski/Sites/windytransit/data/City_Boundary/City_Boundary.shp')
+layer = ds[0]
+source_srs = layer.srs
+model = models.CityBorder
+geom_field = "area"
+opts = model._meta
+geo_field, model, direct, m2m = opts.get_field_by_name(geom_field)
+using = router.db_for_write(model)
+spatial_backend = connections[using].ops
+SpatialRefSys = spatial_backend.spatial_ref_sys()
+target_srs = SpatialRefSys.objects.using(using).get(srid=geo_field.srid).srs
+transform = CoordTransform(source_srs, target_srs)
+feature = layer[0]
+geom = feature.geom
+geom.transform(transform)
+
+
+
+
+c = CityBorder.objects.all()[0]
+center = c.centroid 
+c.area.contains(p.point)
+
+
+
+
+
+
+%cpaste
+
+from django.contrib.gis.geos import Point
+from pyproj import Geod
+g = Geod(ellps='WGS84')
+
+class GridPoint(object):
+    def __init__(self, x, y, point, xint=200, yint=200):
+        self.xint = xint
+        self.yint = yint
+        self.point = point
+        self.x = x
+        self.y = y 
+    
+    @property
+    def grid_coords(self):
+        return (self.x, self.y)
+    
+    @property
+    def geo_coords(self):
+        return_value = (self.point.x, self.point.y)
+    
+    @property
+    def geo_coords_r(self):
+        return_value = (self.point.y, self.point.x)
+    
+    def __repr__(self):
+        return "GridPoint(lng=%s (%s), lat=%s (%s))" % (
+                self.point.x, self.x, self.point.y, self.y)
+    
+    def transpose(self, azimuth, distance):
+        return g.fwd(self.point.x, self.point.y, azimuth, distance)
+    
+    @property
+    def north(self):
+        lng, lat, az =  self.transpose(0, self.yint)
+        return GridPoint(self.x, self.y + self.yint, Point(lng, lat), self.xint, self.yint)
+    
+    @property
+    def south(self):
+        lng, lat, az =  self.transpose(180, self.yint)
+        return GridPoint(self.x, self.y - self.yint, Point(lng, lat), self.xint, self.yint)
+    
+    @property
+    def east(self): 
+        lng, lat, az = self.transpose(90, self.xint)
+        return GridPoint(self.x + self.xint, self.y, Point(lng, lat), self.xint, self.yint)
+    
+    @property
+    def west(self): 
+        lng, lat, az = self.transpose(270, self.xint)
+        return GridPoint(self.x - self.xint, self.y, Point(lng, lat), self.xint, self.yint)
+        
+
+
+p = CityBorder.objects.all()[0]
+gp = GridPoint(0, 0, p.area.centroid)
+
+graph = {}
+directions = ['north', 'south', 'east', 'west']
+    
+def create_grid(grid_point):
+    for direction in directions:
+        new_point = getattr(grid_point, direction)
+        if not graph.has_key((new_point.x, new_point.y)):
+            graph[(new_point.x, new_point.y)] = new_point
+            if p.area.contains(new_point.point):
+                print "New", new_point 
+                create_grid(new_point)
+            else:
+                print "Out of bounds", new_point
+        else:
+            print "Existing", new_point
+
+
+create_grid(gp)
+
+
+
+
+
+
+---------------
+
+%cpaste
+
+from Queue import Queue
+from threading import Thread
+
+p = CityBorder.objects.all()[0]
+gp = GridPoint(0, 0, p.area.centroid)
+
+graph = {}
+directions = ['north', 'south', 'east', 'west']
+    
+q = Queue()
+
+def create_grid(grid_point):
+    for direction in directions:
+        new_point = getattr(grid_point, direction)
+        if not graph.has_key((new_point.x, new_point.y)):
+            graph[(new_point.x, new_point.y)] = new_point
+            if p.area.contains(new_point.point):
+                print "New", new_point 
+                q.put(new_point)
+            else:
+                print "Out of bounds", new_point
+        else:
+            print "Existing", new_point
+
+num_worker_threads=4
+for i in range(num_worker_threads):
+     t = Thread(target=worker)
+     t.daemon = True
+     t.start()
+
+def worker():
+    while True:
+        item = q.get()
+        create_grid(item)
+        q.task_done()
+
+create_grid(gp)
