@@ -272,7 +272,22 @@ class KMLImportBase(ImportBase):
         return placemarks
 
 
+
+from django.db import connections, router
+
 class ShapeFileImportBase(ImportBase):
+
+    def get_geom_field(self):
+        raise NotImplementedError("subclasses must implement this to specify a field name string of the geography field.")
+
+    def prepare_srid_transform(self, source_srs, model_class, geom_field, ):
+        using = router.db_for_write(model_class)
+        spatial_backend = connections[using].ops
+        opts = model_class._meta
+        geo_field, model, direct, m2m = opts.get_field_by_name(geom_field)
+        SpatialRefSys = spatial_backend.spatial_ref_sys()
+        target_srs = SpatialRefSys.objects.using(using).get(srid=geo_field.srid).srs
+        return gdal.CoordTransform(source_srs, target_srs)
 
     @classmethod
     def open_data(cls, input_file_path):
@@ -292,6 +307,12 @@ class ShapeFileImportBase(ImportBase):
             input_data = self.input_data[0]
         except IndexError, error:
             raise ImportException("Root element not found: %s"  % (error))  
+        
+        self.coord_transform = self.prepare_srid_transform(
+                                    source_srs=input_data.srs, 
+                                    model_class=self.get_model_class(),
+                                    geom_field=self.get_geom_field(), 
+                                    )
         return input_data
 
 ########################################

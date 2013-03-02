@@ -472,3 +472,13 @@ class CityBorder(models.Model):
     class Meta:
         verbose_name = "City Border"
         verbose_name_plural = "City Borders"
+
+
+# Auto-generated `LayerMapping` dictionary for CityBorder model
+cityborder_mapping = {
+    'objectid' : 'OBJECTID',
+    'name' : 'NAME',
+    'shape_area' : 'SHAPE_AREA',
+    'shape_len' : 'SHAPE_LEN',
+    'area' : 'MULTIPOLYGON',
+}

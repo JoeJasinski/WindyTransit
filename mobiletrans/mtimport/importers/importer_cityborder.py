@@ -13,6 +13,9 @@ class CityBorder(ShapeFileImportBase):
     def get_model_class(cls,):
         return loc_models.CityBorder
 
+    def get_geom_field(self):
+        return "area"
+
     def parse_row(self, row):
         
         existing = False
@@ -47,7 +50,9 @@ class CityBorder(ShapeFileImportBase):
             raise ImportException("field 'SHAPE_LEN' not available", error)            
 
         try:
-            cityborder.area = row.geom.wkt
+            geom = row.geom
+            geom.transform(self.coord_transform)
+            cityborder.area = geom.wkt
         except Exception, error:
             raise ImportException("attribute 'geom' not available", error)     
         

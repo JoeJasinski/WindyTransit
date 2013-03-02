@@ -38,8 +38,7 @@ def renderkml(request, lat=None, long=None):
         except IndexError:
             zipcode = ""
         context.update({ 'zipcode':zipcode,})        
-    
-    
+
     transit_stop = ContentType.objects.get_for_model(models.TransitStop)
     placemarks = models.Location.objects.exclude(content_type__in=[transit_stop]).filter(point__distance_lte=(params.ref_pnt, D(**params.d) )).distance(params.ref_pnt).order_by('distance') 
     
