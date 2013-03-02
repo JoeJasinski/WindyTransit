@@ -1,3 +1,8 @@
+##################################################
+# Working: search google places near transit stops
+# in the cta netowrk. Only searches train stops,
+# not bus stops
+
 from mobiletrans.mtimport.importers import importer_googleplace as importer
 
 start=135
@@ -10,7 +15,8 @@ for station in TransitStop.objects.filter(location_type=1)[start:stop]:
     
 
 
-
+##################################################
+# Working: example of single call to the google places api
 
 from django.conf import settings
 from googleplaces import GooglePlaces, types, lang, GooglePlacesError
