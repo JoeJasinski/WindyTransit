@@ -46,6 +46,18 @@ class LocationQuerySet(models.query.GeoQuerySet):
         transit_stop = ContentType.objects.get_for_model(TransitStop)
         return super(LocationQuerySet, self).exclude(content_type__in=[transit_stop])
     
+    def get_closest(self, from_point, distance_dict ):
+        """
+        Only select landmarks with a given distance of a point.
+        The from_point is a valid Point object
+        The distance_dict is of the format
+          {distance_unit:str(distance)} 
+          where distance_unit is one of the geodjango supported units 
+             https://docs.djangoproject.com/en/dev/ref/contrib/gis/measure/#supported-units
+          and distance is a radius around the from_point
+        """
+        return self.filter(point__distance_lte=(from_point, D(**distance_dict) )).distance(from_point).order_by('distance')
+    
 class LocationManager(models.GeoManager):
     def get_query_set(self):
         return LocationQuerySet(self.model)
