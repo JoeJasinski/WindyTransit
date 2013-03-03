@@ -76,7 +76,7 @@ class Grid(DictMixin):
         return self.grid.keys()
     def json(self):
         features = []
-        for k, point in self.grid.itmes():
+        for k, point in self.items():
             d = { "type": "Feature",
                    "geometry": {"type": "Point", "coordinates": point.geo_coords()},
             }
