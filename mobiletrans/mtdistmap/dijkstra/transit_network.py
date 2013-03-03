@@ -156,13 +156,13 @@ class TransitNetwork(DictMixin):
         return keys 
     def _shortest_path(self, start, end):
         return shortestPath(self, start, end)
-    def shortest_path(self, start, end, reverse=False):
+    def shortest_path_raw(self, start, end, reverse=False):
         """
         This determines the shortest path between two 
         stops.  The start and end parameters must take
         valid station keys in the form of <line>_<stop_id>.
         For example, 
-            shortest_path('Red_40560', 'Brn_40680')
+            shortest_path_raw('start_40560', 'end_40680')
         
         If the reverse parameter is set to True, 
         that effectively reverses the direction of the path.
@@ -184,6 +184,20 @@ class TransitNetwork(DictMixin):
             return_value = self._shortest_path(start, end)
             self._path_cache[cache_key] = return_value
         return Path(self, return_value[0], return_value[1])
+    def shortest_path(self, start, end, reverse=False):
+        """
+        Pass in a stop id for the start and end stop.
+        Get a shortest path back.
+        For example:
+            tn.shortest_path('40820', '41160')
+        """
+        if reverse:
+            tmp = start
+            start = end
+            end = tmp
+        start = self.rejoin('start', start)
+        end = self.rejoin('end', end)
+        return self.shortest_path_raw(start, end)
     def clear_path_cache(self):
         """
         This clears the path cache.  Only used if one needs
