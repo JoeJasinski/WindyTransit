@@ -58,11 +58,23 @@ class GridPoint(object):
 """
 region = CityBorder.objects.all()[0]
 gp = GridPoint(0, 0, region.area.centroid)
-g = generate_graph(region, gp)
+g = generate_grid(region, gp)
 """
 
-def generate_graph(region, gp):
-    graph = {}
+class Grid(DictMixin):
+    def __init__(self, *args, **kwargs):
+        self.grid = {}
+    def __getitem__(self, key):
+        return self.grid[key]
+    def __setitem__(self, key, item):
+        self.grid[key] = item
+    def __delitem__(self, key):
+        del self.grid[key]
+    def keys(self):
+        return self.grid.keys()
+
+def generate_grid(region, gp):
+    grid = Grid()
     directions = ['north', 'south', 'east', 'west']
         
     q = Queue()
@@ -70,10 +82,10 @@ def generate_graph(region, gp):
     def create_grid(grid_point):
         for direction in directions:
             new_point = getattr(grid_point, direction)
-            if not graph.has_key((new_point.x, new_point.y)):
-                graph[(new_point.x, new_point.y)] = new_point
+            if not grid.has_key((new_point.x, new_point.y)):
+                grid[(new_point.x, new_point.y)] = new_point
                 if region.area.contains(new_point.point):
-                    print "New", new_point 
+                    logging.debug("New %s" % new_point)
                     q.put(new_point)
                 else:
                     """ """
@@ -97,5 +109,5 @@ def generate_graph(region, gp):
     
     create_grid(gp)
     q.join()
-    return graph
+    return grid
 
