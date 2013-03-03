@@ -100,9 +100,10 @@ class TransitNetwork(DictMixin):
         """
         root_cost = 0
         line, name = self.disjoin(key)
-        station_root_key = self.rejoin("", name)
+        station_start_key = self.rejoin("start", name)
+        station_end_key = self.rejoin("end", name)
         
-        links.update({station_root_key:root_cost})
+        links.update({station_end_key:root_cost})
         
         station = Station(line, name, links, *args, **kwargs)
         if not self.station_dict.has_key(line):
@@ -110,16 +111,21 @@ class TransitNetwork(DictMixin):
         else:
             self.station_dict[line].update({name:station})
             
-        if not self.has_key(station_root_key):
-            station_root = Station("", name, links={key:root_cost})
-            
-            if not self.station_dict.has_key(""):
-                self.station_dict[""] = {name:station_root}
+        if not self.has_key(station_start_key):
+            station_start = Station("start", name, links={key:root_cost})
+            if not self.station_dict.has_key("start"):
+                self.station_dict["start"] = {name:station_start}
             else:
-                self.station_dict[""].update({name:station_root})
- 
+                self.station_dict["start"].update({name:station_start})
         else:
-            self[station_root_key].links.update({key:root_cost})
+            self[station_start_key].links.update({key:root_cost})
+
+        if not self.has_key(station_end_key):
+            station_end = Station("end", name, links={})
+            if not self.station_dict.has_key("end"):
+                self.station_dict["end"] = {name:station_end}
+            else:
+                self.station_dict["end"].update({name:station_end})
             
     def get_stops_on_line(self, line):
         """
