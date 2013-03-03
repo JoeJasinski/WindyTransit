@@ -3,6 +3,7 @@ from django.contrib.gis.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from autoslug import AutoSlugField
 from mobiletrans.mtlocation.fields import SeparatedValuesField, UUIDField
 
@@ -36,9 +37,15 @@ class SubclassingQuerySet(models.query.GeoQuerySet):
             yield item.as_leaf_class()
 
 
+class LocationSubclassingQuerySet(SubclassingQuerySet):
+    def displayable(self):
+        transit_stop = ContentType.objects.get_for_model(models.TransitStop)
+        return super(LocationSubclassingQuerySet, self).exclude(content_type__in=[transit_stop])
+    
+
 class LocationManager(models.GeoManager):
     def get_query_set(self):
-        return SubclassingQuerySet(self.model)
+        return LocationSubclassingQuerySet(self.model)
 
 class RegionManager(models.GeoManager):
     def get_query_set(self):
