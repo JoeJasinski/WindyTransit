@@ -1,4 +1,4 @@
-import logging
+import logging, json
 from Queue import Queue
 from threading import Thread
 from UserDict import DictMixin
@@ -74,6 +74,18 @@ class Grid(DictMixin):
         del self.grid[key]
     def keys(self):
         return self.grid.keys()
+    def json(self):
+        features = []
+        for k, point in self.itmes():
+            d = { "type": "Feature",
+                   "geometry": {"type": "Point", "coordinates": point.geo_coords()},
+            }
+            features.append(d)
+              
+        json_dict = { "type": "FeatureCollection",
+          "features": features
+         }
+        return json.dumps(json_dict)
 
 def generate_grid(region, gp):
     grid = Grid()
