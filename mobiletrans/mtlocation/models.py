@@ -55,11 +55,11 @@ class LocationQuerySet(models.query.GeoQuerySet):
           {distance_unit:str(distance)} 
           where distance_unit is one of the geodjango supported units 
              https://docs.djangoproject.com/en/dev/ref/contrib/gis/measure/#supported-units
-          and di[stance is a radius around the from_point
+          and distance is a radius around the from_point
         """
         return self.filter(point__distance_lte=(from_point, D(**distance_dict) )).distance(from_point).order_by('distance')
     
-    def get_closets_x(self, from_point, distance_dict, number=2):
+    def get_closest_x(self, from_point, distance_dict, number=2):
         return self.get_closest(from_point, distance_dict)[:number]
     
 class LocationManager(models.GeoManager):
