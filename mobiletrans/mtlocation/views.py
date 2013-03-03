@@ -2,7 +2,6 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext, loader, Context
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.gis.measure import D 
 from django.contrib.sites.models import Site
@@ -39,7 +38,6 @@ def renderkml(request, lat=None, long=None):
             zipcode = ""
         context.update({ 'zipcode':zipcode,})        
 
-    transit_stop = ContentType.objects.get_for_model(models.TransitStop)
     placemarks = models.Location.objects.displayable().get_closest(from_point=params.ref_pnt, distance_dict=params.d )  
     
     context.update({ 'placemarks': placemarks[:params.limit], 'site': Site.objects.get_current(), 'STATIC_URL':settings.STATIC_URL, })
