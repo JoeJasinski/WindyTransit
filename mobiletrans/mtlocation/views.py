@@ -3,7 +3,6 @@ from django.template import RequestContext, loader, Context
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.gis.measure import D 
 from django.contrib.sites.models import Site
 from django.conf import settings
 
