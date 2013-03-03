@@ -1,6 +1,7 @@
 import logging
 from Queue import Queue
 from threading import Thread
+from UserDict import DictMixin
 
 from django.contrib.gis.geos import Point
 from pyproj import Geod
@@ -56,6 +57,7 @@ class GridPoint(object):
         return GridPoint(self.x - self.xint, self.y, Point(lng, lat), self.xint, self.yint)
         
 """
+from mobiletrans.mtdistmap.area_grid import generate_grid, GridPoint 
 region = CityBorder.objects.all()[0]
 gp = GridPoint(0, 0, region.area.centroid)
 g = generate_grid(region, gp)
