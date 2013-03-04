@@ -467,7 +467,7 @@ class CTARailLines(models.Model):
     alt_legend = models.CharField(max_length=5)
     branch = models.CharField(max_length=50)
     shape_len = models.FloatField()
-    line = models.LineStringField()
+    line = models.LineStringField(srid=4326)
     
     objects = models.GeoManager()
 
