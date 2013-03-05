@@ -24,6 +24,8 @@ class Station(DictMixin):
 
 class StartPoint(object):
     name = "walk"
+    def __repr__(self):
+        return "StartPoint(name=%s)" % (self.name,)
 
 class Path(object):
     def __init__(self, tn, stops, total_time):
@@ -116,7 +118,7 @@ class TransitNetwork(DictMixin):
             self.station_dict[line].update({name:station})
             
         if not self.has_key(station_start_key):
-            station_start = Station("start", name, links={key:root_cost}, desc="Start Point")
+            station_start = Station("start", name, links={key:root_cost}, desc="Start Station")
             if not self.station_dict.has_key("start"):
                 self.station_dict["start"] = {name:station_start}
             else:
@@ -125,7 +127,7 @@ class TransitNetwork(DictMixin):
             self[station_start_key].links.update({key:root_cost})
 
         if not self.has_key(station_end_key):
-            station_end = Station("end", name, links={}, desc="End Point")
+            station_end = Station("end", name, links={}, desc="End Station")
             if not self.station_dict.has_key("end"):
                 self.station_dict["end"] = {name:station_end}
             else:
