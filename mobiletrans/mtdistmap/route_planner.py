@@ -8,16 +8,17 @@ def distance_to_time(distance, unit="m", units_per_min="60"):
     return getattr(distance, unit)  *  (1 / units_per_min ) 
 
 class RoutePlanner(object):
-    def __init__(self, tn, unit="m", units_per_min="60", max_distance=1500):
+    def __init__(self, tn, unit="m", units_per_min="60", max_distance=1500, num_routes=2):
         self.tn = tn
         self.unit = unit
         self.units_per_min = units_per_min
         self.max_distance = max_distance
+        self.num_routes = num_routes
     def get_distance_dict(self):
         return {self.unit:self.max_distance}
     def fastest_route_from_point(self, point, station_id):
         distance_dict=self.get_distance_dict()
-        stations = models.TransitStop.objects.filter(location_type=1).get_closest_x(point, distance_dict ) 
+        stations = models.TransitStop.objects.filter(location_type=1).get_closest_x(point, distance_dict, number=self.num_routes ) 
         paths = []
         for station in stations: 
             path = self.tn.shortest_path(str(station.stop_id), station_id)
