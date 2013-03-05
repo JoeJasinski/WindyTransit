@@ -4,7 +4,6 @@ from django.contrib.gis.measure import D
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
 from autoslug import AutoSlugField
 from mobiletrans.mtlocation.fields import SeparatedValuesField, UUIDField
 

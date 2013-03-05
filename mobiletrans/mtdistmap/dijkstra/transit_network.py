@@ -27,7 +27,7 @@ class Path(object):
         self.stops = stops
         self.total_time = total_time
     def as_stations(self):
-        return [ self.tn[stop] for stop in self.stops ]
+        return [ self.tn[stop]  if tn.haskey(stop) else "walk"  for stop in self.stops ]
     def __repr__(self):
         return "Path(stops=%s total_time=%s)" % (self.stops, self.total_time)
     def pprint(self):
