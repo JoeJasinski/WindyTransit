@@ -22,9 +22,9 @@ class RoutePlanner(object):
         paths = []
         for station in stations: 
             path = self.tn.shortest_path(str(station.stop_id), station_id)
-            path.stops.insert(0, "walk_1")
             walking_distance = station.distance
             walking_time = distance_to_time(walking_distance, self.unit, self.max_distance)
+            path.stops.insert(0, "walk_%s" % (walking_time))
             path.total_time += walking_time 
             paths.append(path)
         sorted(paths, key=lambda x:x.total_time)

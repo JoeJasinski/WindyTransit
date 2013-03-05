@@ -23,9 +23,14 @@ class Station(DictMixin):
 
 
 class StartPoint(object):
-    name = "walk"
+    name = ""
+    def __init__(self, key,  *args, **kwargs):
+        name, time = key.split("_")
+        self.name = name
+        self.time = time
+        self.desc = kwargs.get('desc', "")
     def __repr__(self):
-        return "StartPoint(name=%s)" % (self.name,)
+        return "StartPoint(name=%s time=%s)" % (self.name, self.time)
 
 class Path(object):
     def __init__(self, tn, stops, total_time):
@@ -33,7 +38,7 @@ class Path(object):
         self.stops = stops
         self.total_time = total_time
     def as_stations(self):
-        return [ self.tn[stop]  if self.tn.has_key(stop) else StartPoint()  for stop in self.stops ]
+        return [ self.tn[stop]  if self.tn.has_key(stop) else StartPoint(stop, desc="Start")  for stop in self.stops ]
     def __repr__(self):
         return "Path(stops=%s total_time=%s)" % (self.stops, self.total_time)
     def pprint(self):
