@@ -21,13 +21,17 @@ class Station(DictMixin):
     def get_unique_name(self):
         return "%s_%s" % (self.line, self.name)
 
+
+class StartPoint(object):
+    name = "walk"
+
 class Path(object):
     def __init__(self, tn, stops, total_time):
         self.tn = tn
         self.stops = stops
         self.total_time = total_time
     def as_stations(self):
-        return [ self.tn[stop]  if self.tn.has_key(stop) else "walk"  for stop in self.stops ]
+        return [ self.tn[stop]  if self.tn.has_key(stop) else StartPoint()  for stop in self.stops ]
     def __repr__(self):
         return "Path(stops=%s total_time=%s)" % (self.stops, self.total_time)
     def pprint(self):
@@ -112,7 +116,7 @@ class TransitNetwork(DictMixin):
             self.station_dict[line].update({name:station})
             
         if not self.has_key(station_start_key):
-            station_start = Station("start", name, links={key:root_cost})
+            station_start = Station("start", name, links={key:root_cost}, desc="Start Point")
             if not self.station_dict.has_key("start"):
                 self.station_dict["start"] = {name:station_start}
             else:
@@ -121,7 +125,7 @@ class TransitNetwork(DictMixin):
             self[station_start_key].links.update({key:root_cost})
 
         if not self.has_key(station_end_key):
-            station_end = Station("end", name, links={})
+            station_end = Station("end", name, links={}, desc="End Point")
             if not self.station_dict.has_key("end"):
                 self.station_dict["end"] = {name:station_end}
             else:
