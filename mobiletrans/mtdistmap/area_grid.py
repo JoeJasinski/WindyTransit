@@ -167,3 +167,11 @@ class RouteGridGenerator(GridGenerator):
         p = self.t.fastest_route_from_point(from_point, self.to_point)
         new_point.routes = p
         
+"""
+#from mobiletrans.mtdistmap.area_grid import RouteGridGenerator, GridPoint, Grid
+region = CityBorder.objects.all()[0]
+center = region.area.centroid
+grid = Grid(xint=300, yint=300)
+gridgen = RouteGridGenerator('41320', region, grid)
+g = gridgen.run(GridPoint(0,0,center))
+"""

@@ -165,8 +165,6 @@ class TransitNetwork(DictMixin):
             if v.has_key(name):
                 keys.append(self.rejoin(line,name))
         return keys 
-    def _shortest_path(self, start, end):
-        return shortestPath(self, start, end)
     def shortest_path_raw(self, start, end, reverse=False):
         """
         This determines the shortest path between two 
@@ -190,11 +188,16 @@ class TransitNetwork(DictMixin):
             end=tmp
         cache_key = "%s.%s" % (start, end)
         if self._path_cache.has_key(cache_key):
-            return_value = self._path_cache[cache_key]
+            shortest_path_return = self._path_cache[cache_key]
         else:
-            return_value = self._shortest_path(start, end)
-            self._path_cache[cache_key] = return_value
-        return Path(self, return_value[0], return_value[1])
+            try:
+                shortest_path_return = self.shortestPath(start, end)
+                self._path_cache[cache_key] = shortest_path_return
+            except KeyError:
+                path = Path(self, [], 9999999999)
+            else:
+                path = Path(self, shortest_path_return[0], shortest_path_return[1])
+        return path
     def shortest_path(self, start, end, reverse=False):
         """
         Pass in a stop id for the start and end stop.
