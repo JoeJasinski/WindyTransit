@@ -89,7 +89,7 @@ class GridGenerator(object):
     directions = ['north', 'south', 'east', 'west']
     num_worker_threads=4
     
-    def __init__(self, region, grid):
+    def __init__(self, region, grid, *args, **kwargs):
         self.q = Queue()
         self.region = region
         self.grid = grid
@@ -119,7 +119,11 @@ class GridGenerator(object):
             if not self.grid.has_key((new_point.x, new_point.y)):
                 self.grid[(new_point.x, new_point.y)] = new_point
                 if self.region.area.contains(new_point.point):
+                    self.work(new_point)
                     self.q.put(new_point)
+
+    def work(self, new_point):
+        pass
 
     def worker(self):
         while True:
@@ -136,7 +140,6 @@ class GridGenerator(object):
         self.q.join()
         return self.grid
 
-
 """
 #from mobiletrans.mtdistmap.area_grid import GridGenerator, GridPoint, Grid
 region = CityBorder.objects.all()[0]
@@ -145,3 +148,22 @@ grid = Grid(xint=300, yint=300)
 gridgen = GridGenerator(region, grid)
 g = gridgen.run(GridPoint(0,0,center))
 """
+
+
+from mobiletrans.mtdistmap.cta_conn import load_transitnetwork
+from mobiletrans.mtdistmap.route_planner import RoutePlanner
+from django.contrib.gis.geos import Point, fromstr
+
+class RouteGridGenerator(GridGenerator):
+    
+    def __init__(self, to_point, *args, **kwargs):
+        self.to_point = to_point
+        tn = load_transitnetwork()
+        self.t = RoutePlanner(tn)
+        super(RouteGridGenerator, self).__init__(*args, **kwargs)
+         
+    def work(self, new_point):
+        from_point = new_point.point
+        p = self.t.fastest_route_from_point(from_point, self.to_point)
+        new_point.routes = p
+        
