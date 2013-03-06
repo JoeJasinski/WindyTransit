@@ -11,11 +11,11 @@ g = Geod(ellps='WGS84')
 
 class GridPoint(object):
     def __init__(self, x, y, point, xint=300, yint=300):
-        self.xint = xint
-        self.yint = yint
-        self.point = point
         self.x = x
-        self.y = y 
+        self.y = y
+        self.point = point
+        self.xint = xint
+        self.yint = yint 
     
     @property
     def grid_coords(self):
@@ -87,41 +87,44 @@ class Grid(DictMixin):
          }
         return json.dumps(json_dict)
 
-def generate_grid(region, gp):
+class GridGenerator(object):
     grid = Grid()
     directions = ['north', 'south', 'east', 'west']
-        
-    q = Queue()
-    
-    def create_grid(grid_point):
-        for direction in directions:
-            new_point = getattr(grid_point, direction)
-            if not grid.has_key((new_point.x, new_point.y)):
-                grid[(new_point.x, new_point.y)] = new_point
-                if region.area.contains(new_point.point):
-                    logging.debug("New %s" % new_point)
-                    q.put(new_point)
-                else:
-                    """ """
-                    #print "Out of bounds", new_point
-            else:
-                """ """
-                #print "Existing", new_point
-    
     num_worker_threads=4
     
-    def worker():
-        while True:
-            item = q.get()
-            create_grid(item)
-            q.task_done()
-            
-    for i in range(num_worker_threads):
-         t = Thread(target=worker)
-         t.daemon = True
-         t.start()
+    def __init__(self, region):
+        self.q = Queue()
+        self.region = region
     
-    create_grid(gp)
-    q.join()
-    return grid
+    def create_grid(self, grid_point):
+        for direction in self.directions:
+            new_point = getattr(grid_point, direction)
+            if not self.grid.has_key((new_point.x, new_point.y)):
+                self.grid[(new_point.x, new_point.y)] = new_point
+                if self.region.area.contains(new_point.point):
+                    logging.debug("New %s" % new_point)
+                    self.q.put(new_point)
 
+    def worker(self):
+        while True:
+            item = self.q.get()
+            self.create_grid(item)
+            self.q.task_done()
+    
+    def run(self, start_grid_point):
+        for i in range(self.num_worker_threads):
+             t = Thread(target=self.worker)
+             t.daemon = True
+             t.start()
+        self.create_grid(start_grid_point)
+        self.q.join()
+        return self.grid
+
+
+"""
+from mobiletrans.mtdistmap.area_grid import GridGenerator, GridPoint
+r = CityBorder.objects.all()[0]
+gg = GridGenerator(r)
+p = r.area.centroid
+g = gg.run(GridPoint(0,0,p))
+"""
