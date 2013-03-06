@@ -6,16 +6,28 @@ from UserDict import DictMixin
 from django.contrib.gis.geos import Point
 from pyproj import Geod
 
+logger = logging.getLogger('simple_example')
+logger.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 g = Geod(ellps='WGS84')
 
 class GridPoint(object):
-    def __init__(self, x, y, point, xint=300, yint=300):
+    """
+    This represents a geographic coordinate and
+    where it falls on the Grid object.  The value
+    of x and y refer to the x or y distance from the
+    origin.  The xint and yint are the spacings between
+    points.  
+    """
+    def __init__(self, x, y, point,):
         self.x = x
         self.y = y
         self.point = point
-        self.xint = xint
-        self.yint = yint 
     
     @property
     def grid_coords(self):
@@ -33,28 +45,6 @@ class GridPoint(object):
         return "GridPoint(lng=%s (%s), lat=%s (%s))" % (
                 self.point.x, self.x, self.point.y, self.y)
     
-    def transpose(self, azimuth, distance):
-        return g.fwd(self.point.x, self.point.y, azimuth, distance)
-    
-    @property
-    def north(self):
-        lng, lat, az =  self.transpose(0, self.yint)
-        return GridPoint(self.x, self.y + self.yint, Point(lng, lat), self.xint, self.yint)
-    
-    @property
-    def south(self):
-        lng, lat, az =  self.transpose(180, self.yint)
-        return GridPoint(self.x, self.y - self.yint, Point(lng, lat), self.xint, self.yint)
-    
-    @property
-    def east(self): 
-        lng, lat, az = self.transpose(90, self.xint)
-        return GridPoint(self.x + self.xint, self.y, Point(lng, lat), self.xint, self.yint)
-    
-    @property
-    def west(self): 
-        lng, lat, az = self.transpose(270, self.xint)
-        return GridPoint(self.x - self.xint, self.y, Point(lng, lat), self.xint, self.yint)
         
 """
 from mobiletrans.mtdistmap.area_grid import generate_grid, GridPoint 
@@ -64,8 +54,15 @@ g = generate_grid(region, gp)
 """
 
 class Grid(DictMixin):
-    def __init__(self, *args, **kwargs):
+    """
+    This represents a grid of GridPoints, the center of which
+    is at (0,0).  The key to this dict-like object is an (x,y)
+    tuple representing the distance from the origin (0,0).
+    """
+    def __init__(self, xint, yint, *args, **kwargs):
         self.grid = {}
+        self.xint = xint
+        self.yint = yint
     def __getitem__(self, key):
         return self.grid[key]
     def __setitem__(self, key, item):
@@ -88,21 +85,40 @@ class Grid(DictMixin):
         return json.dumps(json_dict)
 
 class GridGenerator(object):
-    grid = Grid()
+    grid = None
     directions = ['north', 'south', 'east', 'west']
     num_worker_threads=4
     
-    def __init__(self, region):
+    def __init__(self, region, grid):
         self.q = Queue()
         self.region = region
+        self.grid = grid
+
+    def transpose(self, grid_point, azimuth, distance):
+        return g.fwd(grid_point.point.x, grid_point.point.y, azimuth, distance)
+  
+    def north(self, grid_point):
+        lng, lat, az =  self.transpose(grid_point, 0, self.grid.yint)
+        return GridPoint(grid_point.x, grid_point.y + self.grid.yint, Point(lng, lat))
     
+    def south(self, grid_point):
+        lng, lat, az =  self.transpose(grid_point, 180, self.grid.yint)
+        return GridPoint(grid_point.x, grid_point.y - self.grid.yint, Point(lng, lat), )
+    
+    def east(self, grid_point): 
+        lng, lat, az = self.transpose(grid_point, 90, self.grid.xint)
+        return GridPoint(grid_point.x + self.grid.xint, grid_point.y, Point(lng, lat), )
+    
+    def west(self, grid_point): 
+        lng, lat, az = self.transpose(grid_point, 270, self.grid.xint)
+        return GridPoint(grid_point.x - self.grid.xint, grid_point.y, Point(lng, lat),)
+
     def create_grid(self, grid_point):
         for direction in self.directions:
-            new_point = getattr(grid_point, direction)
+            new_point = getattr(self, direction)(grid_point)
             if not self.grid.has_key((new_point.x, new_point.y)):
                 self.grid[(new_point.x, new_point.y)] = new_point
                 if self.region.area.contains(new_point.point):
-                    logging.debug("New %s" % new_point)
                     self.q.put(new_point)
 
     def worker(self):
@@ -122,9 +138,10 @@ class GridGenerator(object):
 
 
 """
-from mobiletrans.mtdistmap.area_grid import GridGenerator, GridPoint
-r = CityBorder.objects.all()[0]
-gg = GridGenerator(r)
-p = r.area.centroid
-g = gg.run(GridPoint(0,0,p))
+#from mobiletrans.mtdistmap.area_grid import GridGenerator, GridPoint, Grid
+region = CityBorder.objects.all()[0]
+center = region.area.centroid
+grid = Grid(xint=300, yint=300)
+gridgen = GridGenerator(region, grid)
+g = gridgen.run(GridPoint(0,0,center))
 """
