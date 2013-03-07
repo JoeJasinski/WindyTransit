@@ -170,12 +170,13 @@ class RouteGridGenerator(GridGenerator):
 
 class RouteGridPoint(GridPoint):
     
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(RouteGridPoint, self).__init__(*args, **kwargs)
         self.routes = []
     
      
 """
-from mobiletrans.mtdistmap.area_grid import RouteGridGenerator, GridPoint, Grid
+from mobiletrans.mtdistmap.area_grid import RouteGridGenerator, RouteGridPoint, Grid
 region = CityBorder.objects.all()[0]
 center = region.area.centroid
 grid = Grid(xint=300, yint=300)
