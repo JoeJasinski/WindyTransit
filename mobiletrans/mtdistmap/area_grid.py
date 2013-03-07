@@ -94,6 +94,7 @@ class GridGenerator(object):
         self.region = region
         self.grid = grid
 
+    @property
     def grid_point_class(self):
         return GridPoint
 
@@ -165,6 +166,7 @@ class RouteGridGenerator(GridGenerator):
         self.t = RoutePlanner(tn)
         super(RouteGridGenerator, self).__init__(*args, **kwargs)
 
+    @property
     def grid_point_class(self):
         return RouteGridPoint
    
