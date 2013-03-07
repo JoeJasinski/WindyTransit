@@ -173,7 +173,7 @@ class RouteGridGenerator(GridGenerator):
     def work(self, new_point):
         from_point = new_point.point
         p = self.t.fastest_route_from_point(from_point, self.to_point)
-        new_point.routes = p
+        new_point.routes.append(p)
 
 
 class RouteGridPoint(GridPoint):
