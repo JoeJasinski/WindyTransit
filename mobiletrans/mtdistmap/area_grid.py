@@ -173,7 +173,7 @@ class RouteGridGenerator(GridGenerator):
     def work(self, new_point):
         from_point = new_point.point
         p = self.t.fastest_route_from_point(from_point, self.to_point)
-        new_point.routes.append(p)
+        new_point.routes += p
 
 
 class RouteGridPoint(GridPoint):
@@ -190,4 +190,7 @@ center = region.area.centroid
 grid = Grid(xint=300, yint=300)
 gridgen = RouteGridGenerator('41320', region, grid)
 g = gridgen.run(RouteGridPoint(0,0,center))
+
+for k, v in g.items():
+    print v.geo_coords_r, v.routes
 """
