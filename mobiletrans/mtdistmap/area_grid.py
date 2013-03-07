@@ -94,24 +94,27 @@ class GridGenerator(object):
         self.region = region
         self.grid = grid
 
+    def grid_point_class(self):
+        return GridPoint
+
     def transpose(self, grid_point, azimuth, distance):
         return g.fwd(grid_point.point.x, grid_point.point.y, azimuth, distance)
   
     def north(self, grid_point):
         lng, lat, az =  self.transpose(grid_point, 0, self.grid.yint)
-        return GridPoint(grid_point.x, grid_point.y + self.grid.yint, Point(lng, lat))
+        return self.grid_point_class(grid_point.x, grid_point.y + self.grid.yint, Point(lng, lat))
     
     def south(self, grid_point):
         lng, lat, az =  self.transpose(grid_point, 180, self.grid.yint)
-        return GridPoint(grid_point.x, grid_point.y - self.grid.yint, Point(lng, lat), )
+        return self.grid_point_class(grid_point.x, grid_point.y - self.grid.yint, Point(lng, lat), )
     
     def east(self, grid_point): 
         lng, lat, az = self.transpose(grid_point, 90, self.grid.xint)
-        return GridPoint(grid_point.x + self.grid.xint, grid_point.y, Point(lng, lat), )
+        return self.grid_point_class(grid_point.x + self.grid.xint, grid_point.y, Point(lng, lat), )
     
     def west(self, grid_point): 
         lng, lat, az = self.transpose(grid_point, 270, self.grid.xint)
-        return GridPoint(grid_point.x - self.grid.xint, grid_point.y, Point(lng, lat),)
+        return self.grid_point_class(grid_point.x - self.grid.xint, grid_point.y, Point(lng, lat),)
 
     def create_grid(self, grid_point):
         for direction in self.directions:
@@ -161,7 +164,10 @@ class RouteGridGenerator(GridGenerator):
         tn = load_transitnetwork()
         self.t = RoutePlanner(tn)
         super(RouteGridGenerator, self).__init__(*args, **kwargs)
-         
+
+    def grid_point_class(self):
+        return RouteGridPoint
+   
     def work(self, new_point):
         from_point = new_point.point
         p = self.t.fastest_route_from_point(from_point, self.to_point)
