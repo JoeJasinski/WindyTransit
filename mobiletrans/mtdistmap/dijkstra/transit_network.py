@@ -212,7 +212,7 @@ class TransitNetwork(DictMixin):
             end = tmp
         start = self.rejoin('start', start)
         end = self.rejoin('end', end)
-        return [ p for p in self.shortest_path_raw(start, end) if p ]
+        return self.shortest_path_raw(start, end) 
     def clear_path_cache(self):
         """
         This clears the path cache.  Only used if one needs
