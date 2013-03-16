@@ -74,16 +74,22 @@ schema="""<?xml version="1.0" encoding="utf-8"?>
   <Parameter name="interactivity_layer">undefined</Parameter>
   <Parameter name="interactivity_fields"></Parameter>
   <Parameter name="minzoom">0</Parameter>
-  <Parameter name="maxzoom">14</Parameter>
+  <Parameter name="maxzoom">15</Parameter>
   <Parameter name="name"><![CDATA[Chicago]]></Parameter>
   <Parameter name="legend"><![CDATA[Chicago]]></Parameter>
 </Parameters>
 
-
+<FontSet name="fontset-0">
+  <Font face-name="Futura Medium"/>
+  <Font face-name="Function Pro Medium"/>
+  <Font face-name="Ubuntu Regular"/>
+  <Font face-name="Trebuchet MS Regular"/>
+  <Font face-name="DejaVu Sans Book"/>
+</FontSet>
 <Style name="mtlocationcityborder" filter-mode="first" >
   <Rule>
-    <LineSymbolizer stroke="#1e77a4" stroke-opacity="0.5" stroke-width="3" />
-    <PolygonSymbolizer fill="#1795d4" fill-opacity="100" />
+    <LineSymbolizer stroke="#ddc176" stroke-opacity="0.5" stroke-width="3" />
+    <PolygonSymbolizer fill="#fcf0cf" fill-opacity="100" />
   </Rule>
 </Style>
 <Layer name="mtlocationcityborder"
@@ -93,7 +99,22 @@ schema="""<?xml version="1.0" encoding="utf-8"?>
 
 <Style name="mtregion" filter-mode="first" >
   <Rule>
-    <LineSymbolizer stroke="#b1e91c" stroke-opacity="0.5" stroke-width="3" />
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <TextSymbolizer size="8" fontset-name="fontset-0" text-transform="uppercase" halo-fill="rgba(255, 255, 255, 0.5)" halo-radius="1" line-spacing="1" wrap-width="20" fill="#828870" ><![CDATA[[long_name]]]></TextSymbolizer>
+    <LineSymbolizer stroke="#828870" stroke-opacity="1" stroke-width="0.5" />
+    <PolygonSymbolizer fill-opacity="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>400000</MaxScaleDenominator>
+    <MinScaleDenominator>200000</MinScaleDenominator>
+    <TextSymbolizer size="5" fontset-name="fontset-0" text-transform="uppercase" halo-fill="rgba(255, 255, 255, 0.5)" halo-radius="1" line-spacing="1" wrap-width="20" fill="#828870" ><![CDATA[[long_name]]]></TextSymbolizer>
+    <LineSymbolizer stroke="#828870" stroke-opacity="1" stroke-width="0.5" />
+    <PolygonSymbolizer fill-opacity="0" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <TextSymbolizer fontset-name="fontset-0" size="8" text-transform="uppercase" halo-fill="rgba(255, 255, 255, 0.5)" halo-radius="1" line-spacing="1" wrap-width="20" fill="#828870" ><![CDATA['']]></TextSymbolizer>
+    <LineSymbolizer stroke="#828870" stroke-opacity="1" stroke-width="0.5" />
     <PolygonSymbolizer fill-opacity="0" />
   </Rule>
 </Style>
@@ -104,12 +125,39 @@ schema="""<?xml version="1.0" encoding="utf-8"?>
 
 <Style name="mtlocationlocation" filter-mode="first" >
   <Rule>
-    <MarkersSymbolizer width="3" stroke="#ff0000" />
+    <MinScaleDenominator>200000</MinScaleDenominator>
+    <MarkersSymbolizer width="0.5" stroke="#ff0000" fill="#ff0000" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MarkersSymbolizer width="3" fill="#ff0000" stroke="#ff0000" />
   </Rule>
 </Style>
 <Layer name="mtlocationlocation"
   srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
     <StyleName>mtlocationlocation</StyleName>
+  </Layer>
+
+<Style name="mtrail-outline" filter-mode="first" >
+  <Rule>
+    <MaxScaleDenominator>50000</MaxScaleDenominator>
+    <LineSymbolizer stroke="#000000" stroke-width="4.5" />
+  </Rule>
+</Style>
+<Style name="mtrail" filter-mode="first" >
+  <Rule>
+    <MaxScaleDenominator>50000</MaxScaleDenominator>
+    <LineSymbolizer stroke="#ffffff" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <LineSymbolizer stroke-width="1" />
+  </Rule>
+</Style>
+<Layer name="mtrail"
+  srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>mtrail</StyleName>
+    <StyleName>mtrail-outline</StyleName>
   </Layer>
 
 </Map>
