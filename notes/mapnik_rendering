@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map[]>
+<Map srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" background-color="#b8dee6" maximum-extent="-88.157,41.4890,-87.4951,42.1359""
+>
+
+<Parameters>
+  <Parameter name="bounds">-88.3081,41.4839,-87.3193,42.2854</Parameter>
+  <Parameter name="center">-87.6242,41.8726,9</Parameter>
+  <Parameter name="format">png</Parameter>
+  <Parameter name="minzoom">0</Parameter>
+  <Parameter name="maxzoom">14</Parameter>
+  <Parameter name="name"><![CDATA[jjj]]></Parameter>
+</Parameters>
+
+
+<Style name="mtlocationcityborder" filter-mode="first" >
+  <Rule>
+    <LineSymbolizer stroke="#00aaff" stroke-opacity="0.5" stroke-width="2" />
+    <PolygonSymbolizer fill="#00aaff" fill-opacity="100" />
+  </Rule>
+</Style>
+<Layer name="mtlocationcityborder" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>mtlocationcityborder</StyleName>
+  </Layer>
+
+<Style name="mtlocationlocation" filter-mode="first" >
+  <Rule>
+    <MarkersSymbolizer width="3" stroke="#ff0000" />
+  </Rule>
+</Style>
+<Layer name="mtlocationlocation" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>mtlocationlocation</StyleName>
+  </Layer>
+
+</Map>
+
+
+
+import mapnik
+m = mapnik.Map(600,600)
+mapnik.load_map(m, 'chicago2.xml')
+ds = mapnik.PostGIS(dbname='mobiletrans', user='mobiletrans', host='localhost', password='1234', table='mtlocation_cityborder')
+m.layers[0].datasource = ds
+ds = mapnik.PostGIS(dbname='mobiletrans', user='mobiletrans', host='localhost', password='1234', table='mtlocation_location')
+m.layers[1].datasource = ds
+m.zoom_all()
+mapnik.render_to_file(m, 'chicago.png', 'png')
+m.zoom(1)
+mapnik.render_to_file(m, 'chicago2.png', 'png')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+schema="""<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map[]>
+<Map srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" background-color="#b8dee6" maximum-extent="-88.157,41.4890,-87.4951,42.1359">
+
+<Parameters>
+  <Parameter name="bounds">-88.157,41.489,-87.4951,42.1359</Parameter>
+  <Parameter name="center">-87.6407,41.8624,9</Parameter>
+  <Parameter name="format">png</Parameter>
+  <Parameter name="interactivity_layer">undefined</Parameter>
+  <Parameter name="interactivity_fields"></Parameter>
+  <Parameter name="minzoom">0</Parameter>
+  <Parameter name="maxzoom">14</Parameter>
+  <Parameter name="name"><![CDATA[Chicago]]></Parameter>
+  <Parameter name="legend"><![CDATA[Chicago]]></Parameter>
+</Parameters>
+
+
+<Style name="mtlocationcityborder" filter-mode="first" >
+  <Rule>
+    <LineSymbolizer stroke="#1e77a4" stroke-opacity="0.5" stroke-width="3" />
+    <PolygonSymbolizer fill="#1795d4" fill-opacity="100" />
+  </Rule>
+</Style>
+<Layer name="mtlocationcityborder"
+  srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>mtlocationcityborder</StyleName>
+  </Layer>
+
+<Style name="mtregion" filter-mode="first" >
+  <Rule>
+    <LineSymbolizer stroke="#b1e91c" stroke-opacity="0.5" stroke-width="3" />
+    <PolygonSymbolizer fill-opacity="0" />
+  </Rule>
+</Style>
+<Layer name="mtregion"
+  srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>mtregion</StyleName>
+  </Layer>
+
+<Style name="mtlocationlocation" filter-mode="first" >
+  <Rule>
+    <MarkersSymbolizer width="3" stroke="#ff0000" />
+  </Rule>
+</Style>
+<Layer name="mtlocationlocation"
+  srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>mtlocationlocation</StyleName>
+  </Layer>
+
+</Map>
+"""
+
+import mapnik
+subquery1 = """(SELECT * FROM   public.mtlocation_region,  public.mtlocation_neighborhood,  public.django_content_type WHERE 
+  mtlocation_region.id = mtlocation_neighborhood.region_ptr_id AND
+  mtlocation_region.content_type_id = django_content_type.id) as foo"""
+subquery2 = """(SELECT * FROM  public.mtlocation_location, public.django_content_type
+WHERE  mtlocation_location.content_type_id = django_content_type.id
+AND model not in ('transitstop')) as foo"""
+m = mapnik.Map(600,600)
+mapnik.load_map_from_string(m, schema)
+ds = mapnik.PostGIS(dbname='mobiletrans', user='mobiletrans', host='localhost', password='1234', table='mtlocation_cityborder')
+m.layers[0].datasource = ds
+ds = mapnik.PostGIS(dbname='mobiletrans', user='mobiletrans', host='localhost', password='1234', table=subquery1, geometry_table="mtlocation_region", geometry_field='area')
+m.layers[1].datasource = ds
+ds = mapnik.PostGIS(dbname='mobiletrans', user='mobiletrans', host='localhost', password='1234', table=subquery2,  geometry_table="mtlocation_location", geometry_field='point')
+m.layers[2].datasource = ds
+m.zoom_all()
+mapnik.render_to_file(m, 'chicago.png', 'png')
+m.zoom(1)
+mapnik.render_to_file(m, 'chicago2.png', 'png')
