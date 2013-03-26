@@ -4,11 +4,12 @@ from mobiletrans.mtlocation import models
 from mobiletrans.mtdistmap.cta_conn import load_transitnetwork
 from mobiletrans.mtdistmap.transit_network import Path
 
-def distance_to_time(distance, unit="m", units_per_min="60"):
-    return getattr(distance, unit)  *  (1 / units_per_min ) 
+def distance_to_time(distance, unit="m", units_per_min=60):
+    return_value =  getattr(distance, unit)  *  (1 / units_per_min ) 
+    return return_value
 
 class RoutePlanner(object):
-    def __init__(self, tn, unit="m", units_per_min="60", max_distance=1500, num_routes=2):
+    def __init__(self, tn, unit="m", units_per_min=60, max_distance=1500, num_routes=2):
         self.tn = tn
         self.unit = unit
         self.units_per_min = units_per_min
