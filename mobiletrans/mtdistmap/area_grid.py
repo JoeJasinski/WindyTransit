@@ -208,10 +208,7 @@ class RouteGridGenerator(GridGenerator):
 
 
 
-def RouteGrid(Grid):
-    
-    def __init__(self, *args, **kwargs):
-        super(RouteGrid, self).__init__(*args, **kwargs)
+class RouteGrid(Grid):
     
     def generate_shapefile(self, shape_file_name='shapefiles/test'):
         """
