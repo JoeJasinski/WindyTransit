@@ -3,11 +3,14 @@ This class is used to generate a color gradient between multiple colors.
 It is useful particularly for creating HTML gradients
 
 # Usage Example
+from mobiletrans.mtdistmap.utils.gradient_gen import GradientGenerator
 grd_data =  [
     (0.15, '#FFD3d3', '#ff3030'), 
     (0.75,  '#ff3030', '#0241fc'), 
-    (1.0,  '#0241fc', '#0241fc'), 
+    (0.9,  '#0241fc', '#150189'), 
+    (1.0,  '#150189', '#150189'), 
 ]
+
 
 grad_gen = GradientGenerator(grd_data)
 grad_gen.generate()
@@ -113,15 +116,17 @@ class GradientGenerator(object):
 class MSSGradientGenerator(GradientGenerator):
     """
     Map StyleSheet (MSS) 'heatmap' gradient generator
-    
-    grd_data = [
-    (0.15, (0xFF, 0xD3, 0xd3), (0xff, 0x30, 0x30)),    # range between %0 and %15
-    (1.0, (0, 0, 0), (255, 255, 255)),                 # range between %15 and %100
+
+    from mobiletrans.mtdistmap.utils.gradient_gen import MSSGradientGenerator
+    grd_data =  [
+        (0.15, '#FFD3d3', '#ff3030'), 
+        (0.75,  '#ff3030', '#0241fc'), 
+        (0.9,  '#0241fc', '#150189'), 
+        (1.0,  '#150189', '#150189'), 
     ]
     
-    mssg = MSSGradientGenerator(grd_data)
-    mssg.generate_mss()
-    
+    grad_gen = MSSGradientGenerator(grd_data)
+    grad_gen.generate_mss()
     """
     def generate_mss(self, steps=60, format='hex'):
         for i in reversed(self.generate(steps, format)):
