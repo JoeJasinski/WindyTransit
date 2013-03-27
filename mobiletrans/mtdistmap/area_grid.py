@@ -188,7 +188,7 @@ class RouteGridPoint(GridPoint):
     def shortest_route(self):
         return_value = None
         if self.routes:
-            return_value = sorted( self.routes, key=lambda x: x.total_time,reverse=True) 
+            return_value = sorted( self.routes, key=lambda x: x.total_time,reverse=True)[0]
         return return_value
 
     def shortest_time(self):
