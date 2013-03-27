@@ -190,6 +190,7 @@ class TransitNetwork(DictMixin):
         path = None
         if self._path_cache.has_key(cache_key):
             shortest_path_return = self._path_cache[cache_key]
+            path = Path(self, shortest_path_return[0], shortest_path_return[1])
         else:
             try:
                 shortest_path_return = shortestPath(self, start, end)
