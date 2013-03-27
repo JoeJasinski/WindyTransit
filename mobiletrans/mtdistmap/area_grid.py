@@ -187,6 +187,8 @@ class RouteGridPoint(GridPoint):
 
      
 """
+
+# generate the grid with routes 
 from mobiletrans.mtdistmap.area_grid import RouteGridGenerator, RouteGridPoint, Grid
 region = CityBorder.objects.all()[0]
 center = region.area.centroid
@@ -194,6 +196,25 @@ grid = Grid(xint=300, yint=300)
 gridgen = RouteGridGenerator('41320', region, grid)
 g = gridgen.run(RouteGridPoint(0,0,center))
 
+# print the grid 
 for k, v in g.items():
     print v.geo_coords_r, v.routes
+    
+
+# display grid as a shapefile
+from mobiletrans.mtdistmap.utils import shapefile
+w = shapefile.Writer(shapeType=shapefile.POINT) 
+w.autoBalance = 1
+w.field('ID')
+w.field('NUM_ROUTES')
+
+count = 1
+for i in g.items():
+   p = i[1].point
+   w.point(p.x, p.y)
+   w.record("%s" % count, "%s" % len(i[1].routes))
+   count += 1
+
+w.save('shapefiles/chicago_pts3')
+
 """
