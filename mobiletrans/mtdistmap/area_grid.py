@@ -205,14 +205,16 @@ for k, v in g.items():
 from mobiletrans.mtdistmap.utils import shapefile
 w = shapefile.Writer(shapeType=shapefile.POINT) 
 w.autoBalance = 1
-w.field('ID')
-w.field('NUM_ROUTES')
+w.field('ID', 'N')  # id field of type Number
+w.field('NUM_ROUTES', 'N')  # route field of type Number
+w.field('x' , "N")
+w.field('y', "N")
 
 count = 1
 for i in g.items():
-   p = i[1].point
-   w.point(p.x, p.y)
-   w.record("%s" % count, "%s" % len(i[1].routes))
+   graphpoint = i[1]
+   w.point(graphpoint.point.x, graphpoint.point.y)
+   w.record(count, len(graphpoint.routes), graphpoint.x, graphpoint.y)
    count += 1
 
 w.save('shapefiles/chicago_pts3')
