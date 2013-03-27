@@ -181,7 +181,10 @@ class RouteGridPoint(GridPoint):
     def __init__(self, *args, **kwargs):
         super(RouteGridPoint, self).__init__(*args, **kwargs)
         self.routes = []
-    
+
+    def __repr__(self):
+        return "Route" + super(RouteGridPoint, self).__repr__()
+
      
 """
 from mobiletrans.mtdistmap.area_grid import RouteGridGenerator, RouteGridPoint, Grid

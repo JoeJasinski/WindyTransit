@@ -1,4 +1,4 @@
-from mobiletrans.mtdistmap.dijkstra.transit_network import TransitNetwork
+from mobiletrans.mtdistmap.transit_network import TransitNetwork
 
 """
 from mobiletrans.mtdistmap import cta_conn
