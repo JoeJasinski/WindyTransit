@@ -1,4 +1,41 @@
-# Algorithm bassed off of James Tauber's gradient generator: http://jtauber.com/2008/05/gradient.py
+"""
+This class is used to generate a color gradient between multiple colors.
+It is useful particularly for creating HTML gradients
+
+# Usage Example
+grd_data =  [
+    (0.15, '#FFD3d3', '#ff3030'), 
+    (0.75,  '#ff3030', '#0241fc'), 
+    (1.0,  '#0241fc', '#0241fc'), 
+]
+
+grad_gen = GradientGenerator(grd_data)
+grad_gen.generate()
+
+
+grd_data = [
+    (0.15, (0xFF, 0xD3, 0xd3), (0xff, 0x30, 0x30)), 
+    (0.75, (0xff, 0x30, 0x30), (0x02, 0x41, 0xfc)), 
+    (1.0,  (0x02, 0x41, 0xfc), (0x02, 0x41, 0xfc)), 
+]
+
+grad_gen = GradientGenerator(grd_data)
+grad_gen.generate(format='int')
+
+
+grd_data = [
+    (0.15, (0xFF, 0xD3, 0xd3), (0xff, 0x30, 0x30)), 
+    (1.0, (255, 255, 255), (255, 255, 255)), 
+]
+
+grad_gen = GradientGenerator(grd_data)
+grad_gen.generate(format='int')
+
+
+"""
+
+
+# Algorithm based off of James Tauber's gradient generator: http://jtauber.com/2008/05/gradient.py
 
 
 from __future__ import division
@@ -67,34 +104,31 @@ class GradientGenerator(object):
             fy = float(y)
             color_out = [int(v ) for v in self.gradient()(0, fy / fh)] 
             if format == 'hex':
-                print color_out
                 color_out = ["#" + "".join(map(lambda x: "%0.2X" % x,  color_out[0:3]),)]
-                print color_out
             results.append( [count,] + color_out ) 
             count += 1
         return results
 
 
-"""
-# Usage Example
-grd_data =  [
-    (0.15, '#FFD3d3', '#ff3030'), 
-    (0.75,  '#ff3030', '#0241fc'), 
-    (1.0,  '#0241fc', '#0241fc'), 
-]
+class MSSGradientGenerator(GradientGenerator):
+    """
+    Map StyleSheet (MSS) 'heatmap' gradient generator
+    
+    grd_data = [
+    (0.15, (0xFF, 0xD3, 0xd3), (0xff, 0x30, 0x30)),    # range between %0 and %15
+    (1.0, (0, 0, 0), (255, 255, 255)),                 # range between %15 and %100
+    ]
+    
+    mssg = MSSGradientGenerator(grd_data)
+    mssg.generate_mss()
+    
+    """
+    def generate_mss(self, steps=60, format='hex'):
+        for i in reversed(self.generate(steps, format)):
+            if format == "hex":
+                print """#mtheatmap[total_time<=%s] { marker-fill:%s; }""" % tuple(i)
+            else:
+                print """#mtheatmap[total_time<=%s] { marker-fill:rgb(%.0f, %.0f, %.0f); }""" % tuple(i)
 
-grad_gen = GradientGenerator(grd_data)
-grad_gen.generate()
 
-
-grd_data = [
-    (0.15, (0xFF, 0xD3, 0xd3), (0xff, 0x30, 0x30)), 
-    (0.75, (0xff, 0x30, 0x30), (0x02, 0x41, 0xfc)), 
-    (1.0,  (0x02, 0x41, 0xfc), (0x02, 0x41, 0xfc)), 
-]
-
-grad_gen = GradientGenerator(grd_data)
-grad_gen.generate(format='int')
-
-"""
-
+    
