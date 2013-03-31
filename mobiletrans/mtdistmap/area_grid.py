@@ -221,15 +221,15 @@ w.field('ID', 'N')  # id field of type Number
 w.field('NUM_ROUTES', 'N')  # route field of type Number
 w.field('x' , "N")
 w.field('y', "N")
-w.field('total_time', 'L') # long
+w.field('total_time', 'N', decimal=4) # long
 
 count = 1
 for i in g.items():
    graphpoint = i[1]
    w.point(graphpoint.point.x, graphpoint.point.y)
-   w.record(count, len(graphpoint.routes), graphpoint.x, graphpoint.y, graphpoint.shortest_time() )
+   w.record(count, len(graphpoint.routes), graphpoint.x, graphpoint.y, "%s" % graphpoint.shortest_time() )
    count += 1
 
-w.save('shapefiles/chicago_pts3')
+w.save('shapefiles/chicago_pts4')
 
 """
