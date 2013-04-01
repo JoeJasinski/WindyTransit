@@ -3,6 +3,8 @@ from Queue import Queue
 from threading import Thread
 from UserDict import DictMixin
 
+from mobiletrans.mtdistmap.utils import shapefile
+
 from django.contrib.gis.geos import Point
 from pyproj import Geod
 
@@ -83,6 +85,35 @@ class Grid(DictMixin):
           "features": features
          }
         return json.dumps(json_dict)
+    def generate_shapefile(self, shape_file_name='shapefiles/test'):
+        """
+        Exports the data grid into a set of shapefiles.  
+        
+        Input: 
+        shape_file_name="/home/test/shapefiles/myshape"
+        
+        Output: 
+        In directory /home/test/shapefiles/
+           myshape.shp
+           myshape.shx
+           myshape.dbf
+        
+        """
+        w = shapefile.Writer(shapeType=shapefile.POINT) 
+        w.autoBalance = 1
+        w.field('ID', 'N')  # id field of type Number
+        w.field('x' , "N")
+        w.field('y', "N")
+        
+        count = 1
+        for i in self.items():
+           graphpoint = i[1]
+           w.point(graphpoint.point.x, graphpoint.point.y)
+           w.record(count, graphpoint.x, graphpoint.y, )
+           count += 1
+        
+        w.save(shape_file_name)
+
 
 class GridGenerator(object):
     grid = None
@@ -176,6 +207,41 @@ class RouteGridGenerator(GridGenerator):
         new_point.routes += p
 
 
+
+def RouteGrid(Grid):
+    
+    def generate_shapefile(self, shape_file_name='shapefiles/test'):
+        """
+        Exports the data grid into a set of shapefiles.  
+        
+        Input: 
+        shape_file_name="/home/test/shapefiles/myshape"
+        
+        Output: 
+        In directory /home/test/shapefiles/
+           myshape.shp
+           myshape.shx
+           myshape.dbf
+        
+        """
+        w = shapefile.Writer(shapeType=shapefile.POINT) 
+        w.autoBalance = 1
+        w.field('ID', 'N')  # id field of type Number
+        w.field('NUM_ROUTES', 'N')  # route field of type Number
+        w.field('x' , "N")
+        w.field('y', "N")
+        w.field('total_time', 'N', decimal=4) # long
+        
+        count = 1
+        for i in self.items():
+           graphpoint = i[1]
+           w.point(graphpoint.point.x, graphpoint.point.y)
+           w.record(count, len(graphpoint.routes), graphpoint.x, graphpoint.y, "%s" % graphpoint.shortest_time() )
+           count += 1
+        
+        w.save(shape_file_name)
+
+
 class RouteGridPoint(GridPoint):
     
     def __init__(self, *args, **kwargs):
@@ -201,10 +267,10 @@ class RouteGridPoint(GridPoint):
 """
 
 # generate the grid with routes 
-from mobiletrans.mtdistmap.area_grid import RouteGridGenerator, RouteGridPoint, Grid
+from mobiletrans.mtdistmap.area_grid import RouteGridGenerator, RouteGridPoint, RouteGrid
 region = CityBorder.objects.all()[0]
 center = region.area.centroid
-grid = Grid(xint=300, yint=300)
+grid = RouteGrid(xint=300, yint=300)
 gridgen = RouteGridGenerator('41320', region, grid)
 g = gridgen.run(RouteGridPoint(0,0,center))
 
