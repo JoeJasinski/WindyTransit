@@ -2,6 +2,7 @@ from __future__ import division
 from django.contrib.gis.geos import Point, fromstr
 from mobiletrans.mtlocation import models
 from mobiletrans.mtdistmap.cta_conn import load_transitnetwork
+from mobiletrans.mtdistmap.transit_network import Path
 
 def distance_to_time(distance, unit="m", units_per_min="60"):
     return getattr(distance, unit)  *  (1 / units_per_min ) 
