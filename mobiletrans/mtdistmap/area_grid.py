@@ -210,6 +210,9 @@ class RouteGridGenerator(GridGenerator):
 
 def RouteGrid(Grid):
     
+    def __init__(self, *args, **kwargs):
+        super(RouteGrid, self).__init__(*args, **kwargs)
+    
     def generate_shapefile(self, shape_file_name='shapefiles/test'):
         """
         Exports the data grid into a set of shapefiles.  
