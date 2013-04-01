@@ -27,7 +27,7 @@ class RoutePlanner(object):
                 walking_time = distance_to_time(walking_distance, self.unit, self.max_distance)
                 new_path = Path(self.tn, 
                                 ["walk_%s" % (walking_time)] + path.stops, 
-                                total_time + walking_time )
+                                path.total_time + walking_time )
                 paths.append(new_path)
         sorted(paths, key=lambda x:x.total_time)
         return paths         
