@@ -190,11 +190,24 @@ from mobiletrans.mtdistmap.route_planner import RoutePlanner
 from django.contrib.gis.geos import Point, fromstr
 
 class RouteGridGenerator(GridGenerator):
+    """
+    Generate a grid a cross the region area geography object 
+    and calculate the routes to the given train stop (to_point) for each
+    grid point.  
+    Inputs:
+    grid - (required) the empty new RouteGrid object
+    to_point - (required) train stop id where all the grid point should search to
+    max_distance - (default 1500) the max search radius around each search point in which
+      to search for a nearby start train stop.
+    num_routes - (default 2) will perform a route calculation for the closest num_routes
+      to a given grid point.   
     
+    """
     def __init__(self, to_point, *args, **kwargs):
         self.to_point = to_point
         tn = load_transitnetwork()
-        self.t = RoutePlanner(tn)
+        self.t = RoutePlanner(tn, max_distance=kwargs.get('max_distance', 1500), 
+                              num_routes=kwargs.get('num_routes', 2))
         super(RouteGridGenerator, self).__init__(*args, **kwargs)
 
     @property
