@@ -2,7 +2,7 @@ from __future__ import division
 from django.contrib.gis.geos import Point, fromstr
 from mobiletrans.mtlocation import models
 from mobiletrans.mtdistmap.cta_conn import load_transitnetwork
-
+from copy import deepcopy
 
 def distance_to_time(distance, unit="m", units_per_min="60"):
     return getattr(distance, unit)  *  (1 / units_per_min ) 
@@ -23,11 +23,12 @@ class RoutePlanner(object):
         for station in stations: 
             path = self.tn.shortest_path(str(station.stop_id), station_id)
             if path:
+                path_copy = deepcopy(path)
                 walking_distance = station.distance
                 walking_time = distance_to_time(walking_distance, self.unit, self.max_distance)
-                path.stops.insert(0, "walk_%s" % (walking_time))
-                path.total_time += walking_time 
-                paths.append(path)
+                path_copy.stops.insert(0, "walk_%s" % (walking_time))
+                path_copy.total_time += walking_time 
+                paths.append(path_copy)
         sorted(paths, key=lambda x:x.total_time)
         return paths         
 

@@ -195,6 +195,7 @@ class RouteGridGenerator(GridGenerator):
     and calculate the routes to the given train stop (to_point) for each
     grid point.  
     Inputs:
+    region - (required) the bounding region for the grid
     grid - (required) the empty new RouteGrid object
     to_point - (required) train stop id where all the grid point should search to
     max_distance - (default 1500) the max search radius around each search point in which
@@ -284,31 +285,9 @@ from mobiletrans.mtdistmap.area_grid import RouteGridGenerator, RouteGridPoint, 
 region = CityBorder.objects.all()[0]
 center = region.area.centroid
 grid = RouteGrid(xint=300, yint=300)
-gridgen = RouteGridGenerator('41320', region, grid)
+gridgen = RouteGridGenerator('41320', region, grid, max_distance=2000, num_routes=3)
 g = gridgen.run(RouteGridPoint(0,0,center))
+g.generate_shapefile('shapefiles/chicago_pts5')
 
-# print the grid 
-for k, v in g.items():
-    print v.geo_coords_r, v.routes
-    
-
-# display grid as a shapefile
-from mobiletrans.mtdistmap.utils import shapefile
-w = shapefile.Writer(shapeType=shapefile.POINT) 
-w.autoBalance = 1
-w.field('ID', 'N')  # id field of type Number
-w.field('NUM_ROUTES', 'N')  # route field of type Number
-w.field('x' , "N")
-w.field('y', "N")
-w.field('total_time', 'N', decimal=4) # long
-
-count = 1
-for i in g.items():
-   graphpoint = i[1]
-   w.point(graphpoint.point.x, graphpoint.point.y)
-   w.record(count, len(graphpoint.routes), graphpoint.x, graphpoint.y, "%s" % graphpoint.shortest_time() )
-   count += 1
-
-w.save('shapefiles/chicago_pts4')
 
 """
