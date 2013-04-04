@@ -408,7 +408,13 @@ def load_transitnetwork():
     tn.add_station('G_40130', { 'G_41080':2, 'G_40510':1 }, desc="51st Green")   # done
 
     # Garfield Green
-    tn.add_station('G_40510', { 'G_40130':1, }, desc="Garfield Green")  # partial
+    tn.add_station('G_40510', { 'G_40130':1, 'G_40940':7 }, desc="Garfield Green")  # partial
+    
+    # Halsted Green
+    tn.add_station('G_40940', { 'G_40510':7, 'G_40290':8 }, desc="Halsted Green")  # done
+        
+    # Ashland Green
+    tn.add_station('G_40290', { 'G_40940':8, }, desc="Ashland Green")  # done
 
     ### Blue South West Side ###########################################################
 
