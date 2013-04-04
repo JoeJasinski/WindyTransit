@@ -96,7 +96,7 @@ def load_transitnetwork():
     tn.add_station('Pink_40380', {'Blue_40380':wait_time, 'Brn_40380':wait_time, 'Org_40380':wait_time, 'G_40380':wait_time, 'P_40380':wait_time, 'Pink_40260':1, }, desc='Clark/Lake') # done
     
     #>>> trans(['Red', 'Org', 'G', ], '41400', desc="Roosevelt")
-    tn.add_station('Red_41400', {'Org_41400':wait_time, 'G_41400':wait_time, }, desc='Roosevelt')
+    tn.add_station('Red_41400', {'Red_41000':4, 'Org_41400':wait_time, 'G_41400':wait_time, }, desc='Roosevelt')
     tn.add_station('Org_41400', {'Red_41400':wait_time, 'G_41400':wait_time, 'Org_40850':3 }, desc='Roosevelt')  # done loop
     tn.add_station('G_41400', {'Org_41400':wait_time, 'Red_41400':wait_time, 'G_40680':3, }, desc='Roosevelt')  # done loop
     
@@ -189,6 +189,36 @@ def load_transitnetwork():
 
     # Howard Red 
     tn.add_station('Red_40900', { 'Red_41190':2, 'P_40900':wait_time, }, desc='Howard Red')  # done north side
+
+
+
+    # Cermak - Chinatown Red
+    tn.add_station('Red_41000', {'Red_41400':4, 'Red_40190':4  }, desc='Cermak - Chinatown Red')  # done south
+
+    # Sox 35th Red
+    tn.add_station('Red_40190', {'Red_41000':4, 'Red_41230':3  }, desc='Sox 35th Red')  # done
+
+    # 47th Red
+    tn.add_station('Red_41230', {'Red_40190':3, 'Red_41170':3  }, desc='47th Red')  # done
+
+    # Garfield Red
+    tn.add_station('Red_41170', {'Red_41230': 3,  'Red_40910':2  ,  }, desc='Garfield Red')  # done
+
+    # 63rd Red
+    tn.add_station('Red_40910', {'Red_41170':2  , 'Red_40990':3  ,  }, desc='63rd Red')  # done
+
+    # 69th Red
+    tn.add_station('Red_40990', {'Red_40910':3, 'Red_40240':4  ,  }, desc='69th Red')  # done
+
+    # 79th Red
+    tn.add_station('Red_40240', {'Red_40990':4,  'Red_41430':3  ,  }, desc='79th Red')  # done
+
+    # 87th Red
+    tn.add_station('Red_41430', {'Red_40240':3,  'Red_40450':2 ,  }, desc='87th Red')  # done
+
+    # 95th Red
+    tn.add_station('Red_40450', {'Red_41430':2  ,  }, desc='95th Dan Ryan Red')   # done
+ 
 
     ### Brown North Side ###########################################################
     
