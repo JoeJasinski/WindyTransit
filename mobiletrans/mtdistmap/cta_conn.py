@@ -96,8 +96,8 @@ def load_transitnetwork():
     tn.add_station('Pink_40380', {'Blue_40380':wait_time, 'Brn_40380':wait_time, 'Org_40380':wait_time, 'G_40380':wait_time, 'P_40380':wait_time, 'Pink_40260':1, }, desc='Clark/Lake') # done
     
     #>>> trans(['Red', 'Org', 'G', ], '41400', desc="Roosevelt")
-    tn.add_station('Red_41400', {'Red_41000':4, 'Org_41400':wait_time, 'G_41400':wait_time, }, desc='Roosevelt')
-    tn.add_station('Org_41400', {'Red_41400':wait_time, 'G_41400':wait_time, 'Org_40850':3 }, desc='Roosevelt')  # done loop
+    tn.add_station('Red_41400', {'Red_41000':4, 'Org_41400':wait_time, 'G_41400':wait_time, }, desc='Roosevelt')  # done loop
+    tn.add_station('Org_41400', {'Org_41130':4, 'Red_41400':wait_time, 'G_41400':wait_time, 'Org_40850':3 }, desc='Roosevelt')  # done loop
     tn.add_station('G_41400', {'Org_41400':wait_time, 'Red_41400':wait_time, 'G_40680':3, }, desc='Roosevelt')  # done loop
     
     #>>> trans(['Pink', 'G', ], '41160', desc="Clinton")
@@ -428,7 +428,7 @@ def load_transitnetwork():
     # Clinton Blue
     tn.add_station('Blue_40430', { 'Blue_40350':2, 'Blue_41340':1 }, desc="Clinton Blue")  # done
 
-   ### Pink Side ###########################################################
+    ### Pink Side ###########################################################
 
     # 54th/Cermac Pink
     tn.add_station('Pink_40580', { 'Pink_40420':1, }, desc="54th/Cermac Pink")  # done
@@ -468,5 +468,29 @@ def load_transitnetwork():
 
     # Morgan Pink
     tn.add_station('Pink_morgan', { 'Pink_40170':2, 'Pink_41160':1, 'G_morgan':wait_time}, desc="Morgan Pink")
+
+
+    ### Orange Side ###########################################################
+
+    # Halsted Orange
+    tn.add_station('Org_41130', {'Org_41400':4, 'Org_41060':2  }, desc='Halsted Orange')  # incomplete
+
+    # Ashland Orange
+    tn.add_station('Org_41060', {'Org_41130':2, 'Org_40120':2,  }, desc='Ashland Orange')  
+
+    # 35th/Archer Orange
+    tn.add_station('Org_40120', {'Org_41060':2, 'Org_40310':4 }, desc='35th/Archer Orange')  
+
+    # Western Orange
+    tn.add_station('Org_40310', {'Org_40120':4, 'Org_41150':2, }, desc='Western Orange')  
+
+    # Kedzie Orange
+    tn.add_station('Org_41150', {'Org_40310':2, 'Org_40960':2 }, desc='Kedzie Orange')  
+
+    # Pulaski Orange
+    tn.add_station('Org_40960', {'Org_41150':2, 'Org_40930':7 }, desc='Pulaski Orange')  
+
+    # Midway Orange
+    tn.add_station('Org_40930', {'Org_40960':7 }, desc='Midway Orange')  
 
     return tn
