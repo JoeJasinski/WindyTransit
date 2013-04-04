@@ -157,6 +157,8 @@ class TransitNetwork(DictMixin):
         Takes a station id and returns all of the stops at that station. 
         
         For example:
+            >>> from mobiletrans.mtdistmap.cta_conn import load_transitnetwork
+            >>> tn = load_transitnetwork()
             >>> tn.get_stops_at_station('40260')
             ['Pink_40260', 'G_40260', 'P_40260', 'Brn_40260', 'Org_40260']
         """
@@ -205,6 +207,8 @@ class TransitNetwork(DictMixin):
         Pass in a stop id for the start and end stop.
         Get a shortest path back.
         For example:
+            from mobiletrans.mtdistmap.cta_conn import load_transitnetwork
+            tn = load_transitnetwork()
             tn.shortest_path('40820', '41160')
         """
         if reverse:
