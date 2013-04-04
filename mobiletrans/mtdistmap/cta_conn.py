@@ -98,7 +98,7 @@ def load_transitnetwork():
     #>>> trans(['Red', 'Org', 'G', ], '41400', desc="Roosevelt")
     tn.add_station('Red_41400', {'Red_41000':4, 'Org_41400':wait_time, 'G_41400':wait_time, }, desc='Roosevelt')  # done loop
     tn.add_station('Org_41400', {'Org_41130':4, 'Red_41400':wait_time, 'G_41400':wait_time, 'Org_40850':3 }, desc='Roosevelt')  # done loop
-    tn.add_station('G_41400', {'Org_41400':wait_time, 'Red_41400':wait_time, 'G_40680':3, }, desc='Roosevelt')  # done loop
+    tn.add_station('G_41400', {'G_41120':5, 'Org_41400':wait_time, 'Red_41400':wait_time, 'G_40680':3, }, desc='Roosevelt')  # done loop
     
     #>>> trans(['Pink', 'G', ], '41160', desc="Clinton")
     tn.add_station('Pink_41160', {'G_41160':wait_time, 'Pink_40380':2, 'Pink_morgan':1}, desc='Clinton') # done loop
@@ -390,6 +390,26 @@ def load_transitnetwork():
     # Morgan Green
     tn.add_station('G_morgan', { 'G_40170':2, 'G_41160':1 }, desc="Morgan Green")  # partial
 
+
+
+    # 35th Bronzeville Green
+    tn.add_station('G_41120', { 'G_41400':5,  'G_40300':2  }, desc="35th Bronzeville Green")   # done
+
+    # Indiana Green
+    tn.add_station('G_40300', { 'G_41120':2, 'G_41270':2 }, desc="Indiana Green")   # done
+
+    # 43rd Green
+    tn.add_station('G_41270', { 'G_40300':2, 'G_41080':1 }, desc="43rd Green")   # done
+
+    # 47th Green
+    tn.add_station('G_41080', { 'G_41270':1, 'G_40130':2 }, desc="47th Green")   # done
+
+    # 51st Green
+    tn.add_station('G_40130', { 'G_41080':2, 'G_40510':1 }, desc="51st Green")   # done
+
+    # Garfield Green
+    tn.add_station('G_40510', { 'G_40130':1, }, desc="Garfield Green")  # partial
+
     ### Blue South West Side ###########################################################
 
     # Forest Park Blue
@@ -428,7 +448,7 @@ def load_transitnetwork():
     # Clinton Blue
     tn.add_station('Blue_40430', { 'Blue_40350':2, 'Blue_41340':1 }, desc="Clinton Blue")  # done
 
-    ### Pink Side ###########################################################
+    ### Pink West Side ###########################################################
 
     # 54th/Cermac Pink
     tn.add_station('Pink_40580', { 'Pink_40420':1, }, desc="54th/Cermac Pink")  # done
@@ -470,7 +490,7 @@ def load_transitnetwork():
     tn.add_station('Pink_morgan', { 'Pink_40170':2, 'Pink_41160':1, 'G_morgan':wait_time}, desc="Morgan Pink")
 
 
-    ### Orange Side ###########################################################
+    ### Orange South Side ###########################################################
 
     # Halsted Orange
     tn.add_station('Org_41130', {'Org_41400':4, 'Org_41060':2  }, desc='Halsted Orange')   # done
