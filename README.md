@@ -10,6 +10,8 @@ ENVIRONMENT SETUP
 
 5. pip install -r requirements.pip
 
+6. npm install 
+
 GEODJANGO SETUP
 
 Follow the instructions listed here, ignoreing any environment setup
