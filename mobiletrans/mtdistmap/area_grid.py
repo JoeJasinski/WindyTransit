@@ -285,7 +285,8 @@ from mobiletrans.mtdistmap.area_grid import RouteGridGenerator, RouteGridPoint, 
 region = CityBorder.objects.all()[0]
 center = region.area.centroid
 grid = RouteGrid(xint=300, yint=300)
-gridgen = RouteGridGenerator('41320', region, grid, max_distance=2000, num_routes=3)
+#gridgen = RouteGridGenerator('41320', region, grid, max_distance=2000, num_routes=3)
+gridgen = RouteGridGenerator('40170', region, grid, max_distance=2000, num_routes=3)
 g = gridgen.run(RouteGridPoint(0,0,center))
 g.generate_shapefile('shapefiles/chicago_pts5')
 
