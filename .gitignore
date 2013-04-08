@@ -20,3 +20,4 @@ dist
 *.pyc
 *.pyo
 *.tmp*
+node_modules
