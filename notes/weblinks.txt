@@ -1,0 +1,105 @@
+Shapefile Technical description:
+http://www.esri.com/library/whitepapers/pdfs/shapefile.pdf
+
+Heatmap snippit (unused)
+http://code.activestate.com/recipes/578175-hierarchical-clustering-heatmap-python/
+
+Python Heatmap module Github (unused)
+Has C files that it must build
+I forked on github
+https://github.com/jjguy/heatmap/blob/master/heatmap/colorschemes.py
+http://jjguy.com/heatmap/
+
+PyShp - Shapefile Python Module
+Good tool 
+I used in project (just the shapefile.py piece)
+https://code.google.com/p/pyshp/
+# useful docs article
+https://code.google.com/p/pyshp/wiki/PyShpDocs
+
+
+Research into heatmaps:
+# GeoServer server links related to rasters
+http://docs.geoserver.org/2.1.3/user/styling/sld-cookbook/rasters.html
+http://docs.geoserver.org/2.1.3/user/styling/sld-introduction.html
+# possible mapnik plugin for raster support
+https://github.com/stellaeof/mapnik-rasterizers 
+# RasterSymbolizer notation for adding rasters to mapnik
+https://github.com/mapnik/mapnik/wiki/RasterSymbolizer
+http://mapnik.org/docs/v2.1.0/api/python/mapnik._mapnik.RasterSymbolizer-class.html
+# good article about use of RasterSymbolizer in mapnik
+http://www.mikejcorey.com/wordpress/2011/02/25/tutorial-part-2-create-beautiful-hillshade-maps-from-digital-elevation-models-with-gdal-and-mapnik/
+http://docs.codehaus.org/display/GEOTOOLS/Raster+Symbolizer+support
+# good articles on map raster rendering using mapnik 
+http://blog.thematicmapping.org/2012/07/terrain-mapping-with-mapnik.html
+https://github.com/stellaeof/mapnik-rasterizers
+http://alexlittle.net/blog/2010/09/03/playing-with-heatmaps/
+
+
+Python Proj4 module
+Can transpose points on a map
+I used this to create the grid points
+http://blog.tremily.us/posts/pyproj/
+
+PyQGIS - QGIS python bindings 
+http://www.qgis.org/pyqgis-cookbook/crs.html
+
+Convert TileMill Style MSS (Map Stylesheets) to mapnik xml research
+# good link working example of conversion
+http://wiki.openstreetmap.org/wiki/Carto
+# the carto nodejs module used for the conversion
+https://github.com/mapbox/carto/blob/master/bin/carto 
+# python module for doing the mss to mapnik xml conversion 
+# carto node module is based on this, but node module may be more complete (not sure)
+https://github.com/mapnik/Cascadenik
+
+Mapnik project home
+https://github.com/mapnik/mapnik/wiki/About-Mapnik
+# good example of programatically creating map style xml
+https://github.com/mapnik/mapnik/wiki/GettingStartedInPython
+
+ModestMaps - Javascript module for mapping
+I believe this is the one recommended by Zain during his 2011 Djangocon US talk
+http://modestmaps.com/
+
+LeafletJS - another javascript mapping tool mentioned by Zain
+http://leafletjs.com/
+
+
+Good article about the mapping stack
+http://alistapart.com/article/takecontrolofyourmaps
+
+TileCache
+Python based map server. 
+http://www.tilecache.org/docs/index.html
+
+Python raw math for creating tiles for a slippy map
+http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Python
+
+Interesting TileMill/Carto article by the authors of TileMill
+http://developmentseed.org/blog/2011/feb/09/introducing-carto-css-map-styling-language/
+
+Django shapefile generator 
+(I didn't use this module)
+https://bitbucket.org/springmeyer/django-shapes/src/e57a5a16ca5a/shapes/views/export.py
+
+Color Range gen:
+	James Tauble (Gondor) articles on generating color ranges
+	I used this approach
+	http://jtauber.com/
+	http://eldarion.com/blog/2009/08/18/how-generate-gradients-and-textures/
+	http://jtauber.com/blog/2008/10/17/hsl_gradients/
+
+	Online HTML Color HEX code generator
+	http://www.perbang.dk/rgbgradient/
+	
+	Good post on making color ranges (unused by me)
+	http://stackoverflow.com/questions/10901085/python-range-values-to-pseudocolor
+
+	Online tool for generating gradients 
+	Nice for testing color ranges
+	Normally used for making CSS color ranges
+	http://www.colorzilla.com/gradient-editor/
+
+MapBox
+http://mapbox.com/carto/api/2.1.0/#float
