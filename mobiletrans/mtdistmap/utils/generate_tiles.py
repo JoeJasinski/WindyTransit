@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+#Source: https://trac.openstreetmap.org/browser/subversion/applications/rendering/mapnik/generate_tiles.py
+
 from math import pi,cos,sin,log,exp,atan
 from subprocess import call
 import sys, os
