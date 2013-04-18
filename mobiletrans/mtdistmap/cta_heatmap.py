@@ -12,6 +12,7 @@ DB_PASSWORD = settings.DATABASES['default']['PASSWORD']
 class CTAHeatmap(object):
     """
     from mobiletrans.mtdistmap.cta_heatmap import CTAHeatmap
+    import mapnik
     m = mapnik.Map(600,600)
     cta_map = CTAHeatmap(m)
     cta_map.render_image()
@@ -71,8 +72,9 @@ class CTAHeatmap(object):
         self.map = map
 
     def render_image(self):
-        self.map.zoom_all()
-        mapnik.render_to_file(self.map, 'chicago.png', 'png')
+        map = self.map
+        map.zoom_all()
+        mapnik.render_to_file(map, 'chicago.png', 'png')
 
 
 
