@@ -57,18 +57,18 @@ class CTAHeatmap(object):
         subquery = self.get_subqueries()
         schema = self.get_stylesheet()
         
-        mapnik.load_map_from_string(m, schema)
+        mapnik.load_map_from_string(map, schema)
         ds = mapnik.PostGIS(dbname=DB_NAME, user=DB_USER, host=DB_HOST, password=DB_PASSWORD, port=DB_PORT, table='mtlocation_cityborder')
-        m.layers[0].datasource = ds
+        map.layers[0].datasource = ds
         ds = mapnik.PostGIS(dbname=DB_NAME, user=DB_USER, host=DB_HOST, password=DB_PASSWORD, port=DB_PORT, table=subquery[1], geometry_table="mtlocation_region", geometry_field='area')
-        m.layers[1].datasource = ds
+        map.layers[1].datasource = ds
         ds = mapnik.PostGIS(dbname=DB_NAME, user=DB_USER, host=DB_HOST, password=DB_PASSWORD, port=DB_PORT, table=subquery[2],  geometry_table="mtlocation_location", geometry_field='point')
-        m.layers[2].datasource = ds
+        map.layers[2].datasource = ds
         ds = mapnik.PostGIS(dbname=DB_NAME, user=DB_USER, host=DB_HOST, password=DB_PASSWORD, port=DB_PORT, table='mtlocation_ctaraillines', )
-        m.layers[3].datasource = ds
+        map.layers[3].datasource = ds
         ds = mapnik.PostGIS(dbname=DB_NAME, user=DB_USER, host=DB_HOST, password=DB_PASSWORD, port=DB_PORT, table=subquery[4], geometry_table="mtlocation_location", geometry_field='point' )
-        m.layers[4].datasource = ds        
-        self.map = m
+        map.layers[4].datasource = ds        
+        self.map = map
 
     def render_image(self):
         self.map.zoom_all()
