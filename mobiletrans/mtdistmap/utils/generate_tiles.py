@@ -58,13 +58,11 @@ class GoogleProjection:
 
 
 class RenderThread:
-    def __init__(self, tile_dir, mapfile, q, printLock, maxZoom):
+    def __init__(self, tile_dir, map_obj, q, printLock, maxZoom):
         self.tile_dir = tile_dir
         self.q = q
-        self.m = mapnik.Map(256, 256)
+        self.m = map_obj
         self.printLock = printLock
-        # Load style XML
-        mapnik.load_map(self.m, mapfile, True)
         # Obtain <Map> projection
         self.prj = mapnik.Projection(self.m.srs)
         # Projects between tile pixel co-ordinates and LatLong (EPSG:4326)
@@ -128,15 +126,15 @@ class RenderThread:
 
 
 
-def render_tiles(bbox, mapfile, tile_dir, minZoom=1,maxZoom=18, name="unknown", num_threads=NUM_THREADS, tms_scheme=False):
-    print "render_tiles(",bbox, mapfile, tile_dir, minZoom,maxZoom, name,")"
+def render_tiles(bbox, map_obj, tile_dir, minZoom=1,maxZoom=18, name="unknown", num_threads=NUM_THREADS, tms_scheme=False):
+    print "render_tiles(",bbox, map_obj, tile_dir, minZoom,maxZoom, name,")"
 
     # Launch rendering threads
     queue = Queue(32)
     printLock = threading.Lock()
     renderers = {}
     for i in range(num_threads):
-        renderer = RenderThread(tile_dir, mapfile, queue, printLock, maxZoom)
+        renderer = RenderThread(tile_dir, map_obj, queue, printLock, maxZoom)
         render_thread = threading.Thread(target=renderer.loop)
         render_thread.start()
         #print "Started render thread %s" % render_thread.getName()
@@ -192,7 +190,7 @@ def render_tiles(bbox, mapfile, tile_dir, minZoom=1,maxZoom=18, name="unknown", 
         renderers[i].join()
 
 
-
+"""
 if __name__ == "__main__":
     home = os.environ['HOME']
     try:
@@ -257,3 +255,4 @@ if __name__ == "__main__":
     # Europe+
     bbox = (1.0,10.0, 20.6,50.0)
     render_tiles(bbox, mapfile, tile_dir, 1, 11 , "Europe+")
+"""

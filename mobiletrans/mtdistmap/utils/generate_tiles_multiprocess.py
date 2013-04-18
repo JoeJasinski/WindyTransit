@@ -56,10 +56,10 @@ class GoogleProjection:
 
 
 class RenderThread:
-    def __init__(self, tile_dir, mapfile, q, printLock, maxZoom):
+    def __init__(self, tile_dir, map_obj, q, printLock, maxZoom):
         self.tile_dir = tile_dir
         self.q = q
-        self.mapfile = mapfile
+        self.map_obj = map_obj
         self.maxZoom = maxZoom
         self.printLock = printLock
 
@@ -95,9 +95,7 @@ class RenderThread:
 
     def loop(self):
         
-        self.m = mapnik.Map(256, 256)
-        # Load style XML
-        mapnik.load_map(self.m, self.mapfile, True)
+        self.m = self.map_obj
         # Obtain <Map> projection
         self.prj = mapnik.Projection(self.m.srs)
         # Projects between tile pixel co-ordinates and LatLong (EPSG:4326)
@@ -128,15 +126,15 @@ class RenderThread:
 
 
 
-def render_tiles(bbox, mapfile, tile_dir, minZoom=1,maxZoom=18, name="unknown", num_threads=NUM_THREADS):
-    print "render_tiles(",bbox, mapfile, tile_dir, minZoom,maxZoom, name,")"
+def render_tiles(bbox, map_obj, tile_dir, minZoom=1,maxZoom=18, name="unknown", num_threads=NUM_THREADS):
+    print "render_tiles(",bbox, map_obj, tile_dir, minZoom,maxZoom, name,")"
 
     # Launch rendering threads
     queue = multiprocessing.JoinableQueue(32)
     printLock = multiprocessing.Lock()
     renderers = {}
     for i in range(num_threads):
-        renderer = RenderThread(tile_dir, mapfile, queue, printLock, maxZoom)
+        renderer = RenderThread(tile_dir, map_obj, queue, printLock, maxZoom)
         render_thread = multiprocessing.Process(target=renderer.loop)
         render_thread.start()
         #print "Started render thread %s" % render_thread.getName()
@@ -185,7 +183,7 @@ def render_tiles(bbox, mapfile, tile_dir, minZoom=1,maxZoom=18, name="unknown", 
         renderers[i].join()
 
 
-
+"""
 if __name__ == "__main__":
 	
     home = os.environ['HOME']
@@ -208,6 +206,8 @@ if __name__ == "__main__":
     # Start with an overview
     # World
     bbox = (-180.0,-90.0, 180.0,90.0)
+
+
 
     render_tiles(bbox, mapfile, tile_dir, 0, 5, "World")
 
@@ -251,3 +251,4 @@ if __name__ == "__main__":
     # Europe+
     bbox = (1.0,10.0, 20.6,50.0)
     render_tiles(bbox, mapfile, tile_dir, 1, 11 , "Europe+")
+"""
