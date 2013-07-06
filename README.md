@@ -1,16 +1,23 @@
 ENVIRONMENT SETUP
 -------
-1. virtualenv --no-site-packages windytransit
+1. Create virtualenv 
+    virtualenv --no-site-packages windytransit
 
-2. cd windytransit; . ./bin/activate
+2. Activate Virtual Environment
+    cd windytransit; . ./bin/activate
 
-3. mkdir proj; cd proj
+3. Make project directory
+    mkdir proj; cd proj
 
-4. git clone git@github.com:JoeJasinski/WindyTransit.git
+4. Checkout Code
+    git clone git@github.com:JoeJasinski/WindyTransit.git; cd WindyTransit 
 
-5. pip install -r requirements.pip
+5. Install Python dependencies 
+    pip install -r requirements.pip
 
-6. npm install 
+6. Install node and dependencies
+    . ./windytransit/scripts/install_node_in_venv.sh
+    npm -g install 
 
 GEODJANGO SETUP
 

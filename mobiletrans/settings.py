@@ -1,6 +1,6 @@
 # Django settings for mobiletrans project.
 import os
-from mtsettings.local_settings import (VENV_ROOT, PROJECT_ROOT )
+from mtsettings.local_settings import (ENVIRONMENT_ROOT, PROJECT_ROOT )
 
 #######################
 #####  These settings should go in local_settings.py
@@ -55,7 +55,7 @@ USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(VENV_ROOT, 'htdocs','media').replace('\\','/') + '/'
+MEDIA_ROOT = os.path.join(ENVIRONMENT_ROOT, 'htdocs','media').replace('\\','/') + '/'
 
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
@@ -67,7 +67,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(VENV_ROOT,'htdocs','static')
+STATIC_ROOT = os.path.join(ENVIRONMENT_ROOT,'htdocs','static')
 
 
 # URL prefix for static files.
