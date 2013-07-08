@@ -1,6 +1,6 @@
 # Django settings for mobiletrans project.
 import os
-from mtsettings.local_settings import (ENVIRONMENT_ROOT, PROJECT_ROOT )
+from mobiletrans.local_settings import (ENVIRONMENT_ROOT, PROJECT_ROOT )
 
 #######################
 #####  These settings should go in local_settings.py
@@ -184,4 +184,4 @@ LOGGING = {
 }
 
 
-from mtsettings.local_settings import *
+from mobiletrans.local_settings import *
