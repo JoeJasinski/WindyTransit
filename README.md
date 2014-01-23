@@ -13,7 +13,7 @@ ENVIRONMENT SETUP
     git clone git@github.com:JoeJasinski/WindyTransit.git; cd WindyTransit 
 
 5. Install Python dependencies 
-    pip install -r requirements.pip
+    pip install -r requirements.txt
 
 6. Install node and dependencies
     . ./windytransit/scripts/install_node_in_venv.sh
