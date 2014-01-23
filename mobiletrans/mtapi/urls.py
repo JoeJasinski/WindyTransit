@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from piston.resource import Resource
 
 from mobiletrans.mtapi.handlers import TransitRouteHandler, LocationDataHandler, TransitRoutesHandler, TransitStopDataHandler

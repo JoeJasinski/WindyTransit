@@ -1,6 +1,9 @@
 # Django settings for mobiletrans project.
 import os
-from mobiletrans.local_settings import (ENVIRONMENT_ROOT, PROJECT_ROOT )
+
+PROJECT_ROOT  = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
+
+ENVIRONMENT_ROOT = os.path.abspath(os.path.join(PROJECT_ROOT, '..', '..'))
 
 #######################
 #####  These settings should go in local_settings.py
