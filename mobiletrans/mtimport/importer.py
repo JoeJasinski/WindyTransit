@@ -5,11 +5,6 @@ from xml.dom import minidom
 from mobiletrans.mtimport import models
 from mobiletrans.mtimport.exceptions import * 
 
-try:
-    from cStringIO import StringIO
-except:
-    from StringIO import StringIO
-
 
 class ImportBase(object):
 
@@ -37,11 +32,7 @@ class ImportBase(object):
         try:
             data = cls.open_data(*input_parameters)
         except ImportException, error:
-
-            stacktrace_file = StringIO()
-            traceback.print_exc(limit=50, file=stacktrace_file)
-            stacktrace_file.seek(0)
-            stacktrace_text = stacktrace_file.read()
+            stacktrace_text = traceback.format_exc(limit=50)
 
             models.InputRecord.objects.make_note(
              input_record=input_record,
@@ -82,11 +73,7 @@ class ImportBase(object):
             try:
                 import_object = self.parse_row(row)
             except ValueError, error:
-
-                stacktrace_file = StringIO()
-                traceback.print_exc(limit=50, file=stacktrace_file)
-                stacktrace_file.seek(0)
-                stacktrace_text = stacktrace_file.read()
+                stacktrace_text = traceback.format_exc(limit=50)
 
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
@@ -97,11 +84,7 @@ class ImportBase(object):
                 self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
             except IndexError, error:
-
-                stacktrace_file = StringIO()
-                traceback.print_exc(limit=50, file=stacktrace_file)
-                stacktrace_file.seek(0)
-                stacktrace_text = stacktrace_file.read()
+                stacktrace_text = traceback.format_exc(limit=50)
 
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
@@ -112,11 +95,7 @@ class ImportBase(object):
                 self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
             except ImportException, error:
-
-                stacktrace_file = StringIO()
-                traceback.print_exc(limit=50, file=stacktrace_file)
-                stacktrace_file.seek(0)
-                stacktrace_text = stacktrace_file.read()
+                stacktrace_text = traceback.format_exc(limit=50)
 
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
@@ -127,11 +106,7 @@ class ImportBase(object):
                 self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
             except Exception, error:
-
-                stacktrace_file = StringIO()
-                traceback.print_exc(limit=50, file=stacktrace_file)
-                stacktrace_file.seek(0)
-                stacktrace_text = stacktrace_file.read()
+                stacktrace_text = traceback.format_exc(limit=50)
 
                 models.InputRecord.objects.make_note(
                  input_record=self.input_record,
@@ -147,11 +122,7 @@ class ImportBase(object):
                     import_object.full_clean()
                     import_object.save()
                 except Exception, error: 
-
-                    stacktrace_file = StringIO()
-                    traceback.print_exc(limit=50, file=stacktrace_file)
-                    stacktrace_file.seek(0)
-                    stacktrace_text = stacktrace_file.read()
+                    stacktrace_text = traceback.format_exc(limit=50)
 
                     models.InputRecord.objects.make_note(
                      input_record=self.input_record,
@@ -296,7 +267,7 @@ class ShapeFileImportBase(ImportBase):
             input_data = gdal.DataSource(input_file_path)
         except IOError, error:
             raise IOImportException("Error with ShapeFile read: %s - %s" % (input_file_path, error, ))
-        except gdal.error.OGRException:
+        except gdal.error.OGRException, error:
             raise DataFormatImportException("Error with ShapeFile read: %s - %s" % (input_file_path, error, ))
         except Exception, error:
             raise ImportException("Unknown import ShapeFile error: %s - %s" % (input_file_path, error, ))

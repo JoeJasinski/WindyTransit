@@ -3,7 +3,7 @@ import os
 
 PROJECT_ROOT  = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
 
-ENVIRONMENT_ROOT = os.path.abspath(os.path.join(PROJECT_ROOT, '..', '..'))
+ENVIRONMENT_ROOT = os.path.abspath(os.path.join(PROJECT_ROOT, '..', '..', '..'))
 
 #######################
 #####  These settings should go in local_settings.py
@@ -160,7 +160,6 @@ INSTALLED_APPS = (
     'mobiletrans.mtlocation',
     'mobiletrans.mtimport',
     'mobiletrans.mtdistmap',
-
 )
 
 # A sample logging configuration. The only tangible logging

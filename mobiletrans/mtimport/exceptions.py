@@ -1,8 +1,8 @@
 class ImportException(Exception):
     pass
 
-class IOImportException(Exception):
+class IOImportException(ImportException):
     pass
 
-class DataFormatImportException(Exception):
+class DataFormatImportException(ImportException):
     pass

@@ -1,7 +1,7 @@
 import os, json
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from mobiletrans.mtimport.importers import importer_landmarks as importer
+from mobiletrans.mtimport.importers import importer_landmark as importer
 
 class Command(BaseCommand):
     args = '<landmarks.json>'
