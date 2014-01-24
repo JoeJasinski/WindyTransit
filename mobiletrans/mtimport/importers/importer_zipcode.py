@@ -67,7 +67,6 @@ class Zipcode(KMLImportBase):
             raise Exception("%s %s: Error Reading 'text' from 'coordinates': %s" % (pk, pk_val, error)) 
         
         poly = coord_text.split(' ')
-    
         
         point_str = ""
         for point in poly:
@@ -85,5 +84,5 @@ class Zipcode(KMLImportBase):
             self.stats['existing'] += 1
         else:
             self.stats['new'] += 1
-        print vars(neighborhood)
+        
         return neighborhood

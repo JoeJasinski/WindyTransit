@@ -5,6 +5,9 @@ from xml.dom import minidom
 from mobiletrans.mtimport import models
 from mobiletrans.mtimport.exceptions import * 
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class ImportBase(object):
 
@@ -118,7 +121,7 @@ class ImportBase(object):
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)               
             else:
                 try:
-                    print "LOCATION", vars(import_object)
+                    logger.debug("%s" % vars(import_object))
                     import_object.full_clean()
                     import_object.save()
                 except Exception, error: 
@@ -241,7 +244,6 @@ class KMLImportBase(ImportBase):
             raise ImportException("Missing 'Placemark' elements.")  
 
         return placemarks
-
 
 
 from django.db import connections, router
