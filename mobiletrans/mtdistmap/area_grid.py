@@ -281,6 +281,7 @@ class RouteGridPoint(GridPoint):
 """
 
 # generate the grid with routes 
+from mobiletrans.mtlocation.models import CityBorder
 from mobiletrans.mtdistmap.area_grid import RouteGridGenerator, RouteGridPoint, RouteGrid
 region = CityBorder.objects.all()[0]
 center = region.area.centroid

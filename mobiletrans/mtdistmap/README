@@ -12,6 +12,7 @@ cta_map.render_image()
 # Make a grid of points in the city border
 
 from mobiletrans.mtdistmap.area_grid import GridGenerator, GridPoint, Grid
+from mobiletrans.mtlocation.models import CityBorder
 region = CityBorder.objects.all()[0]
 center = region.area.centroid
 grid = Grid(xint=300, yint=300)
@@ -22,6 +23,7 @@ g = gridgen.run(GridPoint(0,0,center))
 # Generate the grid with routes 
 
 from mobiletrans.mtdistmap.area_grid import RouteGridGenerator, RouteGridPoint, RouteGrid
+from mobiletrans.mtlocation.models import CityBorder
 region = CityBorder.objects.all()[0]
 center = region.area.centroid
 grid = RouteGrid(xint=300, yint=300)
@@ -44,7 +46,7 @@ grad_gen = GradientGenerator(grd_data)
 grad_gen.generate()
 
 
-# Plan a route from a point to a train stop
+# Plan a route from a point on the map to a train stop
 
 from mobiletrans.mtdistmap.cta_conn import load_transitnetwork
 from mobiletrans.mtdistmap.route_planner import RoutePlanner
