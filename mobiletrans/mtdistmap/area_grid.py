@@ -116,6 +116,20 @@ class Grid(DictMixin):
 
 
 class GridGenerator(object):
+    """
+    Generate a grid of evenly spaced points across the region 
+    area geography object.
+  
+    Executing the run() method will actually start the calculation.
+    It will create generated a grid by first taking a start 
+    point and then visit points to the north, south, east, and
+    west of that point.  This will continue until all points
+    in the region have been visited. 
+
+    Inputs:
+    region - (required) the bounding region for the grid
+    grid - (required) the empty new Grid object  
+    """
     grid = None
     directions = ['north', 'south', 'east', 'west']
     num_worker_threads=4
