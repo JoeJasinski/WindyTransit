@@ -16,7 +16,7 @@ ENVIRONMENT SETUP
     pip install -r requirements.txt
 
 6. Install node and dependencies
-    . ./windytransit/scripts/install_node_in_venv.sh
+    #. ./windytransit/scripts/install_node_in_venv.sh  # this is installed via virtual-node 
     npm -g install 
 
 GEODJANGO SETUP

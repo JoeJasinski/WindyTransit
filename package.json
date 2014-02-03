@@ -4,10 +4,10 @@
   "author": "Joe Jasinski",
   "version": "0.0.1",
   "dependencies": {
-    "carto": ">=0.9.4",
+    "carto": ">=0.9.5",
     "less":">=1.4.1"
   },
   "engines": {
-    "node": ">=0.8"
+    "node": ">=0.10"
   }
 }
