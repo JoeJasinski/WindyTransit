@@ -103,3 +103,73 @@ Color Range gen:
 
 MapBox
 http://mapbox.com/carto/api/2.1.0/#float
+
+
+http://epsg.io/
+
+
+http://en.wikipedia.org/wiki/SRID
+SRID - a unique value for representing a spacial coordinate sytem
+ - primary key for spatial_ref_sys table 
+
+EPSG - European Petroleum Survey Group - authority originally 
+  keeping an index or SRIDs
+
+    The OGP’s EPSG Geodetic Parameter Dataset is a collection of definitions of coordinate reference systems and coordinate transformations which may be global, regional, national or local in application. 
+
+WKT - Well known text - markup language for defining geometries
+ or spacial reference systems.  Serialization for geometry
+
+	GEOGCS["WGS 84",
+	    DATUM["WGS_1984",
+	        SPHEROID["WGS 84",6378137,298.257223563,
+	            AUTHORITY["EPSG","7030"]],
+	        AUTHORITY["EPSG","6326"]],
+	    PRIMEM["Greenwich",0,
+	        AUTHORITY["EPSG","8901"]],
+	    UNIT["degree",0.01745329251994328,
+	        AUTHORITY["EPSG","9122"]],
+	    AUTHORITY["EPSG","4326"]]
+
+
+http://spatialreference.org/
+Spatial Reference .org - shows representations of projections
+
+Spacial Reference System
+    http://en.wikipedia.org/wiki/Spatial_reference_system
+	A spatial reference system (SRS) or coordinate reference system (CRS) is a coordinate-based local, regional or global system used to locate geographical entities. A spatial reference system defines a specific map projection, as well as transformations between different spatial reference systems. Spatial reference systems are defined by the OGC's Simple feature access using well-known text, and support has been implemented by several standards-based geographic information systems. Spatial reference systems can be referred to using a SRID integer, including EPSG codes defined by the International Association of Oil and Gas Producers.
+
+
+http://en.wikipedia.org/wiki/World_Geodetic_System
+http://spatialreference.org/ref/sr-org/epsg3857-wgs84-web-mercator-auxiliary-sphere/
+WGS84 is a standard spherical coordinate system used by the GPS system.
+Also called EPSG:4326.
+
+http://www.openstreetmap.org/
+Open Street Map - like google maps but open
+
+http://openlayers.org/
+OpenLayers - javascript library for mapping (1MB large
+
+http://marble.kde.org
+Marbel - Like google earth
+
+http://www.osgeo.org/grass
+Grass GIS - desktop gis application
+
+http://trac.osgeo.org/proj/
+Proj4 - open source Cartographic Projections library
+      - GeoDjango dependnecy
+
+http://www.osgeo.org/
+Foundation for promotion of open geo data
+
+
+
+What's the difference between EPSG:4326 and EPSG:900913?
+	http://gis.stackexchange.com/questions/34276/whats-the-difference-between-epsg4326-and-epsg900913
+	http://crschmidt.net/blog/archives/243/google-projection-900913/comment-page-1/
+
+	They are not the same. EPSG:4326 refers to WGS 84 whereas EPSG:900913 refers to WGS84 Web Mercator. EPSG:4326 treats the earth as an ellipsoid while EPSG:900913 treats it as a sphere. This affects calculations done based on treating the map as a flat plane which is why your features got plotted on the wrong places.
+
+	As a point of trivia: 900913 was originally rejected as a credible projection by European Petroleum Survey Group (EPSG) so Google (who invented it for the web) gave it their own number, which if you type it on an old fashioned calculator spells 'googlE' (substitute '9' for 'g' and squint a bit). Eventually EPSG relented and allowed 900913 into its geodetic repository but gave it the number 3857.
