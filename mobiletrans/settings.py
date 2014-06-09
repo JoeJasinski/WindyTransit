@@ -155,6 +155,7 @@ INSTALLED_APPS = (
     'django_extensions',
     "south", 
     "compressor",
+    'rest_framework',
     
     'mobiletrans.mtcore',
     'mobiletrans.mtlocation',
