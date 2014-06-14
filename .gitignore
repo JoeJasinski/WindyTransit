@@ -20,7 +20,7 @@ dist
 *.pyc
 *.pyo
 *.tmp*
-settings/local.py
+mobiletrans/settings/local.py
 node_modules
 .project
 .pydevproject
