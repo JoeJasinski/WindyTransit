@@ -24,7 +24,7 @@ from googleplaces import GooglePlaces, types, lang, GooglePlacesError
 radius=250
 longitude = '-87.776812'
 lattitude = '41.870851'
-google_places = GooglePlaces("AIzaSyCTIojWEAwahO_xrTMM2BMyD2OQZfk5Xy4")
+google_places = GooglePlaces("google places api key")
 query_result = google_places.query(
             lat_lng={'lat':lattitude, 'lng':longitude,}, radius=radius, )
             
