@@ -1,67 +1,68 @@
-ENVIRONMENT SETUP
+REQUIREMENTS
 -------
-1. Create virtualenv 
-    virtualenv --no-site-packages windytransit
+1) RECOMMENDED STACK 
 
-2. Activate Virtual Environment
-    cd windytransit; . ./bin/activate
+ - Ubuntu 14.04
+ - Python 2.7
+ - Postgresql 9.3 
+ - PostGIS 2.x
+ - Nginx 1.6
+ - Node JS 0.10.26
 
-3. Make project directory
-    mkdir proj; cd proj
 
-4. Checkout Code
-    git clone git@github.com:JoeJasinski/WindyTransit.git; cd WindyTransit 
+2) PACKAGE DEPENDENCIES - Ensure the following Apt pacakges are installed:
 
-5. Install Python dependencies 
-    pip install -r requirements.txt
+    build-essential git libfreetype6 libfreetype6-dev libjpeg8-dev libjpeg8 
+    libmysqlclient-dev openssh-client openssh-server
+    openssl postfix python-virtualenv sqlite3 sudo supervisor zlib1g
+    zlib1g-dev libxml2-dev libxslt1-dev python-dev
+    binutils gdal-bin postgresql-9.3-postgis postgresql-server-dev-9.3 python-psycopg2
 
-6. Install node and dependencies
-    #. ./windytransit/scripts/install_node_in_venv.sh  # this is installed via virtual-node 
-    npm -g install 
-
-GEODJANGO SETUP
+    # Optional but recommended
+    ack-grep aptitude curl findutils mlocate graphviz-dev libgraphviz-dev htop
+    nmon screen subversion tig tmux vim fail2ban
+    
+3) GEODJANGO SETUP - Prior to installation, a working GeoDjango Postgres Database is required.
 
 Follow the instructions listed here, ignoreing any environment setup
 steps that you already followed. 
 http://www.chicagodjango.com/blog/geo-django-quickstart/
 
 
-CODE SETUP AND CONFIGURATION
+INSTALL
+-------
 
-1. Create a settings module as follows and place it on the PYTHON path. 
-   NOTE: I have placed this within an VIRTUAL_ENV/etc/django/ directory 
-   of which I have included ${VIRTUAL_ENV}/etc/django/ on the PYTHON path.
+1. Create virtualenv 
+    virtualenv  windytransit
 
-    mkdir mtsettings
-    cd mtsettings
-    touch __init__.py
-    touch local_settings.py
+2. Activate Virtual Environment
+    cd windytransit; . ./bin/activate
 
-Edit the local_settings.py file to add the following, making changes where needed: 
+3. Make needed directories
+    mkdir -p var/log/
+    mkdir -p data/
+    mkdir proj/; cd proj/
 
-    #######################
-    #####  These settings should go in local_settings.py
-    ####################
-    DEBUG = True
-    TEMPLATE_DEBUG = DEBUG
+4. Checkout Code
+    git clone git@github.com:JoeJasinski/WindyTransit.git windytransit; cd windytransit 
 
-    VENV_ROOT = os.path.join('/','jaz', 'sites', 'mobiletrans')
-    PROJECT_ROOT = os.path.join(VENV_ROOT, 'proj', 'mobiletrans')
-    
-    ADMINS = (
-        ('Your Name', 'your_email@example.com'),
-    )
-    
-    MANAGERS = ADMINS
-    
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.contrib.gis.db.backends.postgis',
-            'NAME': 'mobiletrans',
-            'USER': 'mobiletrans_user',
-            'PASSWORD': '1234',
-            'HOST': 'localhost',
-            'PORT': '',
-        }
-    }
+5. Install Python dependencies 
+    export PROJECT_DIR=`pwd`
+    pip install -r requirements.txt
+
+6. Copy the settings example file into place
+    cp mobiletrans/settings/local.example mobiletrans/settings/local.py
+
+7. Adjust the local settings as desired, though the default should be enough to get started
+
+8. Sync the db and migrate the database
+
+   ./manage.py syncdb 
+   ./manage.py migrate 
+
+
+
+
+
+
 
