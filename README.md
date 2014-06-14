@@ -17,11 +17,11 @@ REQUIREMENTS
     openssl postfix python-virtualenv sqlite3 sudo supervisor zlib1g
     zlib1g-dev libxml2-dev libxslt1-dev python-dev 
     
-needed for mapnik
+Needed for mapnik
 
     libboost-all-dev libmapnik libmapnik-dev mapnik-utils python-mapnik
     
-needed for postgres and postgis
+Needed for postgres and postgis
 
     gdal-bin postgresql-9.3-postgis postgresql-server-dev-9.3 python-psycopg2
 
@@ -36,7 +36,7 @@ Follow the instructions listed here, ignoreing any environment setup
 steps that you already followed. 
 http://www.chicagodjango.com/blog/geo-django-quickstart/
 
-4) To get mapnik to work, add this to the PYTHON_PATH
+4) To get mapnik to work, add this to the PYTHONPATH
 
     export PYTHONPATH="$PYTHONPATH:/usr/lib/pymodules/python2.7/"
 
