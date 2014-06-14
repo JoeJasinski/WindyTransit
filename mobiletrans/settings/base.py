@@ -1,33 +1,32 @@
 # Django settings for mobiletrans project.
 import os
-from mtsettings.local_settings import (VENV_ROOT, PROJECT_ROOT )
 
-#######################
-#####  These settings should go in local_settings.py
-####################
-#DEBUG = True
-#TEMPLATE_DEBUG = DEBUG
-#
-#ADMINS = (
-#    # ('Your Name', 'your_email@example.com'),
-#)
-#
-#MANAGERS = ADMINS
-#
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#        'NAME': 'mobiletrans',
-#        'USER': 'mobiletrans_user',
-#        'PASSWORD': '1234',
-#        'HOST': 'localhost',
-#        'PORT': '',
-#    }
-#}
+PROJECT_ROOT  = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
+ENVIRONMENT_ROOT = os.path.abspath(os.path.join(PROJECT_ROOT, '..', '..', '..'))
+
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
+
+MANAGERS = ADMINS
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'windytransit',
+        'USER': 'windytransit',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    }
+}
+
 GOOGLE_PLACES_API_KEY = ''
-#######################
-#####  END These settings should go in local_settings.py
-####################
+
 
 
 # Local time zone for this installation. Choices can be found here:
@@ -55,7 +54,7 @@ USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(VENV_ROOT, 'htdocs','media').replace('\\','/') + '/'
+MEDIA_ROOT = os.path.join(ENVIRONMENT_ROOT, 'htdocs','media').replace('\\','/') + '/'
 
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
@@ -67,7 +66,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(VENV_ROOT,'htdocs','static')
+STATIC_ROOT = os.path.join(ENVIRONMENT_ROOT,'htdocs','static')
 
 
 # URL prefix for static files.
@@ -84,7 +83,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, 'staticfiles'),
+    os.path.join(PROJECT_ROOT, 'static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -152,11 +151,12 @@ INSTALLED_APPS = (
     'django_extensions',
     "south", 
     "compressor",
+    'rest_framework',
     
     'mobiletrans.mtcore',
     'mobiletrans.mtlocation',
     'mobiletrans.mtimport',
-
+    'mobiletrans.mtdistmap',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -183,4 +183,54 @@ LOGGING = {
 }
 
 
-from mtsettings.local_settings import *
+LOG_DIR = os.path.abspath(os.path.join(ENVIRONMENT_ROOT, 'var', 'log'))
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, "mobiletrans.log"),
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'mobiletrans.mtimport': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
+}
+
+from mobiletrans.local_settings import *

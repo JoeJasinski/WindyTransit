@@ -1,0 +1,65 @@
+
+
+# Generate a CTA Heatmap using mapnik
+
+from mobiletrans.mtdistmap.cta_heatmap import CTAHeatmap
+import mapnik
+m = mapnik.Map(600,600)
+cta_map = CTAHeatmap(m)
+cta_map.render_image()
+
+
+# Make a grid of points in the city border
+
+from mobiletrans.mtdistmap.area_grid import GridGenerator, GridPoint, Grid
+from mobiletrans.mtlocation.models import CityBorder
+region = CityBorder.objects.all()[0]
+center = region.area.centroid
+grid = Grid(xint=300, yint=300)
+gridgen = GridGenerator(region, grid)
+g = gridgen.run(GridPoint(0,0,center))
+
+
+# Generate the grid with routes 
+
+from mobiletrans.mtdistmap.area_grid import RouteGridGenerator, RouteGridPoint, RouteGrid
+from mobiletrans.mtlocation.models import CityBorder
+region = CityBorder.objects.all()[0]
+center = region.area.centroid
+grid = RouteGrid(xint=300, yint=300)
+#gridgen = RouteGridGenerator('41320', region, grid, max_distance=2000, num_routes=3)
+gridgen = RouteGridGenerator('40170', region, grid, max_distance=2000, num_routes=3)
+g = gridgen.run(RouteGridPoint(0,0,center))
+g.generate_shapefile('shapefiles/chicago_pts5')
+
+
+# Generate a hex color gradient  
+
+from mobiletrans.mtdistmap.utils.gradient_gen import GradientGenerator
+grd_data =  [
+    (0.15, '#FFD3d3', '#ff3030'), 
+    (0.75,  '#ff3030', '#0241fc'), 
+    (0.9,  '#0241fc', '#150189'), 
+    (1.0,  '#150189', '#150189'), 
+]
+grad_gen = GradientGenerator(grd_data)
+grad_gen.generate()
+
+
+# Plan a route from a point on the map to a train stop
+
+from mobiletrans.mtdistmap.cta_conn import load_transitnetwork
+from mobiletrans.mtdistmap.route_planner import RoutePlanner
+from django.contrib.gis.geos import Point, fromstr
+from_point = fromstr('POINT(%s %s)' % ("-87.66638826", "41.96182144"))
+#from_point = GPlace.objects.get(name__icontains='Precious Blood Church')
+tn = load_transitnetwork()
+t = RoutePlanner(tn)
+p = t.fastest_route_from_point(from_point, '41320')
+
+
+# Get the shortest path between two train stops
+
+from mobiletrans.mtdistmap.cta_conn import load_transitnetwork
+tn = load_transitnetwork()
+tn.shortest_path('40820', '41160')

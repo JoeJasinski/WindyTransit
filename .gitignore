@@ -20,3 +20,7 @@ dist
 *.pyc
 *.pyo
 *.tmp*
+settings/local.py
+node_modules
+.project
+.pydevproject

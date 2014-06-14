@@ -1,7 +1,7 @@
 import os, json
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from mobiletrans.mtimport.importers import importer_landmarks as importer
+from mobiletrans.mtimport.importers import importer_landmark as importer
 
 class Command(BaseCommand):
     args = '<landmarks.json>'
@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, input_file_path="", **options):
         if not input_file_path:
-            input_file_path = "%s" % os.path.join(settings.VENV_ROOT, "data", "landmarks.json")
+            input_file_path = "%s" % os.path.join(settings.ENVIRONMENT_ROOT, "data", "landmarks.json")
         self.stdout.write("Import %s \n" % input_file_path)
         input_record = importer.Landmark.data_import(input_file_path)
         print input_file_path 
