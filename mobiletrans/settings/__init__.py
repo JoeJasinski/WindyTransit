@@ -1,0 +1,1 @@
+from mobiletrans.settings.local import *
