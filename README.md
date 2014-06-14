@@ -13,10 +13,15 @@ REQUIREMENTS
 2) PACKAGE DEPENDENCIES - Ensure the following Apt pacakges are installed:
 
     build-essential git libfreetype6 libfreetype6-dev libjpeg8-dev libjpeg8 
-    libmysqlclient-dev openssh-client openssh-server
+    libmysqlclient-dev openssh-client openssh-server binutils
     openssl postfix python-virtualenv sqlite3 sudo supervisor zlib1g
-    zlib1g-dev libxml2-dev libxslt1-dev python-dev
-    binutils gdal-bin postgresql-9.3-postgis postgresql-server-dev-9.3 python-psycopg2
+    zlib1g-dev libxml2-dev libxslt1-dev python-dev 
+    
+    # needed for mapnik
+    libboost-all-dev libmapnik libmapnik-dev mapnik-utils python-mapnik
+    
+    # needed for postgres and postgis
+    gdal-bin postgresql-9.3-postgis postgresql-server-dev-9.3 python-psycopg2
 
     # Optional but recommended
     ack-grep aptitude curl findutils mlocate graphviz-dev libgraphviz-dev htop
@@ -28,6 +33,9 @@ Follow the instructions listed here, ignoreing any environment setup
 steps that you already followed. 
 http://www.chicagodjango.com/blog/geo-django-quickstart/
 
+4) To get mapnik to work, add this to the PYTHON_PATH
+
+    export PYTHONPATH="$PYTHONPATH:/usr/lib/pymodules/python2.7/"
 
 INSTALL
 -------
@@ -55,7 +63,7 @@ INSTALL
 
 7. Adjust the local settings as desired, though the default should be enough to get started
 
-8. Sync the db and migrate the database
+8. Sync the database and migrate the database
 
    ./manage.py syncdb 
    ./manage.py migrate 
