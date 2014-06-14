@@ -1,6 +1,6 @@
 REQUIREMENTS
 -------
-1) RECOMMENDED STACK 
+1. RECOMMENDED STACK 
 
  - Ubuntu 14.04
  - Python 2.7
@@ -10,7 +10,7 @@ REQUIREMENTS
  - Node JS 0.10.26
 
 
-2) PACKAGE DEPENDENCIES - Ensure the following Apt pacakges are installed:
+2. PACKAGE DEPENDENCIES - Ensure the following Apt pacakges are installed:
 
     build-essential git libfreetype6 libfreetype6-dev libjpeg8-dev libjpeg8 
     libmysqlclient-dev openssh-client openssh-server binutils
@@ -27,13 +27,13 @@ REQUIREMENTS
     ack-grep aptitude curl findutils mlocate graphviz-dev libgraphviz-dev htop
     nmon screen subversion tig tmux vim fail2ban
     
-3) GEODJANGO SETUP - Prior to installation, a working GeoDjango Postgres Database is required.
+3. GEODJANGO SETUP - Prior to installation, a working GeoDjango Postgres Database is required.
 
 Follow the instructions listed here, ignoreing any environment setup
 steps that you already followed. 
 http://www.chicagodjango.com/blog/geo-django-quickstart/
 
-4) To get mapnik to work, add this to the PYTHON_PATH
+4. To get mapnik to work, add this to the PYTHON_PATH
 
     export PYTHONPATH="$PYTHONPATH:/usr/lib/pymodules/python2.7/"
 
