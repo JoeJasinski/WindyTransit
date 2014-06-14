@@ -233,4 +233,3 @@ LOGGING = {
     }
 }
 
-from mobiletrans.local_settings import *
