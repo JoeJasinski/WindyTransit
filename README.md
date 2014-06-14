@@ -17,13 +17,16 @@ REQUIREMENTS
     openssl postfix python-virtualenv sqlite3 sudo supervisor zlib1g
     zlib1g-dev libxml2-dev libxslt1-dev python-dev 
     
-    # needed for mapnik
+needed for mapnik
+
     libboost-all-dev libmapnik libmapnik-dev mapnik-utils python-mapnik
     
-    # needed for postgres and postgis
+needed for postgres and postgis
+
     gdal-bin postgresql-9.3-postgis postgresql-server-dev-9.3 python-psycopg2
 
-    # Optional but recommended
+Optional but recommended
+
     ack-grep aptitude curl findutils mlocate graphviz-dev libgraphviz-dev htop
     nmon screen subversion tig tmux vim fail2ban
     
