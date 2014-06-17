@@ -8,9 +8,7 @@ from django.contrib.sites.models import Site
 from mobiletrans.mtcore import utils
 
 def index(request, template_name=""):
-    
     params = utils.PrepParams(request)
-    
     url_parts = {}
     if params.limit:
         url_parts.update({'limit':params.limit})
@@ -21,13 +19,10 @@ def index(request, template_name=""):
     if params.point_types:
         url_parts = [ ('type','%s' % i) for i in params.point_types ] + url_parts.items()
     encoded_args = utils.encode_args(url_parts)
-
     built_url = utils.build_url(host=Site.objects.get_current().domain, 
                                 path=reverse('mtlocation_renderkml'),
                                 args=encoded_args, encode=False)
-    
     context = {'url':built_url, 'lat':params.lat, 'long':long, }
-    
     return render_to_response(template_name, context, context_instance=RequestContext(request))
 
 
