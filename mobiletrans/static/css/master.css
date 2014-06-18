@@ -10,7 +10,7 @@ h1, h2 {
 font-family: 'Open Sans', sans-serif;
 padding-top: 20px; 	
 padding-left: 135px; 
-width: 300px; 
+width: 200px; 
 }
 
 h1 a { 
@@ -60,6 +60,10 @@ height: 80px;
 
 .menu { float: right; margin-right: 12px; 
 margin-top: 15px;  }
+
+.menu ul {
+ padding:0px;
+}
 
 .menu ul li{
  font-family: Tahoma, Geneva, sans-serif;
@@ -177,8 +181,15 @@ text-align: justify;
  position: absolute;
  background-color: black;
  color: white;
- opacity: 0.7;
- padding: 5px;
+ opacity: 0.8;
+ padding: 3px;
+ margin-top: 0px;
+ margin-bottom: 0px; 
+ 
+
+ width: 400px;
+
+
 }
 
 
