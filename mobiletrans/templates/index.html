@@ -14,7 +14,7 @@ $(document).ready(function(){
 	  zoom: 11,
 	  center: myLatlng,
 	  mapTypeId: google.maps.MapTypeId.ROADMAP
-	}
+	};
 
 	var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	    
@@ -74,18 +74,18 @@ $(document).ready(function(){
 	 if ( clicked_parent.children('ul').children('li.level2').size() == 0 ) {
 	      $.getJSON(clicked_element.attr('href'), 
 	        function(data) {
-	        	var route = data.transit_route
+	        	var route = data.transit_route;
 	
 				ul = $('<ul>');
 				$.each(route.stops,
 				function( intIndex, objValue )
 				{
-					 kml = '/kml/?lat=' + objValue.point.lattitude + "&long=" + objValue.point.longitude
+					 kml = '/kml/?lat=' + objValue.point.lattitude + "&long=" + objValue.point.longitude;
 					 a = $("<a/>").attr("href",kml).attr('class','level2_a').css("color",clicked_element.css('background-color')).text(objValue.name);
 					 li = $('<li>').attr("class",'level2').append(a);
 					 ul.append(li);
 				});
-				clicked_parent.append(ul)
+				clicked_parent.append(ul);
 			});
    		}
    		else
