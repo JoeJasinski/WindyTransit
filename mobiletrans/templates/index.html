@@ -80,7 +80,7 @@ $(document).ready(function(){
 				$.each(route.stops,
 				function( intIndex, objValue )
 				{
-					 kml = '/kml/?lat=' + objValue.point.lattitude + "&long=" + objValue.point.longitude;
+					 kml = '{% url "mtlocation_renderkml" %}?lat=' + objValue.point.lattitude + "&long=" + objValue.point.longitude;
 					 a = $("<a/>").attr("href",kml).attr('class','level2_a').css("color",clicked_element.css('background-color')).text(objValue.name);
 					 li = $('<li>').attr("class",'level2').append(a);
 					 ul.append(li);
