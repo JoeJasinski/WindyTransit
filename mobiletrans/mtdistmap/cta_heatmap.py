@@ -60,15 +60,16 @@ class CTAHeatmap(object):
         schema = self.get_stylesheet()
         
         mapnik.load_map_from_string(map, schema)
-        ds = mapnik.PostGIS(dbname=DB_NAME, user=DB_USER, host=DB_HOST, password=DB_PASSWORD, port=DB_PORT, table='mtlocation_cityborder')
+        connection_params = dict(dbname=DB_NAME, user=DB_USER, host=DB_HOST, password=DB_PASSWORD, port=DB_PORT, )
+        ds = mapnik.PostGIS(table='mtlocation_cityborder', **connection_params)
         map.layers[0].datasource = ds
-        ds = mapnik.PostGIS(dbname=DB_NAME, user=DB_USER, host=DB_HOST, password=DB_PASSWORD, port=DB_PORT, table=subquery[1], geometry_table="mtlocation_region", geometry_field='area')
+        ds = mapnik.PostGIS(table=subquery[1], geometry_table="mtlocation_region", geometry_field='area', **connection_params)
         map.layers[1].datasource = ds
-        ds = mapnik.PostGIS(dbname=DB_NAME, user=DB_USER, host=DB_HOST, password=DB_PASSWORD, port=DB_PORT, table=subquery[2],  geometry_table="mtlocation_location", geometry_field='point')
+        ds = mapnik.PostGIS(table=subquery[2],  geometry_table="mtlocation_location", geometry_field='point', **connection_params)
         map.layers[2].datasource = ds
-        ds = mapnik.PostGIS(dbname=DB_NAME, user=DB_USER, host=DB_HOST, password=DB_PASSWORD, port=DB_PORT, table='mtlocation_ctaraillines', )
+        ds = mapnik.PostGIS(table='mtlocation_ctaraillines', **connection_params)
         map.layers[3].datasource = ds
-        ds = mapnik.PostGIS(dbname=DB_NAME, user=DB_USER, host=DB_HOST, password=DB_PASSWORD, port=DB_PORT, table=subquery[4], geometry_table="mtlocation_location", geometry_field='point' )
+        ds = mapnik.PostGIS(table=subquery[4], geometry_table="mtlocation_location", geometry_field='point', **connection_params)
         map.layers[4].datasource = ds        
         self.map = map
 
