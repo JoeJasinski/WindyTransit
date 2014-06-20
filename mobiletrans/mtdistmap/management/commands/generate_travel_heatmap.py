@@ -29,7 +29,13 @@ class Command(BaseCommand):
             dest='num_routes',
             default=3,
             help='Given a point on the map, look for the x closest routes (default 3).'),
-        
+
+        make_option('--city-border-name', '-c',
+            action='store',
+            dest='city_border_name',
+            default='chicago',
+            help='Name of the city border database object used to bound calculation.'),
+       
     )
 
 
@@ -49,8 +55,20 @@ class Command(BaseCommand):
             self.stdout.write("--num-routes must be an integer", ending='')
             exit(1)
 
+        city_border_name = options['city_border_name']
+        self.stdout.write("city_border_name set to {0}".format(city_border_name))
+
         self.stdout.write("Looking up the city border.")
-        region = CityBorder.objects.all()[0]
+        border_name="chicago"
+        try:
+            region = CityBorder.objects.get(name=border_name)
+        except CityBorder.DoesNotExist:
+            self.stdout.write("city border with name '{0}' does not exit".format(border_name))
+            exit(1)
+        except CityBorder.MultipleObjectsReturned:
+            self.stdout.write("More than one city border object is defined with name '{0}'".format(border_name))
+            exit(1)
+        
         center = region.area.centroid
         self.stdout.write("  City Center at {0}".format(center))
         grid = RouteGrid(xint=300, yint=300)

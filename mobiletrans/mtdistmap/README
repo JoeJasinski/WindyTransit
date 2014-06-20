@@ -21,6 +21,7 @@ g = gridgen.run(GridPoint(0,0,center))
 
 
 # Generate the grid with routes 
+#   This is the same as running ./manage.py generate_travel_heatmap
 
 from mobiletrans.mtdistmap.area_grid import RouteGridGenerator, RouteGridPoint, RouteGrid
 from mobiletrans.mtlocation.models import CityBorder
