@@ -20,7 +20,8 @@ class Station(DictMixin):
         return 'Station(line=%s name=%s desc=%s)' % (self.line, self.name, self.desc)
     def get_unique_name(self):
         return "%s_%s" % (self.line, self.name)
-
+    def to_json(self):
+        return {'line':self.line, 'name':self.name, 'desc':self.desc}
 
 class StartPoint(object):
     name = ""
@@ -43,6 +44,8 @@ class Path(object):
         return "Path(stops=%s total_time=%s)" % (self.stops, self.total_time)
     def pprint(self):
         return pprint(self.as_stations())
+    def to_json(self):
+        return {'total_time':self.total_time, 'stops':self.stops}
 
 class TransitNetwork(DictMixin):
     def __init__(self, *args, **kwargs):
