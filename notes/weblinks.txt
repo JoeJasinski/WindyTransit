@@ -79,6 +79,19 @@ http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Python
 Interesting TileMill/Carto article by the authors of TileMill
 http://developmentseed.org/blog/2011/feb/09/introducing-carto-css-map-styling-language/
 
+
+Planar
+Planar is a 2D geometry library for Python designed for use by games and other interactive applications.
+ - classify polygons
+ - convex hull
+https://pythonhosted.org/planar/
+
+Shapley
+Python package for manipulation and analysis of planar geometric objects. 
+It is based on the widely deployed GEOS (the engine of PostGIS)
+http://toblerity.org/shapely/index.html
+
+
 Django shapefile generator 
 (I didn't use this module)
 https://bitbucket.org/springmeyer/django-shapes/src/e57a5a16ca5a/shapes/views/export.py
