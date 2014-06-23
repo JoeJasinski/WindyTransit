@@ -35,7 +35,19 @@ class Command(BaseCommand):
             dest='city_border_name',
             default='chicago',
             help='Name of the city border database object used to bound calculation.'),
-       
+
+        make_option('--grid-x', '-x',
+            action='store',
+            dest='grid_x',
+            default='300',
+            help='Set the grid x spacing in meters. (default 300)'),
+
+        make_option('--grid-y', '-y',
+            action='store',
+            dest='grid_y',
+            default='300',
+            help='Set the grid y spacing in meters. (default 300)'),
+
     )
 
 
@@ -55,6 +67,20 @@ class Command(BaseCommand):
             self.stdout.write("--num-routes must be an integer", ending='')
             exit(1)
 
+        try:
+            grid_x = int(options['grid_x'])
+            self.stdout.write("grid_x set to {0}".format(grid_x))
+        except (ValueError, TypeError) as e:
+            self.stdout.write("--grid-x must be an integer", ending='')
+            exit(1)
+
+        try:
+            grid_y = int(options['grid_y'])
+            self.stdout.write("grid_y set to {0}".format(grid_y))
+        except (ValueError, TypeError) as e:
+            self.stdout.write("--grid-y must be an integer", ending='')
+            exit(1)
+
         city_border_name = options['city_border_name']
         self.stdout.write("city_border_name set to {0}".format(city_border_name))
 
@@ -71,7 +97,7 @@ class Command(BaseCommand):
         
         center = region.area.centroid
         self.stdout.write("  City Center at {0}".format(center))
-        grid = RouteGrid(xint=300, yint=300)
+        grid = RouteGrid(xint=grid_x, yint=grid_y)
         
         for stop_id in args:
             self.stdout.write("Generating heatmap for {0}".format(stop_id))
