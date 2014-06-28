@@ -16,6 +16,10 @@ urlpatterns_2 = patterns('',
         views.LocationDataView.as_view() , { }, name="api_locations"),  
     url(r'^transitstops$', 
         views.TransitStopDataView.as_view(), { }, name="api2_transitstops"), 
+    url(r'^lines$',
+        views.CTARailLinesRoutesView.as_view(), {}, name="api2_borders"),
+    url(r'^lines/(?P<route_id>\w+)$',
+        views.CTARailLinesRoutesView.as_view(), {}, name="api2_borders"),
 )
 
 urlpatterns_2 = format_suffix_patterns(urlpatterns_2, allowed=['json', 'html'])

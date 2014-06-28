@@ -1,6 +1,6 @@
 import logging, json
 from Queue import Queue
-from threading import Thread
+from threading import Thread, Semaphore
 from UserDict import DictMixin
 
 from mobiletrans.mtdistmap.utils import shapefile

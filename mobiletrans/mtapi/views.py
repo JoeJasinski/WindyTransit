@@ -1,11 +1,13 @@
 from django.contrib.gis.measure import D 
 from mobiletrans.mtlocation.models import ( 
-    TransitRoute, TransitStop, Location, Neighborhood, Zipcode, TRANSIT_STOP_TYPE_STATION )
+    TransitRoute, TransitStop, Location, Neighborhood, Zipcode, 
+    TRANSIT_STOP_TYPE_STATION, CityBorder, CTARailLines )
 from mobiletrans.mtcore import utils
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
+from .serializers import CTARailLinesSerializer
 
 class ListTransitRoutesSerializer(serializers.Serializer):
     pass
@@ -110,3 +112,23 @@ class TransitStopDataView(generics.ListAPIView):
             location.update({'distance':str(distance)})
             locations.append(location,)
         return Response({ 'locations': locations[:params.limit], })
+
+
+class CTARailLinesRoutesView(generics.ListAPIView):
+
+    model = CTARailLines
+    methods_allowed = ('GET',)
+    serializer_class = CTARailLinesSerializer
+    lookup_url_kwarg = "objectid"
+
+
+    def get_queryset(self):
+
+        if self.kwargs.get('objectid'):
+            kwargs = {'objectid':self.kwargs['objectid']}
+        else:
+            kwargs = {}
+
+        return self.model.objects.filter(**kwargs)
+    
+

@@ -449,9 +449,7 @@ class GPlace(Location):
         site = Site.objects.get_current()
         static_url = settings.STATIC_URL
         return_value = "http://%s%simage/location-places.png" % (site, static_url)
-        return return_value 
- 
-
+        return return_value
 
 
 class CTARailLines(models.Model):
