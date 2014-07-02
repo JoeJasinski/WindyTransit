@@ -1,11 +1,41 @@
 # Django settings for mobiletrans project.
 import os
+import environ
 
-PROJECT_ROOT  = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
-ENVIRONMENT_ROOT = os.path.abspath(os.path.join(PROJECT_ROOT, '..', '..', '..'))
+default_project_root = environ.Path(__file__) - 2
+default_environment_root = default_project_root - 3 
+default_log_dir = default_environment_root.path('var', 'log')
+default_htdocs_dir = default_environment_root.path('htdocs')
+
+default_static_dir = default_project_root.path('static')
+default_static_root = default_htdocs_dir.path('static')
+
+default_media_root = default_htdocs_dir.path('media')
+default_template_dir = default_project_root.path('template')
 
 
-DEBUG = True
+env = environ.Env(
+    DJANGO_DEBUG=(bool, False),
+    
+    DJANGO_PROJECT_ROOT=(str, str(default_project_root)),
+    DJANGO_ENVIRONMENT_ROOT=(str, str(default_environment_root)),
+    DJANGO_LOG_DIR=(str, str(default_log_dir)),
+    DJANGO_HTDOCS_DIR=(str, str(default_htdocs_dir)),
+    
+    DJANGO_STATIC_DIR=(str, str(default_static_dir)),
+    DJANGO_STATIC_ROOT=(str, str(default_static_root)),
+    
+    DJANGO_MEDIA_ROOT=(str, str(default_media_root)),
+    DJANGO_TEMPLATE_DIR=(str, str(default_template_dir)),
+)
+
+DEBUG = env('DJANGO_DEBUG')
+PROJECT_ROOT  = env("DJANGO_PROJECT_ROOT")
+ENVIRONMENT_ROOT = env("DJANGO_ENVIRONMENT_ROOT")
+LOG_DIR = env("DJANGO_LOG_DIR")
+HTDOCS_DIR = env("DJANGO_HTDOCS_DIR")
+
+
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -15,15 +45,9 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'windytransit',
-        'USER': 'windytransit',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-    }
+    'default': env.db('DJANGO_DATABASE', default='postgis://windytransit@:/windytransit')
 }
+
 
 GOOGLE_PLACES_API_KEY = ''
 
@@ -54,8 +78,7 @@ USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(ENVIRONMENT_ROOT, 'htdocs','media').replace('\\','/') + '/'
-
+MEDIA_ROOT = env("DJANGO_MEDIA_ROOT")
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -66,8 +89,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(ENVIRONMENT_ROOT,'htdocs','static')
-
+STATIC_ROOT = env("DJANGO_STATIC_ROOT")
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -83,7 +105,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, 'static'),
+    env("DJANGO_STATIC_DIR"),
 )
 
 # List of finder classes that know how to find static files in
@@ -136,7 +158,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, 'templates').replace('\\','/'),
+    env("DJANGO_TEMPLATE_DIR"),
 )
 
 INSTALLED_APPS = (
@@ -183,7 +205,7 @@ LOGGING = {
 }
 
 
-LOG_DIR = os.path.abspath(os.path.join(ENVIRONMENT_ROOT, 'var', 'log'))
+
 
 LOGGING = {
     'version': 1,
@@ -215,7 +237,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(LOG_DIR, "mobiletrans.log"),
+            'filename':os.path.join(LOG_DIR,"mobiletrans.log"),
             'formatter': 'verbose'
         },
     },
