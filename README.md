@@ -92,10 +92,14 @@ Or, mount the code directory for development
 MANAGEMENT COMMANDS
 -------
 
-**generate_travel_heatmap **- generates a travel heatmap given a station id. 
+**generate_travel_heatmap** - generates a travel heatmap given a station id. 
 See the managment command help for usage. 
 
 **shortest_path** - calculates the shortest path between 2 stations. 
 See the management command help for usage.
 
-**mt_import_[cityborder|ctarailline|googleplaces|hospitals|landmarks|libraries|neighborhoods|policestations|transitroutes|transitstops|zipcodes]**
+**mt_import_[cityborder|ctarailline|googleplaces|
+            hospitals|landmarks|libraries|neighborhoods|
+            policestations|transitroutes|
+            transitstops|zipcodes]** - import usage data from a variety of sources
+See the management command help for usage. 
