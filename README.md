@@ -72,8 +72,11 @@ INSTALL
    ./manage.py migrate 
 
 
+Docker
+-------
 
+1) Build the container
+sudo docker build -t windy .
 
-
-
-
+2) Run the container
+sudo docker run -itP --rm --name joe windy 
