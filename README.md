@@ -40,7 +40,7 @@ http://www.chicagodjango.com/blog/geo-django-quickstart/
 
     export PYTHONPATH="$PYTHONPATH:/usr/lib/pymodules/python2.7/"
 
-INSTALL
+LOCAL INSTALL
 -------
 
 1. Create virtualenv 
@@ -72,16 +72,30 @@ INSTALL
    ./manage.py migrate 
 
 
-Docker
+DOCKER INSTALL
 -------
 0) Change directory to the dir with the Dockerfile
 
 1) Build the container
-sudo docker build -t windy .
+ 
+    sudo docker build -t windy .
 
 2) Run the container
-sudo docker run -itP --rm --name joe windy 
+
+    sudo docker run -itP --rm --name joe windy 
 
 Or, mount the code directory for development
 
-sudo docker run -itP --rm -v `pwd`:/site/app/  --name joe windy
+    sudo docker run -itP --rm -v `pwd`:/site/app/  --name joe windy
+
+
+MANAGEMENT COMMANDS
+-------
+
+**generate_travel_heatmap **- generates a travel heatmap given a station id. 
+See the managment command help for usage. 
+
+**shortest_path** - calculates the shortest path between 2 stations. 
+See the management command help for usage.
+
+**mt_import_[cityborder|ctarailline|googleplaces|hospitals|landmarks|libraries|neighborhoods|policestations|transitroutes|transitstops|zipcodes]**
