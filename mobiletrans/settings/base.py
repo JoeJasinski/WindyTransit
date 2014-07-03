@@ -11,7 +11,7 @@ default_static_dir = default_project_root.path('static')
 default_static_root = default_htdocs_dir.path('static')
 
 default_media_root = default_htdocs_dir.path('media')
-default_template_dir = default_project_root.path('template')
+default_template_dir = default_project_root.path('templates')
 
 
 env = environ.Env(
