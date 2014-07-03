@@ -74,9 +74,14 @@ INSTALL
 
 Docker
 -------
+0) Change directory to the dir with the Dockerfile
 
 1) Build the container
 sudo docker build -t windy .
 
 2) Run the container
 sudo docker run -itP --rm --name joe windy 
+
+Or, mount the code directory for development
+
+sudo docker run -itP --rm -v `pwd`:/site/app/  --name joe windy
