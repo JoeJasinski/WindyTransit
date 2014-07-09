@@ -1,1 +1,1 @@
-from mobiletrans.settings.local import *
+from mobiletrans.settings.main import *
