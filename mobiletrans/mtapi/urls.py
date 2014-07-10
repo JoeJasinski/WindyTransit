@@ -21,6 +21,10 @@ urlpatterns_2 = patterns('',
         views.CTARailLinesRoutesView.as_view(), {}, name="api2_lines"),
     url(r'^lines/(?P<route_id>\w+)$',
         views.CTARailLinesRoutesView.as_view(), {}, name="api2_lines"),
+    url(r'^border/(?P<name>\w+)$',
+        views.CityBorderView.as_view(), {}, name="api2_border"),
+    url(r'^neighborhood_from/latlong$',
+        views.NeighborhoodFromCoordView.as_view(), {}, name="api2_neighborhood_from"),
 )
 
 urlpatterns_2 = format_suffix_patterns(urlpatterns_2, allowed=['json', 'html'])

@@ -7,7 +7,7 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
-from .serializers import CTARailLinesSerializer
+from .serializers import CTARailLinesSerializer, CityBorderSerializer, NeighborhoodSerializer
 
 class ListTransitRoutesSerializer(serializers.Serializer):
     pass
@@ -121,7 +121,6 @@ class CTARailLinesRoutesView(generics.ListAPIView):
     serializer_class = CTARailLinesSerializer
     lookup_url_kwarg = "objectid"
 
-
     def get_queryset(self):
 
         if self.kwargs.get('objectid'):
@@ -132,3 +131,39 @@ class CTARailLinesRoutesView(generics.ListAPIView):
         return self.model.objects.filter(**kwargs)
     
 
+class CityBorderView(generics.ListAPIView):
+
+    model = CityBorder
+    methods_allowed = ('GET',)
+    serializer_class = CityBorderSerializer
+    lookup_url_kwarg = "name"
+
+    def get_queryset(self):
+
+        if self.kwargs.get('name'):
+            kwargs = {'name':self.kwargs['name']}
+        else:
+            kwargs = {}
+
+        return self.model.objects.filter(**kwargs)
+
+
+class NeighborhoodFromCoordView(generics.RetrieveAPIView):
+
+    model = Neighborhood
+    methods_allowed = ('GET',)
+    serializer_class = NeighborhoodSerializer
+    lookup_url_kwarg = "name"
+
+    def get_object(self, queryset=None):
+        queryset = self.filter_queryset(self.get_queryset())
+        params = utils.PrepParams(self.request)
+        if params.neighborhood:
+            try:
+                neighborhood = Neighborhood.sub_objects.filter(area__contains=params.ref_pnt)[0]
+            except IndexError:
+                neighborhood = ""
+        #neighborhood = get_object_or_404(queryset, **filter_kwargs)
+        self.check_object_permissions(self.request, neighborhood)
+        return neighborhood
+        

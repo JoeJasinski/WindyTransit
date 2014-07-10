@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block extra_head %}{{ block.super }}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script>
+
+$(function() {
+  var x = '{{ center.x }}';
+  var y = '{{ center.y }}';
+
+  var map = L.map('map').setView([y, x], 11);
+
+  map.on('click', function(e) {
+      var neighborhood_url="{% url 'api2_neighborhood_from' %}?lat=" + e.latlng.lat + "&long=" + e.latlng.lng;
+    
+      var jqxhr = $.get( neighborhood_url, function(res) {
+	    console.log( res );
+	    var style = {'color': 'green', 'clickable':false, 'fillColor':"green", 
+	                 'fillOpacity': 0.5, "opacity": 0.8, 'weight':'1'};
+	    var myLayer = L.geoJson(res, {'style':style,
+	           onEachFeature: function (feature, layer) {
+                      layer.bindPopup(feature.properties.name);
+               }
+	    }).addTo(map);
+	  }).done(function() {
+	    console.log("done");
+	  }).fail(function() {
+	    console.log("failed");
+	  }).always(function() {
+	    console.log("finished");
+	  });
+	  
+  });
+
+  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '',
+    maxZoom: 18
+  }).addTo(map);
+
+  var jqxhr = $.get( "{% url 'api2_border' 'chicago' %}", function(res) {
+    console.log( res );
+    var style = {'color': 'red', 'clickable':false, 'fillColor':"red", fillOpacity: 0.1, "opacity": 0.8, 'weight':'1'};
+    var myLayer = L.geoJson(res, {'style':style}).addTo(map);
+  }).done(function() {
+    console.log("done");
+  }).fail(function() {
+    console.log("failed");
+  }).always(function() {
+    console.log("finished");
+  });
+
+  var jqxhr = $.get( "{% url 'api2_lines' %}", function(res) {
+    console.log( res );
+    var style = {'color': 'blue', "opacity": 0.8, 'weight':'2'};
+    var myLayer = L.geoJson(res, {'style':style}).addTo(map);
+  }).done(function() {
+    console.log("done");
+  }).fail(function() {
+    console.log("failed");
+  }).always(function() {
+    console.log("finished");
+  }); 
+ 
+});
+
+</script>
+<style>
+	#map { height: 500px;  }
+</style>
+{% endblock extra_head %}
+
+{% block content %}
+
+<div id="map">
+	
+</div>
+
+{% endblock content %}
