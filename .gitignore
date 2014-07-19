@@ -24,3 +24,4 @@ mobiletrans/settings/local.py
 node_modules
 .project
 .pydevproject
+mobiletrans/components/*
