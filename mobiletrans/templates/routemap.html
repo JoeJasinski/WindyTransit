@@ -11,6 +11,9 @@ $(function() {
 
   var map = L.map('map').setView([y, x], 11);
 
+  var layergroup = L.layerGroup([])
+    .addTo(map);
+
   map.on('click', function(e) {
       var neighborhood_url="{% url 'api2_neighborhood_from' %}?lat=" + e.latlng.lat + "&long=" + e.latlng.lng;
     
@@ -22,7 +25,9 @@ $(function() {
 	           onEachFeature: function (feature, layer) {
                       layer.bindPopup(feature.properties.name);
                }
-	    }).addTo(map);
+	    }); //.addTo(map);
+	    layergroup.clearLayers();
+	    layergroup.addLayer(myLayer);
 	  }).done(function() {
 	    console.log("done");
 	  }).fail(function() {
@@ -32,8 +37,10 @@ $(function() {
 	  });
 	  
   });
-
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  //var map_tile_url = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+  //var map_tile_url = 'http://otile3.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png';
+  var map_tile_url = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+  L.tileLayer(map_tile_url, {
     attribution: '',
     maxZoom: 18
   }).addTo(map);
@@ -61,7 +68,8 @@ $(function() {
   }).always(function() {
     console.log("finished");
   }); 
- 
+
+
 });
 
 </script>
