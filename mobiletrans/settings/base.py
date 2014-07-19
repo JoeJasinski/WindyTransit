@@ -115,8 +115,10 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
     'compressor.finders.CompressorFinder',
+    'djangobower.finders.BowerFinder',
 )
 
+BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
 
 COMPRESS_ENABLED=True
 COMPRESS_OUTPUT_DIR=''
@@ -174,11 +176,17 @@ INSTALLED_APPS = (
     "south", 
     "compressor",
     'rest_framework',
+    'djangobower',
     
     'mobiletrans.mtcore',
     'mobiletrans.mtlocation',
     'mobiletrans.mtimport',
     'mobiletrans.mtdistmap',
+)
+
+
+BOWER_INSTALLED_APPS = (
+    'jquery#1.9',
 )
 
 # A sample logging configuration. The only tangible logging
