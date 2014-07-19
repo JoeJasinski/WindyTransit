@@ -187,6 +187,7 @@ INSTALLED_APPS = (
 
 BOWER_INSTALLED_APPS = (
     'jquery#1.9',
+    'leaflet#0.7.3',
 )
 
 # A sample logging configuration. The only tangible logging
