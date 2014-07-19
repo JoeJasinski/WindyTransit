@@ -14,6 +14,10 @@ $(function() {
   var layergroup = L.layerGroup([])
     .addTo(map);
 
+  var popup = L.popup({
+            maxWidth:400
+        });
+
   map.on('click', function(e) {
       var neighborhood_url="{% url 'api2_neighborhood_from' %}?lat=" + e.latlng.lat + "&long=" + e.latlng.lng;
     
@@ -21,13 +25,15 @@ $(function() {
 	    console.log( res );
 	    var style = {'color': 'green', 'clickable':false, 'fillColor':"green", 
 	                 'fillOpacity': 0.5, "opacity": 0.8, 'weight':'1'};
-	    var myLayer = L.geoJson(res, {'style':style,
+	    var neighborhood_layer = L.geoJson(res, {'style':style,
 	           onEachFeature: function (feature, layer) {
-                      layer.bindPopup(feature.properties.name);
+                      popup.setLatLng(e.latlng);
+					  popup.setContent(feature.properties.name + " " + feature.properties.long_name);
                }
-	    }); //.addTo(map);
+	    });
 	    layergroup.clearLayers();
-	    layergroup.addLayer(myLayer);
+	    layergroup.addLayer(neighborhood_layer);
+	    map.openPopup(popup);
 	  }).done(function() {
 	    console.log("done");
 	  }).fail(function() {
