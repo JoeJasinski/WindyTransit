@@ -24,7 +24,7 @@ urlpatterns_2 = patterns('',
     url(r'^border/(?P<name>\w+)$',
         views.CityBorderView.as_view(), {}, name="api2_border"),
                          
-    url(r'^border_routes/', views.RailLinesRouteBorderView.as_view(), {}, name="api2_border_routes"),
+    url(r'^border_routes/(?P<name>\w+)$', views.RailLinesRouteBorderView.as_view(), {}, name="api2_border_routes"),
     
     url(r'^neighborhood_from/latlong$',
         views.NeighborhoodFromCoordView.as_view(), {}, name="api2_neighborhood_from"),

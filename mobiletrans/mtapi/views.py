@@ -172,10 +172,12 @@ class NeighborhoodFromCoordView(generics.RetrieveAPIView):
 
 class RailLinesRouteBorderView(APIView):
     
-    def get(self, request, format=None):
+    def get(self, request, *args, **kwargs):
         routes = CTARailLines.objects.all()
-
-        kwargs = {'name':'chicago'}
+        
+        name = self.kwargs.get('name')
+        border = get_object_or_404(CityBorder, name=name)
+        kwargs = {'name':name}
             
         border = CityBorder.objects.filter(**kwargs)
 
