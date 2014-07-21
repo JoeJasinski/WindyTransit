@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
 from .serializers import (CTARailLinesSerializer, CityBorderSerializer, 
-                          NeighborhoodSerializer)
+                          NeighborhoodSerializer, LocationSerializer)
 
 class ListTransitRoutesSerializer(serializers.Serializer):
     pass
@@ -157,17 +157,27 @@ class NeighborhoodFromCoordView(generics.RetrieveAPIView):
     serializer_class = NeighborhoodSerializer
     lookup_url_kwarg = "name"
 
+    def dispatch(self, request, *args, **kwargs):
+        self.params = utils.PrepParams(self.request)
+        return super(NeighborhoodFromCoordView, self).dispatch(request, *args, **kwargs)
+
     def get_object(self, queryset=None):
         queryset = self.filter_queryset(self.get_queryset())
-        params = utils.PrepParams(self.request)
-        if params.neighborhood:
+        if self.params.neighborhood:
             try:
-                neighborhood = Neighborhood.sub_objects.filter(area__contains=params.ref_pnt)[0]
+                neighborhood = Neighborhood.sub_objects.filter(area__contains=self.params.ref_pnt)[0]
             except IndexError:
                 neighborhood = ""
         #neighborhood = get_object_or_404(queryset, **filter_kwargs)
         self.check_object_permissions(self.request, neighborhood)
         return neighborhood
+
+    def get(self, request, format=None):
+        placemarks = Location.objects.displayable().get_closest(from_point=self.params.ref_pnt, distance_dict=self.params.d ) 
+        neighborhood = self.get_object()
+        data = {'neighborhood':NeighborhoodSerializer(neighborhood).data,
+                'placemarks':LocationSerializer(placemarks).data,}
+        return Response(data)
 
 
 class RailLinesRouteBorderView(APIView):

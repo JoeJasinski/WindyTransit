@@ -1,5 +1,5 @@
 from rest_framework_gis.serializers import  GeoFeatureModelSerializer
-from mobiletrans.mtlocation.models import CTARailLines, CityBorder, Neighborhood
+from mobiletrans.mtlocation.models import CTARailLines, CityBorder, Neighborhood, Location
 
 
 class CTARailLinesSerializer(GeoFeatureModelSerializer):
@@ -32,3 +32,13 @@ class NeighborhoodSerializer(GeoFeatureModelSerializer):
         fields = ('created', 'modified', 'active', 'name', 'slug',
                   'area', 'uuid', 'long_name' )
 
+
+class LocationSerializer(GeoFeatureModelSerializer):
+    
+    class Meta:
+        model = Location
+        geo_field = 'point'
+        id_field = 'slug'
+        fields = ('created', 'modified', 'active', 'name', 'slug', 
+                  'uuid',
+                  )

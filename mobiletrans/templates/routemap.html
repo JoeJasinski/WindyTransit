@@ -26,12 +26,37 @@ $(function() {
 	    console.log( res );
 	    var style = {'color': 'green', 'clickable':false, 'fillColor':"green", 
 	                 'fillOpacity': 0.5, "opacity": 0.8, 'weight':'1'};
-	    var neighborhood_layer = L.geoJson(res, {'style':style,
+	    var neighborhood_layer = L.geoJson(res.neighborhood, {'style':style,
 	           onEachFeature: function (feature, layer) {
                       popup.setLatLng(e.latlng);
 					  popup.setContent(feature.properties.name + " " + feature.properties.long_name);
                }
 	    });
+
+	    var geojsonMarkerOptions = {
+		    radius: 8,
+		    fillColor: "#ff7800",
+		    color: "#000",
+		    weight: 1,
+		    opacity: 1,
+		    fillOpacity: 0.8
+		};
+		
+		function onEachFeature(feature, layer) {
+	    // does this feature have a property named popupContent?
+	        if (feature.properties && feature.properties.name) {
+	            layer.bindPopup(feature.properties.name);
+	        }
+        }
+		
+	    var placemarks_layer = L.geoJson(res.placemarks, {
+	    
+	        pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions);
+           },
+           onEachFeature: onEachFeature
+	    
+	    }).addTo(map);
 	    layergroup.clearLayers();
 	    layergroup.addLayer(neighborhood_layer);
 	    map.openPopup(popup);
@@ -53,7 +78,7 @@ $(function() {
   }).addTo(map);
 
 
-  var jqxhr = $.get( "{% url 'api2_border_routes' %}", function(res) {
+  var jqxhr = $.get( "{% url 'api2_border_routes' 'chicago' %}", function(res) {
     console.log( res );
     var style = {'color': 'red', 'clickable':false, 'fillColor':"red", fillOpacity: 0.1, "opacity": 0.8, 'weight':'1'};
     var myLayer = L.geoJson(res.border, {'style':style}).addTo(map);
@@ -67,31 +92,6 @@ $(function() {
     console.log("finished");
   });
 
-  /*
-  var jqxhr = $.get( "{% url 'api2_border' 'chicago' %}", function(res) {
-    console.log( res );
-    var style = {'color': 'red', 'clickable':false, 'fillColor':"red", fillOpacity: 0.1, "opacity": 0.8, 'weight':'1'};
-    var myLayer = L.geoJson(res, {'style':style}).addTo(map);
-  }).done(function() {
-    console.log("done");
-  }).fail(function() {
-    console.log("failed");
-  }).always(function() {
-    console.log("finished");
-  });
-
-  var jqxhr = $.get( "{% url 'api2_lines' %}", function(res) {
-    console.log( res );
-    var style = {'color': 'blue', "opacity": 0.8, 'weight':'2'};
-    var myLayer = L.geoJson(res, {'style':style}).addTo(map);
-  }).done(function() {
-    console.log("done");
-  }).fail(function() {
-    console.log("failed");
-  }).always(function() {
-    console.log("finished");
-  }); 
-  */
 
 });
 
