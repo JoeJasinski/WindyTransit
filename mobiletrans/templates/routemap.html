@@ -52,6 +52,22 @@ $(function() {
     maxZoom: 18
   }).addTo(map);
 
+
+  var jqxhr = $.get( "{% url 'api2_border_routes' %}", function(res) {
+    console.log( res );
+    var style = {'color': 'red', 'clickable':false, 'fillColor':"red", fillOpacity: 0.1, "opacity": 0.8, 'weight':'1'};
+    var myLayer = L.geoJson(res.border, {'style':style}).addTo(map);
+    var style = {'color': 'blue', "opacity": 0.8, 'weight':'2'};
+    var myLayer = L.geoJson(res.routes, {'style':style}).addTo(map); 
+  }).done(function() {
+    console.log("done");
+  }).fail(function() {
+    console.log("failed");
+  }).always(function() {
+    console.log("finished");
+  });
+
+  /*
   var jqxhr = $.get( "{% url 'api2_border' 'chicago' %}", function(res) {
     console.log( res );
     var style = {'color': 'red', 'clickable':false, 'fillColor':"red", fillOpacity: 0.1, "opacity": 0.8, 'weight':'1'};
@@ -75,7 +91,7 @@ $(function() {
   }).always(function() {
     console.log("finished");
   }); 
-
+  */
 
 });
 

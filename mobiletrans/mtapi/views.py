@@ -3,11 +3,13 @@ from mobiletrans.mtlocation.models import (
     TransitRoute, TransitStop, Location, Neighborhood, Zipcode, 
     TRANSIT_STOP_TYPE_STATION, CityBorder, CTARailLines )
 from mobiletrans.mtcore import utils
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
-from .serializers import CTARailLinesSerializer, CityBorderSerializer, NeighborhoodSerializer
+from .serializers import (CTARailLinesSerializer, CityBorderSerializer, 
+                          NeighborhoodSerializer)
 
 class ListTransitRoutesSerializer(serializers.Serializer):
     pass
@@ -166,4 +168,18 @@ class NeighborhoodFromCoordView(generics.RetrieveAPIView):
         #neighborhood = get_object_or_404(queryset, **filter_kwargs)
         self.check_object_permissions(self.request, neighborhood)
         return neighborhood
-        
+
+
+class RailLinesRouteBorderView(APIView):
+    
+    def get(self, request, format=None):
+        routes = CTARailLines.objects.all()
+
+        kwargs = {'name':'chicago'}
+            
+        border = CityBorder.objects.filter(**kwargs)
+
+        data = {'border':CityBorderSerializer(border).data,
+                'routes':CTARailLinesSerializer(routes).data,}
+        return Response(data)
+    
