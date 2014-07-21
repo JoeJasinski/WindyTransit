@@ -56,9 +56,10 @@ $(function() {
            },
            onEachFeature: onEachFeature
 	    
-	    }).addTo(map);
+	    });
 	    layergroup.clearLayers();
 	    layergroup.addLayer(neighborhood_layer);
+	    layergroup.addLayer(placemarks_layer);
 	    map.openPopup(popup);
 	  }).done(function() {
 	    console.log("done");
