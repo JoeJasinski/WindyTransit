@@ -70,6 +70,8 @@ LOCAL INSTALL
 
    ./manage.py syncdb 
    ./manage.py migrate 
+   ./manage.py bower install
+   ./manage.py collectstatic
 
 
 DOCKER INSTALL
