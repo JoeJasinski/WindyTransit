@@ -76,6 +76,7 @@ class CTAHeatmap(object):
     def render_image(self):
         map = self.map
         map.zoom_all()
+        #map.zoom_to_box(bbox)
         mapnik.render_to_file(map, 'chicago.png', 'png')
 
 
