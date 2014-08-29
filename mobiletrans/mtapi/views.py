@@ -173,7 +173,7 @@ class NeighborhoodFromCoordView(generics.RetrieveAPIView):
         return neighborhood
 
     def get(self, request, format=None):
-        placemarks = Location.objects.displayable().get_closest(from_point=self.params.ref_pnt, distance_dict=self.params.d ) 
+        placemarks = Location.objects.all().displayable().get_closest(from_point=self.params.ref_pnt, distance_dict=self.params.d ) 
         neighborhood = self.get_object()
         data = {'neighborhood':NeighborhoodSerializer(neighborhood).data,
                 'placemarks':LocationSerializer(placemarks).data,}
