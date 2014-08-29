@@ -11,6 +11,9 @@ urlpatterns = patterns('',
         name="about"),
     url('^routemap/$', MapView.as_view( template_name='routemap.html'), 
         name="routemap"),
+    url('^transitheat/$', MapView.as_view( template_name='transitheat.html'), 
+        name="transitheat"),
+    
     
     url('^kml/$', 'mobiletrans.mtlocation.views.renderkml', { }, 
         name="mtlocation_renderkml"),

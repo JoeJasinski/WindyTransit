@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}{{ block.super }}
+<link rel="stylesheet" href="{% static 'leaflet/dist/leaflet.css' %}" />
+<script src="{% static 'leaflet/dist/leaflet-src.js' %}"></script>
+<script src="{% static 'heatmap.js/src/heatmap.js' %}"></script>
+<script src="{% static 'heatmap.js/src/QuadTree.js' %}"></script>
+<script src="{% static 'heatmap.js/src/heatmap-leaflet.js' %}"></script>
+<script>
+
+$(function() {
+    var x = '{{ center.x }}';
+    var y = '{{ center.y }}';
+
+    //var map = L.map('map').setView([y, x], 11);
+
+	//var map_tile_url = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+	//var map_tile_url = 'http://otile3.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png';
+	//var map_tile_url = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+	//var map_tile_url = "http://tile.stamen.com/toner/{z}/{x}/{y}.png";
+	//var map_tile_url = "http://tile.stamen.com/toner/{z}/{x}/{y}.png";
+	var map_tile_url = "http://localhost:8000/static/tiles/{z}/{x}/{y}.png";
+	var tilelayer = L.tileLayer(map_tile_url, {
+	    attribution: '',
+	    maxZoom: 18,
+	});
+
+    var heatmapLayer = L.TileLayer.heatMap({
+        radius: 20,
+        opacity: 0.8,
+        gradient: {
+            0.45: "rgb(0,0,255)",
+            0.55: "rgb(0,255,255)",
+            0.65: "rgb(0,255,0)",
+            0.95: "yellow",
+            1.0: "rgb(255,0,0)"
+        }
+    });
+    
+    heatmapData = {
+    data: [
+    	{lat:41.6751813582272, lon:-87.59945448479925, value:1},
+        {lat:41.6832833771321, lon:-87.52357156649636, value:1}
+    ],
+    max: 2};
+
+	heatmapLayer.setData(heatmapData.data);
+	
+	//heatmapLayer.addTo(map);
+
+    var map = L.map('map',
+     {
+     	center: [y,x],
+     	zoom: 11,
+     	layers: [tilelayer,heatmapLayer]
+     }
+    );
+    //map.setView([y, x], 11);
+
+
+  var jqxhr = $.get( "{% url 'api2_border_routes' 'chicago' %}", function(res) {
+    console.log( res );
+    var style = {'color': 'red', 
+                 'clickable':false, 
+                 'fillColor':"red", fillOpacity: 0.1, "opacity": 0.8, 'weight':'5'};
+    var myLayer = L.geoJson(res.border, {'style':style}).addTo(map);
+    var style = {'color': 'blue', "opacity": 0.8, 'weight':'2'};
+    var myLayer = L.geoJson(res.routes, {'style':style}).addTo(map); 
+  }).done(function() {
+    console.log("done");
+  }).fail(function() {
+    console.log("failed");
+  }).always(function() {
+    console.log("finished");
+  });
+
+
+});
+
+</script>
+<style>
+	#map { height: 500px;  }
+</style>
+{% endblock extra_head %}
+
+{% block content %}
+
+<div id="map">
+	
+</div>
+
+{% endblock content %}
