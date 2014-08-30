@@ -1,33 +1,56 @@
 # Django settings for mobiletrans project.
 import os
-from mtsettings.local_settings import (VENV_ROOT, PROJECT_ROOT )
+import environ
 
-#######################
-#####  These settings should go in local_settings.py
-####################
-#DEBUG = True
-#TEMPLATE_DEBUG = DEBUG
-#
-#ADMINS = (
-#    # ('Your Name', 'your_email@example.com'),
-#)
-#
-#MANAGERS = ADMINS
-#
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#        'NAME': 'mobiletrans',
-#        'USER': 'mobiletrans_user',
-#        'PASSWORD': '1234',
-#        'HOST': 'localhost',
-#        'PORT': '',
-#    }
-#}
+default_project_root = environ.Path(__file__) - 2
+default_environment_root = default_project_root - 3 
+default_log_dir = default_environment_root.path('var', 'log')
+default_htdocs_dir = default_environment_root.path('htdocs')
+
+default_static_dir = default_project_root.path('static')
+default_static_root = default_htdocs_dir.path('static')
+
+default_media_root = default_htdocs_dir.path('media')
+default_template_dir = default_project_root.path('templates')
+
+
+env = environ.Env(
+    DJANGO_DEBUG=(bool, False),
+    
+    DJANGO_PROJECT_ROOT=(str, str(default_project_root)),
+    DJANGO_ENVIRONMENT_ROOT=(str, str(default_environment_root)),
+    DJANGO_LOG_DIR=(str, str(default_log_dir)),
+    DJANGO_HTDOCS_DIR=(str, str(default_htdocs_dir)),
+    
+    DJANGO_STATIC_DIR=(str, str(default_static_dir)),
+    DJANGO_STATIC_ROOT=(str, str(default_static_root)),
+    
+    DJANGO_MEDIA_ROOT=(str, str(default_media_root)),
+    DJANGO_TEMPLATE_DIR=(str, str(default_template_dir)),
+)
+
+DEBUG = env('DJANGO_DEBUG')
+PROJECT_ROOT  = env("DJANGO_PROJECT_ROOT")
+ENVIRONMENT_ROOT = env("DJANGO_ENVIRONMENT_ROOT")
+LOG_DIR = env("DJANGO_LOG_DIR")
+HTDOCS_DIR = env("DJANGO_HTDOCS_DIR")
+
+
+TEMPLATE_DEBUG = DEBUG
+
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
+
+MANAGERS = ADMINS
+
+DATABASES = {
+    'default': env.db('DJANGO_DATABASE', default='postgis://windytransit@:/windytransit')
+}
+
+
 GOOGLE_PLACES_API_KEY = ''
-#######################
-#####  END These settings should go in local_settings.py
-####################
+
 
 
 # Local time zone for this installation. Choices can be found here:
@@ -55,8 +78,7 @@ USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(VENV_ROOT, 'htdocs','media').replace('\\','/') + '/'
-
+MEDIA_ROOT = env("DJANGO_MEDIA_ROOT")
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -67,8 +89,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(VENV_ROOT,'htdocs','static')
-
+STATIC_ROOT = env("DJANGO_STATIC_ROOT")
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -84,7 +105,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, 'staticfiles'),
+    env("DJANGO_STATIC_DIR"),
 )
 
 # List of finder classes that know how to find static files in
@@ -94,8 +115,10 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
     'compressor.finders.CompressorFinder',
+    'djangobower.finders.BowerFinder',
 )
 
+BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
 
 COMPRESS_ENABLED=True
 COMPRESS_OUTPUT_DIR=''
@@ -137,7 +160,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, 'templates').replace('\\','/'),
+    env("DJANGO_TEMPLATE_DIR"),
 )
 
 INSTALLED_APPS = (
@@ -152,11 +175,19 @@ INSTALLED_APPS = (
     'django_extensions',
     "south", 
     "compressor",
+    'rest_framework',
+    'djangobower',
     
     'mobiletrans.mtcore',
     'mobiletrans.mtlocation',
     'mobiletrans.mtimport',
+    'mobiletrans.mtdistmap',
+)
 
+
+BOWER_INSTALLED_APPS = (
+    'jquery#1.9',
+    'leaflet#0.7.3',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -183,4 +214,53 @@ LOGGING = {
 }
 
 
-from mtsettings.local_settings import *
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename':os.path.join(LOG_DIR,"mobiletrans.log"),
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'mobiletrans.mtimport': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
+}
+

@@ -1,6 +1,10 @@
 from django.db import models
 import datetime
 
+import logging
+logger = logging.getLogger(__name__)
+
+
 TRANSFER_STATUS_RUNNING=1
 TRANSFER_STATUS_SUCCESS=2
 TRANSFER_STATUS_FAILED=3
@@ -27,7 +31,8 @@ class InputRecordManager(models.Manager):
         ir = InputNote(note=note, type=type)
         ir.input_record = input_record
         ir.exception = exception
-        print "Transfer Note", vars(ir)
+        getattr(logger, {'note':'info', 'error':'error', 'warning':'warning'}.get(type, 'debug'))("Transfer Note %s" % vars(ir))
+        #print "Transfer Note", vars(ir)
         ir.save()
     
     def end_import(self, input_record, status=None):

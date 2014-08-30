@@ -56,10 +56,6 @@ class GPlaceLocation(ImportBase):
 
         row.get_details()
 
-        print "------------------------------------------------"
-        print "JJJJ", vars(row)
-        print "------------------------------------------------"
-
         try:
             uuid = row.id
         except AttributeError, error:
@@ -135,10 +131,6 @@ class GPlaceLocation(ImportBase):
         else:
             self.stats['new'] += 1
         
-        print "------------------------------"
-        print "JJJJAAA", vars(place)
-        print "------------------------------"
-
         return place
 
     

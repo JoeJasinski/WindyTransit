@@ -1,5 +1,6 @@
 import uuid
 from django.contrib.gis.db import models
+from django.contrib.gis.measure import D 
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 from django.conf import settings
@@ -35,10 +36,40 @@ class SubclassingQuerySet(models.query.GeoQuerySet):
         for item in super(SubclassingQuerySet, self).__iter__():
             yield item.as_leaf_class()
 
-
-class LocationManager(models.GeoManager):
+class LocationSubclassingManager(models.GeoManager):
     def get_query_set(self):
         return SubclassingQuerySet(self.model)
+
+
+class LocationQuerySet(models.query.GeoQuerySet):
+    def displayable(self):
+        transit_stop = ContentType.objects.get_for_model(TransitStop)
+        return super(LocationQuerySet, self).exclude(content_type__in=[transit_stop])
+    
+    def get_closest(self, from_point, distance_dict ):
+        """
+        Only select landmarks with a given distance of a point.
+        The from_point is a valid Point object
+        The distance_dict is of the format
+          {distance_unit:str(distance)} 
+          where distance_unit is one of the geodjango supported units 
+             https://docs.djangoproject.com/en/dev/ref/contrib/gis/measure/#supported-units
+          and distance is a radius around the from_point
+        """
+        return self.filter(point__distance_lte=(from_point, D(**distance_dict) )).distance(from_point).order_by('distance')
+    
+    def get_closest_x(self, from_point, distance_dict, number=2):
+        return self.get_closest(from_point, distance_dict)[:number]
+    
+class LocationManager(models.GeoManager):
+    def get_query_set(self):
+        return LocationQuerySet(self.model)
+
+    def __getattr__(self, attr, *args):
+        try:
+            return getattr(self.__class__, attr, *args)
+        except AttributeError:
+            return getattr(self.get_query_set(), attr, *args)
 
 class RegionManager(models.GeoManager):
     def get_query_set(self):
@@ -60,8 +91,8 @@ class Location(models.Model):
     
     content_type = models.ForeignKey(ContentType,editable=False,null=True)
 
-    sub_objects = LocationManager()
-    objects = models.GeoManager()
+    sub_objects = LocationSubclassingManager()
+    objects = LocationManager()
     
     class Meta:
         verbose_name = "Location"
@@ -418,9 +449,7 @@ class GPlace(Location):
         site = Site.objects.get_current()
         static_url = settings.STATIC_URL
         return_value = "http://%s%simage/location-places.png" % (site, static_url)
-        return return_value 
- 
-
+        return return_value
 
 
 class CTARailLines(models.Model):
@@ -435,7 +464,7 @@ class CTARailLines(models.Model):
     alt_legend = models.CharField(max_length=5)
     branch = models.CharField(max_length=50)
     shape_len = models.FloatField()
-    line = models.LineStringField()
+    line = models.LineStringField(srid=4326)
     
     objects = models.GeoManager()
 

@@ -10,7 +10,7 @@ h1, h2 {
 font-family: 'Open Sans', sans-serif;
 padding-top: 20px; 	
 padding-left: 135px; 
-width: 300px; 
+width: 200px; 
 }
 
 h1 a { 
@@ -47,7 +47,6 @@ height: 80px;
 }
 
 .content {
- padding: 10px; 
  background-image:url('../image/maingrad.jpg');
  min-height: 200px; 
  background-repeat: repeat-x;
@@ -61,6 +60,10 @@ height: 80px;
 
 .menu { float: right; margin-right: 12px; 
 margin-top: 15px;  }
+
+.menu ul {
+ padding:0px;
+}
 
 .menu ul li{
  font-family: Tahoma, Geneva, sans-serif;
@@ -112,12 +115,6 @@ margin-left: auto;
 .block-box {
 width:100%; 
 /* height: 500px; */
-background-color: #e0e0e0; 
-border-top: solid 15px #272727;
-border-bottom: solid 15px #272727;
-border-radius:10px;
--moz-border-radius:10px;
--webkit-border-radius:10px;
 text-align: center; 
 margin-left: auto;
 margin-right: auto;
@@ -179,6 +176,23 @@ text-align: justify;
  text-align: center; 
 }
 
+.block-desc p {
+ z-index: 4;
+ position: absolute;
+ background-color: black;
+ color: white;
+ opacity: 0.8;
+ padding: 3px;
+ margin-top: 0px;
+ margin-bottom: 0px; 
+ 
+
+ width: 400px;
+
+
+}
+
+
 .block-buttons {
   margin-top: 0px;
 }
@@ -186,6 +200,7 @@ text-align: justify;
 .block-buttons ul 
 {
   margin-top: 0px;
+  margin-bottom: 0px;
   padding-left: 0px; 
 }
 
@@ -193,9 +208,10 @@ text-align: justify;
 {
  padding: 5px; 
  list-style: none; 
- margin-left: 0px;
  padding-left: 0px;  
  text-align: center; 
+ margin-left: 10px;
+ margin-right: 10px;
 }
 
 .block-buttons li a
@@ -211,6 +227,7 @@ text-align: justify;
 
 .block-buttons li.top a.top_a
 {
+	
  color: white; 
  background-color: black; 
  background: url("../image/buttongrad_l.png") repeat scroll center #333333;
@@ -218,50 +235,49 @@ text-align: justify;
 
 .block-buttons li ul li a#orange
 {
- color: white; 
- background: url("../image/buttongrad_lt.png") center #F9461C;
+ background-color: #F9461C;
 }
 
 .block-buttons li a#brown
 {
- color: white; 
- background: url("../image/buttongrad_lt.png") center #62361B;
+ background-color: #62361B;
 }
 
 .block-buttons li a#green
 {
- color: white; 
- background: url("../image/buttongrad_lt.png") center #009B3A;
+ background-color: #009B3A;
 }
 
 .block-buttons li a#pink
 {
- color: white; 
- background: url("../image/buttongrad_lt.png") center #E27EA6;
+ background-color: #E27EA6;
 }
 
 .block-buttons li a#blue
 {
- color: white; 
- background: url("../image/buttongrad_lt.png") center #00A1DE;
+  background: #3498db;
+   background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+  background-image: -o-linear-gradient(top, #3498db, #2980b9);
+  background-image: linear-gradient(to bottom, #3498db, #2980b9);
+ 
+ 
 }
 
 .block-buttons li a#yellow
 {
- color: white; 
- background: url("../image/buttongrad_lt.png") center #F9E300;
+ background-color: #F9E300;
 }
 
 .block-buttons li a#purple
 {
- color: white; 
- background: url("../image/buttongrad_lt.png") center #522398;
- }
+ background-color: #522398;
+}
 
 .block-buttons li a#red
 {
- color: white; 
- background: url("../image/buttongrad_lt.png") center #C60C30;
+ background-color: #c92222;
 }
 
 .level1
@@ -302,4 +318,23 @@ border:3px solid black;
 border-radius:10px;
 -moz-border-radius:10px;
 -webkit-border-radius:10p
+}
+
+
+
+
+.btn {
+
+  -webkit-border-radius: 9;
+  -moz-border-radius: 9;
+  border-radius: 9px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+}
+
+.btn:hover {
+  text-decoration: none;
 }

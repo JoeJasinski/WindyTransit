@@ -1,0 +1,1125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map[]>
+<Map srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" background-color="#b8dee6" maximum-extent="-88.157,41.4890,-87.4951,42.1359">
+
+<Parameters>
+  <Parameter name="bounds">-87.7519,41.7703,-87.5432,42.0136</Parameter>
+  <Parameter name="center">-87.6352,41.8869,10</Parameter>
+  <Parameter name="format">png</Parameter>
+  <Parameter name="interactivity_layer">undefined</Parameter>
+  <Parameter name="interactivity_fields"></Parameter>
+  <Parameter name="minzoom">0</Parameter>
+  <Parameter name="maxzoom">15</Parameter>
+  <Parameter name="name"><![CDATA[Chicago]]></Parameter>
+  <Parameter name="legend"><![CDATA[Chicago]]></Parameter>
+</Parameters>
+
+<FontSet name="fontset-0">
+  <Font face-name="Futura Medium"/>
+  <Font face-name="Function Pro Medium"/>
+  <Font face-name="Ubuntu Regular"/>
+  <Font face-name="Trebuchet MS Regular"/>
+  <Font face-name="DejaVu Sans Book"/>
+</FontSet>
+<Style name="mtlocationcityborder" filter-mode="first">
+  <Rule>
+    <LineSymbolizer stroke="#ddc176" stroke-opacity="0.5" stroke-width="3" />
+    <PolygonSymbolizer fill="#faf7ee" fill-opacity="1" />
+  </Rule>
+</Style>
+<Layer name="mtlocationcityborder" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>mtlocationcityborder</StyleName>
+</Layer>
+
+<Style name="mtregion" filter-mode="first">
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <TextSymbolizer size="8" fontset-name="fontset-0" text-transform="uppercase" halo-fill="rgba(255, 255, 255, 0.5)" halo-radius="1" line-spacing="1" wrap-width="20" fill="#828870" ><![CDATA[[long_name]]]></TextSymbolizer>
+    <LineSymbolizer stroke="#828870" stroke-opacity="1" stroke-width="0.5" />
+    <PolygonSymbolizer fill-opacity="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>400000</MaxScaleDenominator>
+    <MinScaleDenominator>200000</MinScaleDenominator>
+    <TextSymbolizer size="5" fontset-name="fontset-0" text-transform="uppercase" halo-fill="rgba(255, 255, 255, 0.5)" halo-radius="1" line-spacing="1" wrap-width="20" fill="#828870" ><![CDATA[[long_name]]]></TextSymbolizer>
+    <LineSymbolizer stroke="#828870" stroke-opacity="1" stroke-width="0.5" />
+    <PolygonSymbolizer fill-opacity="0" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <TextSymbolizer fontset-name="fontset-0" size="8" text-transform="uppercase" halo-fill="rgba(255, 255, 255, 0.5)" halo-radius="1" line-spacing="1" wrap-width="20" fill="#828870" ><![CDATA['']]></TextSymbolizer>
+    <LineSymbolizer stroke="#828870" stroke-opacity="1" stroke-width="0.5" />
+    <PolygonSymbolizer fill-opacity="0" />
+  </Rule>
+</Style>
+<Layer name="mtregion" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>mtregion</StyleName>
+</Layer>
+
+<Style name="mtlocationlocation" filter-mode="first">
+  <Rule>
+    <Filter>([rating] &gt; 4)</Filter>
+    <MarkersSymbolizer width="12" stroke-width="0" fill="#008000" stroke="#000000" opacity="0.2" allow-overlap="true" />
+  </Rule>
+  <Rule>
+    <Filter>([rating] &gt; 3)</Filter>
+    <MarkersSymbolizer width="12" stroke-width="0" fill="#f7ed38" stroke="#000000" opacity="0.2" allow-overlap="true" />
+  </Rule>
+  <Rule>
+    <Filter>([rating] &gt; 2)</Filter>
+    <MarkersSymbolizer width="12" stroke-width="0" fill="#f9b939" stroke="#000000" opacity="0.2" allow-overlap="true" />
+  </Rule>
+  <Rule>
+    <Filter>([rating] != '')</Filter>
+    <MarkersSymbolizer width="10" stroke-width="0" fill="#ff3232" stroke="#ff3232" opacity="0.2" allow-overlap="true" />
+  </Rule>
+  <Rule>
+    <MarkersSymbolizer width="0" fill="#ff0000" stroke="#ff0000" allow-overlap="true" />
+  </Rule>
+</Style>
+<Layer name="mtlocationlocation" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>mtlocationlocation</StyleName>
+</Layer>
+
+<Style name="mtrail" filter-mode="first">
+  <Rule>
+    <MaxScaleDenominator>50000</MaxScaleDenominator>
+    <LineSymbolizer stroke="#ffffff" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <LineSymbolizer stroke-width="1" />
+  </Rule>
+</Style>
+<Style name="mtrail-outline" filter-mode="first">
+  <Rule>
+    <MaxScaleDenominator>50000</MaxScaleDenominator>
+    <LineSymbolizer stroke="#000000" stroke-width="4.5" />
+  </Rule>
+</Style>
+<Layer name="mtrail" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>mtrail-outline</StyleName>
+    <StyleName>mtrail</StyleName>
+</Layer>
+
+<Style name="mtstop" filter-mode="first">
+  <Rule>
+    <MarkersSymbolizer width="5" fill="#ff0000" allow-overlap="true" />
+  </Rule>
+</Style>
+<Layer name="mtstop" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>mtstop</StyleName>
+</Layer>
+
+<Style name="mtheatmap" filter-mode="first">
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 1)</Filter>
+    <MarkersSymbolizer fill="#ffd3d3" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 1)</Filter>
+    <MarkersSymbolizer fill="#ffd3d3" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 1)</Filter>
+    <MarkersSymbolizer fill="#ffd3d3" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 2)</Filter>
+    <MarkersSymbolizer fill="#ffc0c0" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 2)</Filter>
+    <MarkersSymbolizer fill="#ffc0c0" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 2)</Filter>
+    <MarkersSymbolizer fill="#ffc0c0" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 3)</Filter>
+    <MarkersSymbolizer fill="#ffaeae" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 3)</Filter>
+    <MarkersSymbolizer fill="#ffaeae" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 3)</Filter>
+    <MarkersSymbolizer fill="#ffaeae" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 4)</Filter>
+    <MarkersSymbolizer fill="#ff9c9c" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 4)</Filter>
+    <MarkersSymbolizer fill="#ff9c9c" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 4)</Filter>
+    <MarkersSymbolizer fill="#ff9c9c" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 5)</Filter>
+    <MarkersSymbolizer fill="#ff8a8a" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 5)</Filter>
+    <MarkersSymbolizer fill="#ff8a8a" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 5)</Filter>
+    <MarkersSymbolizer fill="#ff8a8a" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 6)</Filter>
+    <MarkersSymbolizer fill="#ff7878" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 6)</Filter>
+    <MarkersSymbolizer fill="#ff7878" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 6)</Filter>
+    <MarkersSymbolizer fill="#ff7878" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 7)</Filter>
+    <MarkersSymbolizer fill="#ff6666" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 7)</Filter>
+    <MarkersSymbolizer fill="#ff6666" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 7)</Filter>
+    <MarkersSymbolizer fill="#ff6666" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 8)</Filter>
+    <MarkersSymbolizer fill="#ff5454" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 8)</Filter>
+    <MarkersSymbolizer fill="#ff5454" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 8)</Filter>
+    <MarkersSymbolizer fill="#ff5454" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 9)</Filter>
+    <MarkersSymbolizer fill="#ff4242" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 9)</Filter>
+    <MarkersSymbolizer fill="#ff4242" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 9)</Filter>
+    <MarkersSymbolizer fill="#ff4242" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 10)</Filter>
+    <MarkersSymbolizer fill="#ff3030" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 10)</Filter>
+    <MarkersSymbolizer fill="#ff3030" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 10)</Filter>
+    <MarkersSymbolizer fill="#ff3030" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 11)</Filter>
+    <MarkersSymbolizer fill="#f73035" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 11)</Filter>
+    <MarkersSymbolizer fill="#f73035" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 11)</Filter>
+    <MarkersSymbolizer fill="#f73035" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 12)</Filter>
+    <MarkersSymbolizer fill="#f0303b" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 12)</Filter>
+    <MarkersSymbolizer fill="#f0303b" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 12)</Filter>
+    <MarkersSymbolizer fill="#f0303b" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 13)</Filter>
+    <MarkersSymbolizer fill="#e93141" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 13)</Filter>
+    <MarkersSymbolizer fill="#e93141" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 13)</Filter>
+    <MarkersSymbolizer fill="#e93141" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 14)</Filter>
+    <MarkersSymbolizer fill="#e23146" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 14)</Filter>
+    <MarkersSymbolizer fill="#e23146" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 14)</Filter>
+    <MarkersSymbolizer fill="#e23146" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 15)</Filter>
+    <MarkersSymbolizer fill="#db324c" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 15)</Filter>
+    <MarkersSymbolizer fill="#db324c" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 15)</Filter>
+    <MarkersSymbolizer fill="#db324c" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 16)</Filter>
+    <MarkersSymbolizer fill="#d43252" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 16)</Filter>
+    <MarkersSymbolizer fill="#d43252" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 16)</Filter>
+    <MarkersSymbolizer fill="#d43252" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 17)</Filter>
+    <MarkersSymbolizer fill="#cd3357" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 17)</Filter>
+    <MarkersSymbolizer fill="#cd3357" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 17)</Filter>
+    <MarkersSymbolizer fill="#cd3357" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 18)</Filter>
+    <MarkersSymbolizer fill="#c6335d" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 18)</Filter>
+    <MarkersSymbolizer fill="#c6335d" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 18)</Filter>
+    <MarkersSymbolizer fill="#c6335d" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 19)</Filter>
+    <MarkersSymbolizer fill="#bf3463" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 19)</Filter>
+    <MarkersSymbolizer fill="#bf3463" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 19)</Filter>
+    <MarkersSymbolizer fill="#bf3463" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 20)</Filter>
+    <MarkersSymbolizer fill="#b83468" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 20)</Filter>
+    <MarkersSymbolizer fill="#b83468" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 20)</Filter>
+    <MarkersSymbolizer fill="#b83468" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 21)</Filter>
+    <MarkersSymbolizer fill="#b1356e" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 21)</Filter>
+    <MarkersSymbolizer fill="#b1356e" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 21)</Filter>
+    <MarkersSymbolizer fill="#b1356e" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 22)</Filter>
+    <MarkersSymbolizer fill="#aa3574" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 22)</Filter>
+    <MarkersSymbolizer fill="#aa3574" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 22)</Filter>
+    <MarkersSymbolizer fill="#aa3574" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 23)</Filter>
+    <MarkersSymbolizer fill="#a33679" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 23)</Filter>
+    <MarkersSymbolizer fill="#a33679" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 23)</Filter>
+    <MarkersSymbolizer fill="#a33679" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 24)</Filter>
+    <MarkersSymbolizer fill="#9c367f" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 24)</Filter>
+    <MarkersSymbolizer fill="#9c367f" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 24)</Filter>
+    <MarkersSymbolizer fill="#9c367f" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 25)</Filter>
+    <MarkersSymbolizer fill="#953785" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 25)</Filter>
+    <MarkersSymbolizer fill="#953785" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 25)</Filter>
+    <MarkersSymbolizer fill="#953785" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 26)</Filter>
+    <MarkersSymbolizer fill="#8e378a" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 26)</Filter>
+    <MarkersSymbolizer fill="#8e378a" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 26)</Filter>
+    <MarkersSymbolizer fill="#8e378a" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 27)</Filter>
+    <MarkersSymbolizer fill="#873890" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 27)</Filter>
+    <MarkersSymbolizer fill="#873890" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 27)</Filter>
+    <MarkersSymbolizer fill="#873890" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 28)</Filter>
+    <MarkersSymbolizer fill="#803896" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 28)</Filter>
+    <MarkersSymbolizer fill="#803896" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 28)</Filter>
+    <MarkersSymbolizer fill="#803896" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 29)</Filter>
+    <MarkersSymbolizer fill="#79389b" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 29)</Filter>
+    <MarkersSymbolizer fill="#79389b" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 29)</Filter>
+    <MarkersSymbolizer fill="#79389b" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 30)</Filter>
+    <MarkersSymbolizer fill="#7239a1" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 30)</Filter>
+    <MarkersSymbolizer fill="#7239a1" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 30)</Filter>
+    <MarkersSymbolizer fill="#7239a1" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 31)</Filter>
+    <MarkersSymbolizer fill="#6b39a7" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 31)</Filter>
+    <MarkersSymbolizer fill="#6b39a7" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 31)</Filter>
+    <MarkersSymbolizer fill="#6b39a7" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 32)</Filter>
+    <MarkersSymbolizer fill="#643aac" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 32)</Filter>
+    <MarkersSymbolizer fill="#643aac" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 32)</Filter>
+    <MarkersSymbolizer fill="#643aac" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 33)</Filter>
+    <MarkersSymbolizer fill="#5d3ab2" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 33)</Filter>
+    <MarkersSymbolizer fill="#5d3ab2" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 33)</Filter>
+    <MarkersSymbolizer fill="#5d3ab2" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 34)</Filter>
+    <MarkersSymbolizer fill="#563bb8" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 34)</Filter>
+    <MarkersSymbolizer fill="#563bb8" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 34)</Filter>
+    <MarkersSymbolizer fill="#563bb8" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 35)</Filter>
+    <MarkersSymbolizer fill="#4f3bbd" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 35)</Filter>
+    <MarkersSymbolizer fill="#4f3bbd" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 35)</Filter>
+    <MarkersSymbolizer fill="#4f3bbd" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 36)</Filter>
+    <MarkersSymbolizer fill="#483cc3" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 36)</Filter>
+    <MarkersSymbolizer fill="#483cc3" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 36)</Filter>
+    <MarkersSymbolizer fill="#483cc3" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 37)</Filter>
+    <MarkersSymbolizer fill="#413cc9" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 37)</Filter>
+    <MarkersSymbolizer fill="#413cc9" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 37)</Filter>
+    <MarkersSymbolizer fill="#413cc9" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 38)</Filter>
+    <MarkersSymbolizer fill="#3a3dce" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 38)</Filter>
+    <MarkersSymbolizer fill="#3a3dce" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 38)</Filter>
+    <MarkersSymbolizer fill="#3a3dce" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 39)</Filter>
+    <MarkersSymbolizer fill="#333dd4" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 39)</Filter>
+    <MarkersSymbolizer fill="#333dd4" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 39)</Filter>
+    <MarkersSymbolizer fill="#333dd4" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 40)</Filter>
+    <MarkersSymbolizer fill="#2c3eda" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 40)</Filter>
+    <MarkersSymbolizer fill="#2c3eda" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 40)</Filter>
+    <MarkersSymbolizer fill="#2c3eda" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 41)</Filter>
+    <MarkersSymbolizer fill="#253edf" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 41)</Filter>
+    <MarkersSymbolizer fill="#253edf" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 41)</Filter>
+    <MarkersSymbolizer fill="#253edf" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 42)</Filter>
+    <MarkersSymbolizer fill="#1e3fe5" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 42)</Filter>
+    <MarkersSymbolizer fill="#1e3fe5" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 42)</Filter>
+    <MarkersSymbolizer fill="#1e3fe5" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 43)</Filter>
+    <MarkersSymbolizer fill="#173feb" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 43)</Filter>
+    <MarkersSymbolizer fill="#173feb" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 43)</Filter>
+    <MarkersSymbolizer fill="#173feb" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 44)</Filter>
+    <MarkersSymbolizer fill="#1040f0" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 44)</Filter>
+    <MarkersSymbolizer fill="#1040f0" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 44)</Filter>
+    <MarkersSymbolizer fill="#1040f0" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 45)</Filter>
+    <MarkersSymbolizer fill="#0940f6" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 45)</Filter>
+    <MarkersSymbolizer fill="#0940f6" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 45)</Filter>
+    <MarkersSymbolizer fill="#0940f6" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 46)</Filter>
+    <MarkersSymbolizer fill="#0241fc" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 46)</Filter>
+    <MarkersSymbolizer fill="#0241fc" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 46)</Filter>
+    <MarkersSymbolizer fill="#0241fc" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 47)</Filter>
+    <MarkersSymbolizer fill="#0439ef" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 47)</Filter>
+    <MarkersSymbolizer fill="#0439ef" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 47)</Filter>
+    <MarkersSymbolizer fill="#0439ef" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 48)</Filter>
+    <MarkersSymbolizer fill="#0632e2" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 48)</Filter>
+    <MarkersSymbolizer fill="#0632e2" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 48)</Filter>
+    <MarkersSymbolizer fill="#0632e2" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 49)</Filter>
+    <MarkersSymbolizer fill="#082bd5" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 49)</Filter>
+    <MarkersSymbolizer fill="#082bd5" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 49)</Filter>
+    <MarkersSymbolizer fill="#082bd5" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 50)</Filter>
+    <MarkersSymbolizer fill="#0a24c8" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 50)</Filter>
+    <MarkersSymbolizer fill="#0a24c8" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 50)</Filter>
+    <MarkersSymbolizer fill="#0a24c8" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 51)</Filter>
+    <MarkersSymbolizer fill="#0c1dbc" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 51)</Filter>
+    <MarkersSymbolizer fill="#0c1dbc" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 51)</Filter>
+    <MarkersSymbolizer fill="#0c1dbc" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 52)</Filter>
+    <MarkersSymbolizer fill="#0e16af" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 52)</Filter>
+    <MarkersSymbolizer fill="#0e16af" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 52)</Filter>
+    <MarkersSymbolizer fill="#0e16af" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 53)</Filter>
+    <MarkersSymbolizer fill="#100fa2" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 53)</Filter>
+    <MarkersSymbolizer fill="#100fa2" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 53)</Filter>
+    <MarkersSymbolizer fill="#100fa2" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 54)</Filter>
+    <MarkersSymbolizer fill="#120895" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 54)</Filter>
+    <MarkersSymbolizer fill="#120895" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 54)</Filter>
+    <MarkersSymbolizer fill="#120895" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 55)</Filter>
+    <MarkersSymbolizer fill="#150189" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 55)</Filter>
+    <MarkersSymbolizer fill="#150189" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 55)</Filter>
+    <MarkersSymbolizer fill="#150189" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 56)</Filter>
+    <MarkersSymbolizer fill="#150189" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 56)</Filter>
+    <MarkersSymbolizer fill="#150189" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 56)</Filter>
+    <MarkersSymbolizer fill="#150189" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 57)</Filter>
+    <MarkersSymbolizer fill="#150189" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 57)</Filter>
+    <MarkersSymbolizer fill="#150189" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 57)</Filter>
+    <MarkersSymbolizer fill="#150189" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 58)</Filter>
+    <MarkersSymbolizer fill="#150189" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 58)</Filter>
+    <MarkersSymbolizer fill="#150189" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 58)</Filter>
+    <MarkersSymbolizer fill="#150189" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 59)</Filter>
+    <MarkersSymbolizer fill="#150189" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 59)</Filter>
+    <MarkersSymbolizer fill="#150189" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 59)</Filter>
+    <MarkersSymbolizer fill="#150189" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 60)</Filter>
+    <MarkersSymbolizer fill="#150189" width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 60)</Filter>
+    <MarkersSymbolizer fill="#150189" width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 60)</Filter>
+    <MarkersSymbolizer fill="#150189" opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 100)</Filter>
+    <MarkersSymbolizer width="40" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &lt;= 100)</Filter>
+    <MarkersSymbolizer width="20" opacity="0.75" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &lt;= 100)</Filter>
+    <MarkersSymbolizer opacity="0.75" width="10" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([total_time] &gt;= 9999999)</Filter>
+    <MarkersSymbolizer width="40" fill="#ff4455" opacity="0" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([total_time] &gt;= 9999999)</Filter>
+    <MarkersSymbolizer width="20" fill="#ff4455" opacity="0" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <Filter>([total_time] &gt;= 9999999)</Filter>
+    <MarkersSymbolizer fill="#ff4455" width="10" opacity="0" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <MarkersSymbolizer width="40" opacity="0" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <MarkersSymbolizer width="20" opacity="0" allow-overlap="true" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MarkersSymbolizer width="10" opacity="0" allow-overlap="true" stroke-width="0" />
+  </Rule>
+</Style>
+<Layer name="mtheatmap" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>mtheatmap</StyleName>
+</Layer>
+
+</Map>

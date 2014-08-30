@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, input_file_path="", **options):
         if not input_file_path:
-            input_file_path = "%s" % os.path.join(settings.VENV_ROOT, "data", "City_Boundary", "City_Boundary.shp")
+            input_file_path = "%s" % os.path.join(settings.ENVIRONMENT_ROOT, "data", "City_Boundary", "City_Boundary.shp")
         self.stdout.write("Import %s \n" % input_file_path)
         input_record = importer.CityBorder.data_import(input_file_path)
         print input_file_path 
