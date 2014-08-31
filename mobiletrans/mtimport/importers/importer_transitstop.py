@@ -73,5 +73,5 @@ class TransitStop(CSVImportBase):
             self.stats['existing'] += 1
         else:
             self.stats['new'] += 1
-        print vars(transitstop)
+        
         return transitstop

@@ -68,7 +68,6 @@ class Neighborhood(KMLImportBase):
         
         poly = coord_text.split(' ')
     
-        
         point_str = ""
         for point in poly:
             if point: 
@@ -85,5 +84,5 @@ class Neighborhood(KMLImportBase):
             self.stats['existing'] += 1
         else:
             self.stats['new'] += 1
-        print vars(neighborhood)
+
         return neighborhood

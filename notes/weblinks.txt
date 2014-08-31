@@ -199,7 +199,6 @@ What's the difference between EPSG:4326 and EPSG:900913/EPSG:3857 (Google Projec
 	Eventually EPSG relented and allowed 900913 into its geodetic repository but gave it the number 3857.
 	
 
-
 http://webhelp.esri.com/arcgisdesktop/9.3/index.cfm?TopicName=Projection_basics_the_GIS_professional_needs_to_know
 http://webhelp.esri.com/arcgisdesktop/9.2/index.cfm?TopicName=Georeferencing_and_coordinate_systems
 http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#/Projection_basics_for_GIS_professionals/003r00000002000000/
