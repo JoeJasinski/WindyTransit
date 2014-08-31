@@ -3,7 +3,7 @@ import os
 import environ
 
 default_project_root = environ.Path(__file__) - 2
-default_environment_root = default_project_root - 3 
+default_environment_root = default_project_root - 2
 default_log_dir = default_environment_root.path('var', 'log')
 default_htdocs_dir = default_environment_root.path('htdocs')
 
@@ -28,13 +28,11 @@ env = environ.Env(
     DJANGO_MEDIA_ROOT=(str, str(default_media_root)),
     DJANGO_TEMPLATE_DIR=(str, str(default_template_dir)),
 )
-
 DEBUG = env('DJANGO_DEBUG')
 PROJECT_ROOT  = env("DJANGO_PROJECT_ROOT")
 ENVIRONMENT_ROOT = env("DJANGO_ENVIRONMENT_ROOT")
 LOG_DIR = env("DJANGO_LOG_DIR")
 HTDOCS_DIR = env("DJANGO_HTDOCS_DIR")
-
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -44,9 +42,9 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': env.db('DJANGO_DATABASE', default='postgis://windytransit@:/windytransit')
-}
+#DATABASES = {
+#    'default': env.db('DJANGO_DATABASE', default='postgis://windytransit@:/windytransit')
+#}
 
 
 GOOGLE_PLACES_API_KEY = ''
@@ -188,6 +186,7 @@ INSTALLED_APPS = (
 BOWER_INSTALLED_APPS = (
     'jquery#1.9',
     'leaflet#0.7.3',
+    'leaflet-omnivore#0.3.0',
 )
 
 # A sample logging configuration. The only tangible logging
