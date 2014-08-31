@@ -4,6 +4,7 @@
 {% block extra_head %}{{ block.super }}
 <link rel="stylesheet" href="{% static 'leaflet/dist/leaflet.css' %}" />
 <script src="{% static 'leaflet/dist/leaflet-src.js' %}"></script>
+<script src="{% static 'leaflet-omnivore/leaflet-omnivore.min.js' %}"></script>
 <!--
 <script src="{% static 'heatmap.js/src/heatmap.js' %}"></script>
 <script src="{% static 'heatmap.js/src/QuadTree.js' %}"></script>
@@ -17,18 +18,18 @@ $(function() {
 
     //var map = L.map('map').setView([y, x], 11);
 
-	//var map_tile_url = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
-	//var map_tile_url = 'http://otile3.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png';
-	//var map_tile_url = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-	//var map_tile_url = "http://tile.stamen.com/toner/{z}/{x}/{y}.png";
-	var map_tile_url = "http://tile.stamen.com/toner/{z}/{x}/{y}.png";
-	//var map_tile_url = "http://localhost:8000/static/tiles/{z}/{x}/{y}.png";
-	var tilelayer = L.tileLayer(map_tile_url, {
-	    attribution: '',
-	    maxZoom: 18,
-	});
+    //var map_tile_url = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+    //var map_tile_url = 'http://otile3.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png';
+    //var map_tile_url = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    //var map_tile_url = "http://tile.stamen.com/toner/{z}/{x}/{y}.png";
+    var map_tile_url = "http://tile.stamen.com/toner/{z}/{x}/{y}.png";
+    //var map_tile_url = "http://localhost:8000/static/tiles/{z}/{x}/{y}.png";
+    var tilelayer = L.tileLayer(map_tile_url, {
+        attribution: '',
+        maxZoom: 18,
+    });
 
-	/*
+    /*
     var heatmapLayer = L.TileLayer.heatMap({
         radius: 20,
         opacity: 0.8,
@@ -48,10 +49,10 @@ $(function() {
     ],
     max: 2};
 
-	heatmapLayer.setData(heatmapData.data);
-	*/
-	
-	//heatmapLayer.addTo(map);
+    heatmapLayer.setData(heatmapData.data);
+    */
+
+    //heatmapLayer.addTo(map);
 
     var map = L.map('map',
      {
@@ -63,13 +64,13 @@ $(function() {
     //map.setView([y, x], 11);
 
 
-  var jqxhr = $.get( "{% url 'api2_border_routes' 'chicago' %}", function(res) {
+    var jqxhr = $.get( "{% url 'api2_border_routes' 'chicago' %}", function(res) {
     console.log( res );
     var style = {'color': 'red', 
                  'clickable':false, 
                  'fillColor':"red", fillOpacity: 0.1, "opacity": 0.8, 'weight':'5'};
     var myLayer = L.geoJson(res.border, {'style':style}).addTo(map);
-    var style = {'color': 'blue', "opacity": 0.8, 'weight':'2'};
+    var style = {'color': 'blue', "opacity": 0.8, 'weight':'5'};
     var myLayer = L.geoJson(res.routes, {'style':style}).addTo(map); 
   }).done(function() {
     console.log("done");
@@ -78,6 +79,16 @@ $(function() {
   }).always(function() {
     console.log("finished");
   });
+
+
+    map.on('click', function(event) {
+        var runLayer = omnivore.kml('{% url "mtlocation_renderkml" %}?lat=' + event.latlng.lat + '&long=' + event.latlng.lng)
+       .on('ready', function() {
+          map.fitBounds(runLayer.getBounds());
+        })
+       .addTo(map);
+
+    });
 
 
 });
