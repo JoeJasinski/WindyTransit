@@ -16,6 +16,7 @@ ipython==2.1.0
 numpy==1.6.2
 psycopg2==2.5.3
 pyproj==1.9.3
+pyshp==1.2.1
 six==1.7.2
 versiontools==1.9.1
 virtual-node==0.1.0

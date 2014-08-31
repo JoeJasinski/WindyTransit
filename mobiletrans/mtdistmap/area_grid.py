@@ -3,7 +3,8 @@ from Queue import Queue
 from threading import Thread, Semaphore
 from UserDict import DictMixin
 
-from mobiletrans.mtdistmap.utils import shapefile
+#from mobiletrans.mtdistmap.utils import shapefile
+import shapefile
 
 from django.contrib.gis.geos import Point
 from pyproj import Geod
