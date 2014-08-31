@@ -96,8 +96,8 @@ $(document).ready(function(){
       return false; 
     });
 
-    $(".block-buttons li.level2 a.level2_a").live('click', function () {
-      var ctaLayer = new google.maps.KmlLayer(this);
+    $(".block-buttons").on('click', "li.level2 a.level2_a", function () {
+      var ctaLayer = new google.maps.KmlLayer(this.href);
 	  ctaLayer.setMap(map);
 	  $('li.top').children('ul').children('li').hide();
       return false; 
