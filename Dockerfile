@@ -1,4 +1,7 @@
 # NEEDS WORK
+# Execution
+# docker build -t postgis .
+# sudo docker run -rm -name postgis -p 7022:22 -p 7080:80  
 FROM ubuntu:14.04
 MAINTAINER Joe Jasinski
 
@@ -40,16 +43,17 @@ RUN ln -s /site/app/configs/nginx/server.conf /etc/nginx/sites-enabled/server.co
 ADD ./configs/nginx/nginx.conf /etc/nginx/nginx.conf
 RUN rm /etc/nginx/sites-enabled/default
 
-# restart supervisor
-RUN service supervisor restart
-
-# collect python static media
-RUN /site/env/bin/python /site/app/manage.py collectstatic --noinput
-
 # set django environment variables
 ENV DJANGO_ENVIRONMENT_ROOT /site/
 ENV DJANGO_LOG_DIR /site/var/log/
 ENV DJANGO_DEBUG True
+
+# restart supervisor
+RUN service supervisor restart
+
+# collect python static media
+RUN /site/env/bin/python /site/app/manage.py bower install
+RUN /site/env/bin/python /site/app/manage.py collectstatic --noinput
 
 EXPOSE 80 22
 CMD ["/usr/bin/supervisord", "-n"]
