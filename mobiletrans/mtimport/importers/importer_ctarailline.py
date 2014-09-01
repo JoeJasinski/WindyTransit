@@ -22,7 +22,7 @@ class CTARailLines(ShapeFileImportBase):
 
         try:
             primary_key = row.get("OBJECTID")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("primary key 'OBJECTID' not available", error)
         
         try:
@@ -36,54 +36,54 @@ class CTARailLines(ShapeFileImportBase):
         
         try:
             ctarailline.segment_id = row.get("SEGMENT_ID")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("field 'SEGMENT_ID' not available", error)
 
         try:
             ctarailline.asset_id = row.get("ASSET_ID")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("field 'ASSET_ID' not available", error)
 
         try:
             ctarailline.transit_lines = row.get("LINES")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("field 'LINES' not available", error)
 
         try:
             ctarailline.description = row.get("DESCRIPTIO")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("field 'DESCRIPTIO' not available", error)
 
         try:
             ctarailline.type = row.get("TYPE")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("field 'TYPE' not available", error)
 
         try:
             ctarailline.legend = row.get("LEGEND")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("field 'LEGEND' not available", error)
 
         try:
             ctarailline.alt_legend = row.get("ALT_LEGEND")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("field 'ALT_LEGEND' not available", error)
 
         try:
             ctarailline.branch = row.get("BRANCH")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("field 'BRANCH' not available", error)
 
         try:
             ctarailline.shape_len = row.get("SHAPE_LEN")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("field 'SHAPE_LEN' not available", error)            
 
         try:
             geom = row.geom
             geom.transform(self.coord_transform)
             ctarailline.line = geom.wkt
-        except Exception, error:
+        except Exception as error:
             raise ImportException("attribute 'geom' not available", error)     
         
         if existing:

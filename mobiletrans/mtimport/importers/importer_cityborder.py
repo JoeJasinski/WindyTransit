@@ -22,7 +22,7 @@ class CityBorder(ShapeFileImportBase):
 
         try:
             primary_key = row.get("OBJECTID")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("primary key 'OBJECTID' not available", error)
         
         try:
@@ -36,17 +36,17 @@ class CityBorder(ShapeFileImportBase):
         
         try:
             cityborder.name = row.get("NAME")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("field 'NAME' not available", error)
 
         try:
             cityborder.shape_area = row.get("SHAPE_AREA")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("field 'SHAPE_AREA' not available", error)
 
         try:
             cityborder.shape_len = row.get("SHAPE_LEN")
-        except OGRIndexError, error:
+        except OGRIndexError as error:
             raise ImportException("field 'SHAPE_LEN' not available", error)            
 
         try:

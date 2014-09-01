@@ -18,12 +18,12 @@ class Neighborhood(KMLImportBase):
         pk = "name"                 
         try:
             pk_val = row.getElementsByTagName(pk)[0]
-        except Exception, error:
+        except Exception as error:
             raise IndexError("%s %s" % (pk, error))
 
         try:
             pk_text = pk_val.childNodes[0].nodeValue
-        except Exception, error:
+        except Exception as error:
             raise Exception("%s %s: Error Reading 'text' from 'pk': %s" % (pk, pk_val, error)) 
 
         slug = slugify(pk_text)
@@ -42,7 +42,7 @@ class Neighborhood(KMLImportBase):
         
         try:
             description = row.getElementsByTagName("description")[0].childNodes[0].nodeValue
-        except Exception, error:
+        except Exception as error:
             pass
         
         s2 = description.replace("\n","")
@@ -53,17 +53,17 @@ class Neighborhood(KMLImportBase):
 
         try:
             ring = row.getElementsByTagName("MultiGeometry")[0]
-        except Exception, error:
+        except Exception as error:
             raise IndexError("%s %s: Error Reading 'MultiGeometry' from 'Placemark': %s" % (pk, pk_val, error)) 
 
         try:       
             coordinates = ring.getElementsByTagName("coordinates")[0]
-        except Exception, error:        
+        except Exception as error:        
             raise Exception("%s %s: Error Reading 'coordinates' from 'Point': %s" % (pk, pk_val, error)) 
         
         try:
             coord_text = coordinates.childNodes[0].nodeValue
-        except Exception, error:
+        except Exception as error:
             raise Exception("%s %s: Error Reading 'text' from 'coordinates': %s" % (pk, pk_val, error)) 
         
         poly = coord_text.split(' ')
@@ -73,7 +73,7 @@ class Neighborhood(KMLImportBase):
             if point: 
                 try:
                     longitude, lattitude, other =  point.split(',')
-                except Exception, error:
+                except Exception as error:
                     raise Exception("%s %s: Error splitting 'text': %s" % (pk, pk_val, error)) 
                 point_str += "%s %s," % (longitude, lattitude)
         

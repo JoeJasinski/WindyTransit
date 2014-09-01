@@ -18,7 +18,7 @@ class PoliceStation(JSONImportBase):
         
         try:
             uuid = row[1]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: uuid %s" % (id, error))
         
         try:
@@ -32,37 +32,37 @@ class PoliceStation(JSONImportBase):
         
         try:
             district = row[0]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: district %s" % (id, error))
         policestation.district = district
         policestation.name = district
 
         try:
             address = row[9]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: address %s" % (id, error))
         policestation.address = address
  
         try:
             zip = row[12]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: zip %s" % (id, error))
         policestation.zip = zip 
         
         try:
             website = row[13][0]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: website %s" % (id, error))
         policestation.website = website 
 
         try:      
             lattitude = row[14][1]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: lattitude %s" % (id, error)) 
         
         try:      
             longitude = row[14][2]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: longitude %s" % (id, error))
 
         point = fromstr('POINT(%s %s)' % (longitude, lattitude))

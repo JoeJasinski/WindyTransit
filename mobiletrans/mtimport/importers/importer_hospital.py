@@ -18,12 +18,12 @@ class Hospital(KMLImportBase):
         pk = "name"                 
         try:
             pk_val = row.getElementsByTagName(pk)[0]
-        except Exception, error:
+        except Exception as error:
             raise IndexError("%s %s" % (pk, error))
 
         try:
             pk_text = pk_val.childNodes[0].nodeValue
-        except Exception, error:
+        except Exception as error:
             raise Exception("%s %s: Error Reading 'text' from 'pk': %s" % (pk, pk_val, error)) 
 
         slug = slugify(pk_text)
@@ -42,22 +42,22 @@ class Hospital(KMLImportBase):
 
         try:
             point = row.getElementsByTagName("Point")[0]
-        except Exception, error:
+        except Exception as error:
             raise IndexError("%s %s: Error Reading 'Point' from 'Placemark': %s" % (pk, pk_val, error)) 
         
         try:       
             coordinates = point.getElementsByTagName("coordinates")[0]
-        except Exception, error:        
+        except Exception as error:        
             raise Exception("%s %s: Error Reading 'coordinates' from 'Point': %s" % (pk, pk_val, error)) 
         
         try:
             coord_text = coordinates.childNodes[0].nodeValue
-        except Exception, error:
+        except Exception as error:
             raise Exception("%s %s: Error Reading 'text' from 'coordinates': %s" % (pk, pk_val, error)) 
         
         try:
             longitude, lattitude, other =  coord_text.split(',')
-        except Exception, error:
+        except Exception as error:
             raise Exception("%s %s: Error splitting 'text': %s" % (pk, pk_val, error)) 
         
 

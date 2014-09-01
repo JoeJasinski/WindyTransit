@@ -18,12 +18,12 @@ class Landmark(JSONImportBase):
         
         try:
             id = row[0]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s" % error)
         
         try:
             uuid = row[1]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: uuid %s" % (id, error))
         
         try:
@@ -37,35 +37,35 @@ class Landmark(JSONImportBase):
         
         try:
             name = row[8]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: name %s" % (id, error))
         landmark.name = name
         
         try:
             address = row[9]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: address %s" % (id, error))
         landmark.address = address
         
         try:  
             created_date = row[10]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: created_date %s" % (id, error))
         
         try:
             architect = row[11]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: architect %s" % (id, error)) 
         landmark.architect = architect
         
         try:      
             lattitude = row[13]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: lattitude %s" % (id, error)) 
         
         try:      
             longitude = row[14]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: longitude %s" % (id, error))
 
         point = fromstr('POINT(%s %s)' % (longitude, lattitude))

@@ -18,12 +18,12 @@ class Library(JSONImportBase):
         
         try:
             id = row[0]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s" % error)
         
         try:
             uuid = row[1]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: uuid %s" % (id, error))
         
         try:
@@ -37,48 +37,48 @@ class Library(JSONImportBase):
         
         try:
             name = row[8]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: name %s" % (id, error))
         library.name = name
 
         try:
             hours = row[9]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: address %s" % (id, error))
         library.hours = hours
                 
         try:
             address = row[10]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: address %s" % (id, error))
         library.address = address
  
         try:
             zip = row[13]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: address %s" % (id, error))
         library.zip = zip 
         
         try:
             phone = row[14]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: address %s" % (id, error))
         library.phone = phone 
         
         try:
             website = row[15][0]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: address %s" % (id, error))
         library.website = website 
         
         try:      
             lattitude = row[16][1]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: lattitude %s" % (id, error)) 
         
         try:      
             longitude = row[16][2]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("id %s: longitude %s" % (id, error))
 
         point = fromstr('POINT(%s %s)' % (longitude, lattitude))

@@ -19,7 +19,7 @@ class TransitStop(CSVImportBase):
         pk = "stop_id"          
         try:
             pk_val = row[0]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("%s %s" % (pk, error))
         
         try:
@@ -34,35 +34,35 @@ class TransitStop(CSVImportBase):
         #attr = (1, 'stop_code')
         #try:
         #    value = row[attr[0]]
-        #except IndexError, error:
+        #except IndexError as error:
         #    raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
         #setattr(transitstop, attr[1], value) 
         
         attr = (2, 'name')
         try:
             value = row[attr[0]]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))  
         setattr(transitstop, attr[1], value)  
             
         attr = (3, 'lattitude')
         try:
             value = row[attr[0]]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
         lattitude = value
         
         attr = (4, 'longitude')
         try:
             value = row[attr[0]]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
         longitude = value 
         
         attr = (5, 'location_type')
         try:
             value = row[attr[0]]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))  
         setattr(transitstop, attr[1], value)  
 

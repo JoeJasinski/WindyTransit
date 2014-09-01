@@ -19,7 +19,7 @@ class TransitRoute(CSVImportBase):
         pk = "route_id"          
         try:
             pk_val = row[0]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("%s %s" % (pk, error))
         
         try:
@@ -34,42 +34,42 @@ class TransitRoute(CSVImportBase):
         attr = (1, 'short_name')
         try:
             value = row[attr[0]]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
         setattr(transitroute, attr[1], value) 
 
         attr = (2, 'long_name')
         try:
             value = row[attr[0]]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
         setattr(transitroute, attr[1], value) 
 
         attr = (3, 'type')
         try:
             value = row[attr[0]]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
         setattr(transitroute, attr[1], value) 
 
         attr = (4, 'url')
         try:
             value = row[attr[0]]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
         setattr(transitroute, attr[1], value) 
 
         attr = (5, 'color')
         try:
             value = row[attr[0]]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
         setattr(transitroute, attr[1], value) 
 
         attr = (6, 'text_color')
         try:
             value = row[attr[0]]
-        except IndexError, error:
+        except IndexError as error:
             raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
         setattr(transitroute, attr[1], value) 
 

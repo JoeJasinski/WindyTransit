@@ -29,9 +29,9 @@ class GPlaceLocation(ImportBase):
     def open_data(cls, lat_lng, radius):
         try:
             data = search_places_from_lat_long(lat_lng, radius=radius)
-        except GooglePlacesError, error:
+        except GooglePlacesError as error:
             raise GoogleIOImportException("GooglePlaces lookup error: %s" % (error)) 
-        except Exception, error:
+        except Exception as error:
             raise ImportException("Unknown import error: lat_lng [%s] radius [%s]: %s" % (lat_lng, radius, error, ))
         except: 
             raise ImportException("Unknown import error: lat_lng [%s] radius [%s]" % (lat_lng, radius, ))
@@ -58,7 +58,7 @@ class GPlaceLocation(ImportBase):
 
         try:
             uuid = row.id
-        except AttributeError, error:
+        except AttributeError as error:
             raise AttributeError("id %s: uuid %s" % (id, error))
         
         try:
@@ -72,13 +72,13 @@ class GPlaceLocation(ImportBase):
        
         try:
             name = row.name
-        except AttributeError, error:
+        except AttributeError as error:
             raise AttributeError("id %s: name %s" % (id, error))
         place.name = name
 
         try:
             geo = row.geo_location
-        except AttributeError, error:
+        except AttributeError as error:
             raise AttributeError("id %s: geo_location %s" % (id, error))
         else:
             if geo.has_key('lng'):

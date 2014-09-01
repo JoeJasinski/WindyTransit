@@ -75,7 +75,7 @@ class ImportBase(object):
             
             try:
                 import_object = self.parse_row(row)
-            except ValueError, error:
+            except ValueError as error:
                 stacktrace_text = traceback.format_exc(limit=50)
 
                 models.InputRecord.objects.make_note(
@@ -86,7 +86,7 @@ class ImportBase(object):
                  )
                 self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
-            except IndexError, error:
+            except IndexError as error:
                 stacktrace_text = traceback.format_exc(limit=50)
 
                 models.InputRecord.objects.make_note(
@@ -97,7 +97,7 @@ class ImportBase(object):
                  )
                 self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
-            except ImportException, error:
+            except ImportException as error:
                 stacktrace_text = traceback.format_exc(limit=50)
 
                 models.InputRecord.objects.make_note(
@@ -108,7 +108,7 @@ class ImportBase(object):
                  )
                 self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
-            except Exception, error:
+            except Exception as error:
                 stacktrace_text = traceback.format_exc(limit=50)
 
                 models.InputRecord.objects.make_note(
@@ -124,7 +124,7 @@ class ImportBase(object):
                     logger.debug("%s" % vars(import_object))
                     import_object.full_clean()
                     import_object.save()
-                except Exception, error: 
+                except Exception as error: 
                     stacktrace_text = traceback.format_exc(limit=50)
 
                     models.InputRecord.objects.make_note(
@@ -165,11 +165,11 @@ class JSONImportBase(ImportBase):
         try:
             input_file = open(input_file_path,'r')
             input_data = json.load(input_file)
-        except IOError, error:
+        except IOError as error:
             raise IOImportException("Error with file read: %s - %s" % (input_file_path, error, ))
         except ValueError:
             raise DataFormatImportException("Error with JSON read: %s - %s" % (input_file_path, error, ))
-        except Exception, error:
+        except Exception as error:
             raise ImportException("Unknown import error: %s - %s" % (input_file_path, error, ))
         else:
             input_file.close()
@@ -200,7 +200,7 @@ class CSVImportBase(ImportBase):
             for row in input_data:
                 data.append(row)
             data = data[1:]
-        except IOError, error:
+        except IOError as error:
             raise IOImportException("Error with file load %s - %s" % (input_file_path, error))
         except Exception, error:
             raise ImportException("Unknown import error: %s - %s" % (input_file_path, error, ))
@@ -220,11 +220,11 @@ class KMLImportBase(ImportBase):
         try:
             input_file = open(input_file_path,'r')
             input_data = minidom.parse(input_file)
-        except IOError, error:
+        except IOError as error:
             raise IOImportException("Error with file read: %s - %s" % (input_file_path, error, ))
         except ValueError:
             raise DataFormatImportException("Error with KML read: %s - %s" % (input_file_path, error, ))
-        except Exception, error:
+        except Exception as error:
             raise ImportException("Unknown import error: %s - %s" % (input_file_path, error, ))
         else:
             input_file.close()
@@ -267,18 +267,18 @@ class ShapeFileImportBase(ImportBase):
 
         try:
             input_data = gdal.DataSource(input_file_path)
-        except IOError, error:
+        except IOError as error:
             raise IOImportException("Error with ShapeFile read: %s - %s" % (input_file_path, error, ))
-        except gdal.error.OGRException, error:
+        except gdal.error.OGRException as error:
             raise DataFormatImportException("Error with ShapeFile read: %s - %s" % (input_file_path, error, ))
-        except Exception, error:
+        except Exception as error:
             raise ImportException("Unknown import ShapeFile error: %s - %s" % (input_file_path, error, ))
         return input_data
 
     def get_iteration_root(self):
         try:
             input_data = self.input_data[0]
-        except IndexError, error:
+        except IndexError as error:
             raise ImportException("Root element not found: %s"  % (error))  
         
         self.coord_transform = self.prepare_srid_transform(
