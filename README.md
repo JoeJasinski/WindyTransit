@@ -44,24 +44,30 @@ LOCAL INSTALL
 -------
 
 1. Create virtualenv 
+
     virtualenv  windytransit
 
 2. Activate Virtual Environment
+
     cd windytransit; . ./bin/activate
 
 3. Make needed directories
+
     mkdir -p var/log/
     mkdir -p data/
     mkdir proj/; cd proj/
 
 4. Checkout Code
+
     git clone git@github.com:JoeJasinski/WindyTransit.git windytransit; cd windytransit 
 
 5. Install Python dependencies 
+
     export PROJECT_DIR=`pwd`
     pip install -r requirements.txt
 
 6. Copy the settings example file into place
+
     cp mobiletrans/settings/local.example mobiletrans/settings/local.py
 
 7. Adjust the local settings as desired, though the default should be enough to get started
