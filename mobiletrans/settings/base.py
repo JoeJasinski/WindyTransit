@@ -3,7 +3,7 @@ import os
 import environ
 
 default_project_root = environ.Path(__file__) - 2
-default_environment_root = default_project_root - 2
+default_environment_root = default_project_root - 3
 default_log_dir = default_environment_root.path('var', 'log')
 default_htdocs_dir = default_environment_root.path('htdocs')
 
