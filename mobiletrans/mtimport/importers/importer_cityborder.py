@@ -1,5 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.contrib.gis.geos import Point, fromstr, fromfile, GEOSGeometry, MultiPoint, MultiPolygon, Polygon
+from django.contrib.gis.geos import (
+    Point, fromstr, fromfile, GEOSGeometry, MultiPoint, MultiPolygon, Polygon)
 from django.contrib.gis.gdal.error import OGRIndexError
 from autoslug.settings import slugify
 from mobiletrans.mtimport.importer import ShapeFileImportBase

@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render, get_object_or_404
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
@@ -26,27 +26,24 @@ def index(request, template_name=""):
                                 path=reverse('mtlocation_renderkml'),
                                 args=encoded_args, encode=False)
     context = {'url': built_url, 'lat': params.lat, 'long': long, }
-    return render_to_response(
-        template_name, context, context_instance=RequestContext(request))
+    return render(request, template_name, context)
 
 
 def download(request, template_name=""):
     context = {}
-    return render_to_response(
-        template_name, context, context_instance=RequestContext(request))
+    return render(request, template_name, context)
 
 
 def about(request, template_name=""):
     context = {}
-    return render_to_response(
-        template_name, context, context_instance=RequestContext(request))
+    return render(request, template_name, context)
 
 
 class MapView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(TemplateView, self).get_context_data(**kwargs)
-        region = CityBorder.objects.get(name='chicago')
+        region = get_object_or_404(CityBorder, name='chicago')
         center = region.area.centroid
         context.update({"center": center})
         return context
