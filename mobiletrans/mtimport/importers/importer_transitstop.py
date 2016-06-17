@@ -4,7 +4,8 @@ from autoslug.settings import slugify
 from mobiletrans.mtimport.importer import CSVImportBase
 from mobiletrans.mtlocation import models as loc_models
 from mobiletrans.mtimport import models
-from mobiletrans.mtimport.exceptions import * 
+from mobiletrans.mtimport.exceptions import *
+
 
 class TransitStop(CSVImportBase):
 
@@ -15,13 +16,13 @@ class TransitStop(CSVImportBase):
     def parse_row(self, row):
         row = list(row)
         existing = False
-        
-        pk = "stop_id"          
+
+        pk = "stop_id"
         try:
             pk_val = row[0]
         except IndexError as error:
             raise IndexError("%s %s" % (pk, error))
-        
+
         try:
             transitstop = self.get_model_class().objects.get(stop_id=pk_val)
             existing = True
@@ -35,36 +36,36 @@ class TransitStop(CSVImportBase):
         #try:
         #    value = row[attr[0]]
         #except IndexError as error:
-        #    raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
-        #setattr(transitstop, attr[1], value) 
-        
+        #    raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))
+        #setattr(transitstop, attr[1], value)
+
         attr = (2, 'name')
         try:
             value = row[attr[0]]
         except IndexError as error:
-            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))  
-        setattr(transitstop, attr[1], value)  
-            
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))
+        setattr(transitstop, attr[1], value)
+
         attr = (3, 'lattitude')
         try:
             value = row[attr[0]]
         except IndexError as error:
-            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))
         lattitude = value
-        
+
         attr = (4, 'longitude')
         try:
             value = row[attr[0]]
         except IndexError as error:
-            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
-        longitude = value 
-        
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))
+        longitude = value
+
         attr = (5, 'location_type')
         try:
             value = row[attr[0]]
         except IndexError as error:
-            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))  
-        setattr(transitstop, attr[1], value)  
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))
+        setattr(transitstop, attr[1], value)
 
         point = fromstr('POINT(%s %s)' % (longitude, lattitude))
         transitstop.point = point
@@ -73,5 +74,5 @@ class TransitStop(CSVImportBase):
             self.stats['existing'] += 1
         else:
             self.stats['new'] += 1
-        
+
         return transitstop

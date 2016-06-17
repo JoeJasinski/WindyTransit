@@ -47,8 +47,8 @@ class AppLabelRenamer(object):
                 admin_class.change_view = rename_breadcrumbs(admin_class.change_view)
                 admin_class.changelist_view = rename_breadcrumbs(admin_class.changelist_view)
                 model._meta.app_label = self.string_with_realoaded_title(
-                                            self.native_app_label,
-                                            self.app_label)
+                    self.native_app_label,
+                    self.app_label)
             return f(model, admin_class, **option)
         return wrap
 

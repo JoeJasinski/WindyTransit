@@ -6,8 +6,8 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.conf import settings
 from django.utils.datastructures import SortedDict
 
-typemapper = { }
-handler_tracker = [ ]
+typemapper = {}
+handler_tracker = []
 
 class Field(object):
     def __init__(self, name, xform_obj=None, destination=None, required=True, iterable_xform_obj=False):
@@ -49,6 +49,7 @@ class Field(object):
 
         return value
 
+
 class PistonViewMetaclass(type):
     """
     Metaclass that converts Field attributes to a dictionary called
@@ -80,10 +81,11 @@ class PistonViewMetaclass(type):
         new_class = super_new(cls, name, bases, attrs)
         return new_class
 
+
 class BasePistonView(object):
     def __new__(cls, data, *args, **kwargs):
         if isinstance(data, (list, tuple)):
-            return [ cls.__new__(cls, x, *args, **kwargs) for x in data ]
+            return [cls.__new__(cls, x, *args, **kwargs) for x in data]
         obj = object.__new__(cls)
         obj.__init__(data, *args, **kwargs)
         return obj
@@ -113,6 +115,7 @@ class BasePistonView(object):
 
     def __emittable__(self):
         return self.render()
+
 
 class PistonView(BasePistonView):
     __metaclass__ = PistonViewMetaclass

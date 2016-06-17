@@ -149,7 +149,7 @@ class TransitStop(Location):
 
     class_slug = 'transit_stop'
 
-    route = models.ManyToManyField('mtlocation.TransitRoute', blank=True, null=True)  
+    route = models.ManyToManyField('mtlocation.TransitRoute', blank=True)
     stop_id = models.IntegerField(unique=True,
         help_text=("Required. The stop_id field contains an ID that uniquely " 
                    "identifies a stop or station. Multiple routes may use the "

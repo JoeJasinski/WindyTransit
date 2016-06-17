@@ -1,18 +1,20 @@
-from django.contrib.gis.measure import D 
-from mobiletrans.mtlocation.models import ( 
-    TransitRoute, TransitStop, Location, Neighborhood, Zipcode, 
-    TRANSIT_STOP_TYPE_STATION, CityBorder, CTARailLines )
+from django.contrib.gis.measure import D
+from mobiletrans.mtlocation.models import (
+    TransitRoute, TransitStop, Location, Neighborhood, Zipcode,
+    TRANSIT_STOP_TYPE_STATION, CityBorder, CTARailLines)
 from mobiletrans.mtcore import utils
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
-from .serializers import (CTARailLinesSerializer, CityBorderSerializer, 
+from .serializers import (CTARailLinesSerializer, CityBorderSerializer,
                           NeighborhoodSerializer, LocationSerializer)
+
 
 class ListTransitRoutesSerializer(serializers.Serializer):
     pass
+
 
 class ListTransitRoutesView(generics.ListAPIView):
 
@@ -21,13 +23,13 @@ class ListTransitRoutesView(generics.ListAPIView):
 
     def get_queryset(self):
         kwargs = {}
-        type = self.request.GET.get('type','').lower()
-        if type in ['1','3','bus','train']:
+        type = self.request.GET.get('type', '').lower()
+        if type in ['1', '3', 'bus', 'train']:
             if type == "bus":
                 type = 3
             if type == "train":
                 type = 1
-            kwargs.update({'type':type})        
+            kwargs.update({'type': type})
         return TransitRoute.objects.filter(**kwargs)
 
     def get(self, request, *args, **kwargs):
@@ -36,84 +38,85 @@ class ListTransitRoutesView(generics.ListAPIView):
         for route in self.object_list:
             transit_route = route.serialize()
             transit_routes.append(transit_route)
-        return Response({'transit_routes':transit_routes})
-    
-    
+        return Response({'transit_routes': transit_routes})
+
+
 class ListTransitRouteView(generics.ListAPIView):
     methods_allowed = ('GET',)
 
     def get(self, request, *args, **kwargs):
-        transit_route_dict = {}    
-        
+        transit_route_dict = {}
+
         if kwargs.get('uuid'):
-            kwargs = {'uuid':kwargs['uuid']}
+            kwargs = {'uuid': kwargs['uuid']}
         elif kwargs.get('route_id'):
-            kwargs = {'route_id':kwargs['route_id']}
+            kwargs = {'route_id': kwargs['route_id']}
         else:
             kwargs = {}
-           
+
         try:
             transit_route = TransitRoute.objects.get(**kwargs)
         except:
             transit_route = []
         else:
             transit_route_dict = transit_route.serialize()
-            stops = map(lambda x: x.serialize(),  transit_route.transitstop_set.all() )
-            transit_route_dict.update({'stops':stops,})
+            stops = map(lambda x: x.serialize(), transit_route.transitstop_set.all())
+            transit_route_dict.update({'stops': stops})
 
-        return Response({'transit_route':transit_route_dict})
+        return Response({'transit_route': transit_route_dict})
 
 
 class LocationDataView(generics.ListAPIView):
-    methods_allowed = ('GET',)
+    methods_allowed = ('GET', )
 
     def get(self, request, *args, **kwargs):
-        
+
         context = {}
-        
+
         params = utils.PrepParams(request)
 
         location_objs = Location.objects.filter(
-            point__distance_lte=(params.ref_pnt, D(**params.d) )).distance(params.ref_pnt).order_by('distance')
+            point__distance_lte=(params.ref_pnt, D(**params.d))).distance(params.ref_pnt).order_by('distance')
 
         if params.point_types_input:
             location_objs = location_objs.filter(content_type__model__in=params.point_types)
 
         if params.neighborhood:
             neighborhood = map(lambda x: x.serialize(), Neighborhood.objects.filter(area__contains=params.ref_pnt))
-            context.update({'neighborhood':neighborhood})
+            context.update({'neighborhood': neighborhood})
 
         if params.zipcode:
             zipcode = map(lambda x: x.serialize(), Zipcode.objects.filter(area__contains=params.ref_pnt))
-            context.update({'zipcode':zipcode})
+            context.update({'zipcode': zipcode})
 
         locations = []
-        for location, distance in [ (l, l.distance) for l in location_objs.distance(params.ref_pnt) ]:
-            distance = location.distance 
+        for location, distance in [(l, l.distance) for l in location_objs.distance(params.ref_pnt)]:
+            distance = location.distance
             location = location.as_leaf_class().serialize()
-            location.update({'distance':str(distance)})
+            location.update({'distance': str(distance)})
             locations.append(location,)
 
-        context.update({ 'locations': locations[:params.limit], })
+        context.update({'locations': locations[:params.limit], })
         return Response(context)
 
 
 class TransitStopDataView(generics.ListAPIView):
     methods_allowed = ('GET',)
- 
+
     def get(self, request, *args, **kwargs):
         params = utils.PrepParams(request)
-        location_objs = TransitStop.orig_objects.filter(location_type=TRANSIT_STOP_TYPE_STATION,
-            point__distance_lte=(params.ref_pnt, D(**params.d) )).distance(params.ref_pnt).order_by('distance')
+        location_objs = TransitStop.orig_objects.filter(
+            location_type=TRANSIT_STOP_TYPE_STATION,
+            point__distance_lte=(params.ref_pnt, D(**params.d))).distance(params.ref_pnt).order_by('distance')
         if params.point_types_input:
             location_objs = location_objs.filter(content_type__model__in=params.point_types)
         locations = []
-        for location, distance in [ (l, l.distance) for l in location_objs.distance(params.ref_pnt) ]:
-            distance = location.distance 
+        for location, distance in [(l, l.distance) for l in location_objs.distance(params.ref_pnt)]:
+            distance = location.distance
             location = location.as_leaf_class().serialize()
-            location.update({'distance':str(distance)})
+            location.update({'distance': str(distance)})
             locations.append(location,)
-        return Response({ 'locations': locations[:params.limit], })
+        return Response({'locations': locations[:params.limit], })
 
 
 class CTARailLinesRoutesView(generics.ListAPIView):
@@ -126,12 +129,12 @@ class CTARailLinesRoutesView(generics.ListAPIView):
     def get_queryset(self):
 
         if self.kwargs.get('objectid'):
-            kwargs = {'objectid':self.kwargs['objectid']}
+            kwargs = {'objectid': self.kwargs['objectid']}
         else:
             kwargs = {}
 
         return self.model.objects.filter(**kwargs)
-    
+
 
 class CityBorderView(generics.ListAPIView):
 
@@ -143,7 +146,7 @@ class CityBorderView(generics.ListAPIView):
     def get_queryset(self):
 
         if self.kwargs.get('name'):
-            kwargs = {'name':self.kwargs['name']}
+            kwargs = {'name': self.kwargs['name']}
         else:
             kwargs = {}
 
@@ -173,25 +176,24 @@ class NeighborhoodFromCoordView(generics.RetrieveAPIView):
         return neighborhood
 
     def get(self, request, format=None):
-        placemarks = Location.objects.all().displayable().get_closest(from_point=self.params.ref_pnt, distance_dict=self.params.d ) 
+        placemarks = Location.objects.all().displayable().get_closest(from_point=self.params.ref_pnt, distance_dict=self.params.d )
         neighborhood = self.get_object()
-        data = {'neighborhood':NeighborhoodSerializer(neighborhood).data,
-                'placemarks':LocationSerializer(placemarks).data,}
+        data = {'neighborhood': NeighborhoodSerializer(neighborhood).data,
+                'placemarks': LocationSerializer(placemarks).data,}
         return Response(data)
 
 
 class RailLinesRouteBorderView(APIView):
-    
+
     def get(self, request, *args, **kwargs):
         routes = CTARailLines.objects.all()
-        
+
         name = self.kwargs.get('name')
         border = get_object_or_404(CityBorder, name=name)
-        kwargs = {'name':name}
-            
+        kwargs = {'name': name}
+
         border = CityBorder.objects.filter(**kwargs)
 
-        data = {'border':CityBorderSerializer(border).data,
-                'routes':CTARailLinesSerializer(routes).data,}
+        data = {'border': CityBorderSerializer(border).data,
+                'routes': CTARailLinesSerializer(routes).data, }
         return Response(data)
-    

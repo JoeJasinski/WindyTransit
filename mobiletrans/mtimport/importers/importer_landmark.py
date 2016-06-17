@@ -4,7 +4,8 @@ from autoslug.settings import slugify
 from mobiletrans.mtimport.importer import JSONImportBase
 from mobiletrans.mtlocation import models as loc_models
 from mobiletrans.mtimport import models
-from mobiletrans.mtimport.exceptions import * 
+from mobiletrans.mtimport.exceptions import *
+
 
 class Landmark(JSONImportBase):
 
@@ -13,19 +14,19 @@ class Landmark(JSONImportBase):
         return loc_models.Landmark
 
     def parse_row(self, row):
-        
+
         existing = False
-        
+
         try:
             id = row[0]
         except IndexError as error:
             raise IndexError("id %s" % error)
-        
+
         try:
             uuid = row[1]
         except IndexError as error:
             raise IndexError("id %s: uuid %s" % (id, error))
-        
+
         try:
             landmark = self.get_model_class().objects.get(uuid=uuid)
             existing = True
@@ -34,46 +35,46 @@ class Landmark(JSONImportBase):
             existing = False
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with uuid %s " % uuid)
-        
+
         try:
             name = row[8]
         except IndexError as error:
             raise IndexError("id %s: name %s" % (id, error))
         landmark.name = name
-        
+
         try:
             address = row[9]
         except IndexError as error:
             raise IndexError("id %s: address %s" % (id, error))
         landmark.address = address
-        
-        try:  
+
+        try:
             created_date = row[10]
         except IndexError as error:
             raise IndexError("id %s: created_date %s" % (id, error))
-        
+
         try:
             architect = row[11]
         except IndexError as error:
-            raise IndexError("id %s: architect %s" % (id, error)) 
+            raise IndexError("id %s: architect %s" % (id, error))
         landmark.architect = architect
-        
-        try:      
+
+        try:
             lattitude = row[13]
         except IndexError as error:
-            raise IndexError("id %s: lattitude %s" % (id, error)) 
-        
-        try:      
+            raise IndexError("id %s: lattitude %s" % (id, error))
+
+        try:
             longitude = row[14]
         except IndexError as error:
             raise IndexError("id %s: longitude %s" % (id, error))
 
         point = fromstr('POINT(%s %s)' % (longitude, lattitude))
         landmark.point = point
-        
+
         if existing:
             self.stats['existing'] += 1
         else:
             self.stats['new'] += 1
-        
+
         return landmark

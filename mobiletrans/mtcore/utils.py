@@ -1,6 +1,6 @@
 import decimal, urllib
+from django.apps import apps
 from django.contrib.gis.geos import fromstr
-from django.db.models.loading import get_models, get_app
 from mobiletrans.mtlocation.models import Location
 
 
@@ -61,7 +61,7 @@ class PrepParams(object):
 
     
     def get_point_types(self, point_types):
-        available_types = [ (m.__name__).lower() for m in get_models(get_app('mtlocation')) if issubclass(m, Location)  ]
+        available_types = [ (m.__name__).lower() for m in apps.get_app_config('mtlocation').get_models() if issubclass(m, Location)  ]
         point_types = map(lambda x: x.lower(), point_types)
         types = set(point_types).intersection(set(available_types))
         #raise AssertionError(available_types, point_types, types)

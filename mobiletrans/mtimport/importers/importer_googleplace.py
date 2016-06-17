@@ -5,20 +5,23 @@ from autoslug.settings import slugify
 from mobiletrans.mtimport.importer import ImportBase
 from mobiletrans.mtlocation import models as loc_models
 from mobiletrans.mtimport import models
-from mobiletrans.mtimport.exceptions import * 
+from mobiletrans.mtimport.exceptions import *
 from django.conf import settings
 from googleplaces import GooglePlaces, types, lang, GooglePlacesError
+
 
 class GoogleIOImportException(IOImportException):
     pass
 
+
 def search_places_from_lat_long(lag_lng, radius=3200, keyword=None, types=[]):
     google_places = GooglePlaces(settings.GOOGLE_PLACES_API_KEY)
     query_result = google_places.query(
-            lat_lng=lag_lng, keyword=keyword,
-            radius =radius, types=types)
+        lat_lng=lag_lng, keyword=keyword,
+        radius=radius, types=types)
     return query_result
-  
+
+
 class GPlaceLocation(ImportBase):
 
     @classmethod
@@ -30,10 +33,10 @@ class GPlaceLocation(ImportBase):
         try:
             data = search_places_from_lat_long(lat_lng, radius=radius)
         except GooglePlacesError as error:
-            raise GoogleIOImportException("GooglePlaces lookup error: %s" % (error)) 
+            raise GoogleIOImportException("GooglePlaces lookup error: %s" % (error))
         except Exception as error:
             raise ImportException("Unknown import error: lat_lng [%s] radius [%s]: %s" % (lat_lng, radius, error, ))
-        except: 
+        except:
             raise ImportException("Unknown import error: lat_lng [%s] radius [%s]" % (lat_lng, radius, ))
         return data
 
@@ -44,14 +47,14 @@ class GPlaceLocation(ImportBase):
             models.InputRecord.objects.make_note(
              input_record=self.input_record,
              note="query data missing 'places' element.",
-             type=models.TRANSFER_NOTE_STATUS_ERROR,    
+             type=models.TRANSFER_NOTE_STATUS_ERROR,
              )
             models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
-            raise ImportException("query data missing 'places' element.")     
+            raise ImportException("query data missing 'places' element.")
         return data
 
     def parse_row(self, row):
-        
+
         existing = False
 
         row.get_details()
@@ -60,16 +63,16 @@ class GPlaceLocation(ImportBase):
             uuid = row.id
         except AttributeError as error:
             raise AttributeError("id %s: uuid %s" % (id, error))
-        
+
         try:
-            place = self.get_model_class().objects.get(uuid=uuid) 
+            place = self.get_model_class().objects.get(uuid=uuid)
             existing = True
         except ObjectDoesNotExist:
             place = self.get_model_class()(uuid=uuid)
             existing = False
         except MultipleObjectsReturned:
             raise ImportException("multiple objects returned with uuid %s " % uuid)
-       
+
         try:
             name = row.name
         except AttributeError as error:
@@ -93,7 +96,7 @@ class GPlaceLocation(ImportBase):
 
         point = fromstr('POINT(%s %s)' % (longitude, lattitude))
         place.point = point
- 
+
         if hasattr(row, 'rating'):
             try:
                 d = decimal.Decimal("%s" % row.rating)
@@ -116,21 +119,19 @@ class GPlaceLocation(ImportBase):
 
         if hasattr(row, 'local_phone_number'):
             place.local_phone_number = row.local_phone_number
- 
+
         if hasattr(row, 'website'):
             place.website = row.website
- 
+
         if hasattr(row, 'formatted_address'):
             place.address = row.formatted_address
 
         if hasattr(row, 'url'):
             place.url = row.url
-     
+
         if existing:
             self.stats['existing'] += 1
         else:
             self.stats['new'] += 1
-        
-        return place
 
-    
+        return place

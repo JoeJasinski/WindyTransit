@@ -1,9 +1,10 @@
 import json, csv, logging, traceback
-from django.contrib.gis import gdal 
+from django.contrib.gis import gdal
 from xml.dom import minidom
 
 from mobiletrans.mtimport import models
-from mobiletrans.mtimport.exceptions import * 
+from mobiletrans.mtimport.exceptions import *
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -13,8 +14,8 @@ class ImportBase(object):
 
     def __init__(self, input_record, input_data):
 
-        self.stats = {'new':0, 'existing':0, 'errors':0}
-        
+        self.stats = {'new': 0, 'existing': 0, 'errors': 0}
+
         self.input_record = input_record
         self.input_data = input_data
 
@@ -24,9 +25,9 @@ class ImportBase(object):
 
     @classmethod
     def data_import(cls, *input_parameters):
-        
+
         data = []
-        status=None
+        status = None
 
         input_record = models.InputRecord()
         input_record.type = cls.get_model_class().__name__
@@ -48,109 +49,110 @@ class ImportBase(object):
 
         import_class = cls(input_record, data, )
         stats = import_class.process()
-    
-        
+
         if not input_record.status == models.TRANSFER_STATUS_FAILED:
-            if input_record.inputnote_set.filter(type__in=[models.TRANSFER_NOTE_STATUS_ERROR,]):
+            if input_record.inputnote_set.filter(type__in=[models.TRANSFER_NOTE_STATUS_ERROR, ]):
                 status = models.TRANSFER_STATUS_PARTIAL
             else:
                 status = models.TRANSFER_STATUS_SUCCESS
-                
+
         models.InputRecord.objects.make_note(
-         input_record=input_record,
-         note='# new records %s - # existing records %s - error records %s' % (
+            input_record=input_record,
+            note='# new records %s - # existing records %s - error records %s' % (
                                 stats['new'], stats['existing'], stats['errors']),
-         type=models.TRANSFER_NOTE_STATUS_NOTE,
-        )     
-            
+            type=models.TRANSFER_NOTE_STATUS_NOTE,
+        )
+
         models.InputRecord.objects.end_import(input_record, status)
 
         return input_record
-        
 
     def process(self):
 
         count = 1
         for row in self.get_iteration_root():
-            
+
             try:
                 import_object = self.parse_row(row)
             except ValueError as error:
                 stacktrace_text = traceback.format_exc(limit=50)
 
                 models.InputRecord.objects.make_note(
-                 input_record=self.input_record,
-                 note="Row %s: ValueError Parse error: %s\n\n%s" % (count, error, stacktrace_text),
-                 type=models.TRANSFER_NOTE_STATUS_ERROR,
-                 exception=error.__class__.__name__,
-                 )
+                    input_record=self.input_record,
+                    note="Row %s: ValueError Parse error: %s\n\n%s" % (
+                        count, error, stacktrace_text),
+                    type=models.TRANSFER_NOTE_STATUS_ERROR,
+                    exception=error.__class__.__name__,
+                )
                 self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
             except IndexError as error:
                 stacktrace_text = traceback.format_exc(limit=50)
 
                 models.InputRecord.objects.make_note(
-                 input_record=self.input_record,
-                 note="Row %s: IndexError Parse error: %s\n\n%s" % (count, error, stacktrace_text),
-                 type=models.TRANSFER_NOTE_STATUS_ERROR,   
-                 exception=error.__class__.__name__, 
-                 )
+                    input_record=self.input_record,
+                    note="Row %s: IndexError Parse error: %s\n\n%s" % (
+                        count, error, stacktrace_text),
+                    type=models.TRANSFER_NOTE_STATUS_ERROR,
+                    exception=error.__class__.__name__,
+                )
                 self.stats['errors'] += 1
                 models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
             except ImportException as error:
                 stacktrace_text = traceback.format_exc(limit=50)
 
                 models.InputRecord.objects.make_note(
-                 input_record=self.input_record,
-                 note="Row %s: Import Exception Parse error: %s\n\n%s" % (count, error, stacktrace_text),
-                 type=models.TRANSFER_NOTE_STATUS_ERROR, 
-                 exception=error.__class__.__name__,  
-                 )
+                    input_record=self.input_record,
+                    note="Row %s: Import Exception Parse error: %s\n\n%s" % (
+                        count, error, stacktrace_text),
+                    type=models.TRANSFER_NOTE_STATUS_ERROR,
+                    exception=error.__class__.__name__,
+                )
                 self.stats['errors'] += 1
-                models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
+                models.InputRecord.objects.end_import(
+                    self.input_record, models.TRANSFER_STATUS_FAILED)
             except Exception as error:
                 stacktrace_text = traceback.format_exc(limit=50)
 
                 models.InputRecord.objects.make_note(
-                 input_record=self.input_record,
-                 note="Row %s: Unknown Parse error: %s\n\n%s" % (count, error, stacktrace_text),
-                 type=models.TRANSFER_NOTE_STATUS_ERROR,
-                 exception=error.__class__.__name__,    
-                 )
+                    input_record=self.input_record,
+                    note="Row %s: Unknown Parse error: %s\n\n%s" % (
+                        count, error, stacktrace_text),
+                    type=models.TRANSFER_NOTE_STATUS_ERROR,
+                    exception=error.__class__.__name__,
+                )
                 self.stats['errors'] += 1
-                models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)               
+                models.InputRecord.objects.end_import(
+                    self.input_record, models.TRANSFER_STATUS_FAILED)
             else:
                 try:
                     logger.debug("%s" % vars(import_object))
                     import_object.full_clean()
                     import_object.save()
-                except Exception as error: 
+                except Exception as error:
                     stacktrace_text = traceback.format_exc(limit=50)
 
                     models.InputRecord.objects.make_note(
-                     input_record=self.input_record,
-                     note="Row %s: Save Error: %s\n\n%s" % (count, error, stacktrace_text),
-                     type=models.TRANSFER_NOTE_STATUS_ERROR,
-                     exception=error.__class__.__name__,    
-                     )
-                    self.stats['errors'] += 1                    
+                        input_record=self.input_record,
+                        note="Row %s: Save Error: %s\n\n%s" % (
+                            count, error, stacktrace_text),
+                        type=models.TRANSFER_NOTE_STATUS_ERROR,
+                        exception=error.__class__.__name__,
+                    )
+                    self.stats['errors'] += 1
 
             count += 1
 
         return self.stats
 
-
     def get_iteration_root(self):
         raise NotImplementedError("implement this get_iteration_root method in a subclass")
-
 
     def open_data(self, **input_parameters):
         raise NotImplementedError("implement this open_data method in a subclass")
 
-
     def parse_row(self, row):
         raise NotImplementedError("implement this parse_row method in a subclass")
-
 
 
 ########################################
@@ -163,7 +165,7 @@ class JSONImportBase(ImportBase):
     def open_data(cls, input_file_path):
 
         try:
-            input_file = open(input_file_path,'r')
+            input_file = open(input_file_path, 'r')
             input_data = json.load(input_file)
         except IOError as error:
             raise IOImportException("Error with file read: %s - %s" % (input_file_path, error, ))
@@ -180,12 +182,12 @@ class JSONImportBase(ImportBase):
             data = self.input_data['data']
         else:
             models.InputRecord.objects.make_note(
-             input_record=self.input_record,
-             note="Input file missing 'data' element.",
-             type=models.TRANSFER_NOTE_STATUS_ERROR,    
-             )
+                input_record=self.input_record,
+                note="Input file missing 'data' element.",
+                type=models.TRANSFER_NOTE_STATUS_ERROR,
+            )
             models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
-            raise ImportException("JSON missing 'data' element.")     
+            raise ImportException("JSON missing 'data' element.")
         return data
 
 
@@ -195,7 +197,7 @@ class CSVImportBase(ImportBase):
     def open_data(cls, input_file_path):
 
         try:
-            input_file = open(input_file_path,'r')
+            input_file = open(input_file_path, 'r')
             input_data = csv.reader(input_file, delimiter=',', quotechar='"')
             for row in input_data:
                 data.append(row)
@@ -207,7 +209,7 @@ class CSVImportBase(ImportBase):
         else:
             input_file.close()
         return data
- 
+
     def get_iteration_root(self):
         return self.input_data
 
@@ -234,19 +236,20 @@ class KMLImportBase(ImportBase):
 
         placemarks = self.input_data.getElementsByTagName("Placemark")
 
-        if not placemarks:            
+        if not placemarks:
             models.InputRecord.objects.make_note(
-             input_record=self.input_record,
-             note="Missing 'Placemark' elements.",
-             type=models.TRANSFER_NOTE_STATUS_ERROR,    
-             )
+                input_record=self.input_record,
+                note="Missing 'Placemark' elements.",
+                type=models.TRANSFER_NOTE_STATUS_ERROR,
+            )
             models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
-            raise ImportException("Missing 'Placemark' elements.")  
+            raise ImportException("Missing 'Placemark' elements.")
 
         return placemarks
 
 
 from django.db import connections, router
+
 
 class ShapeFileImportBase(ImportBase):
 
@@ -279,16 +282,13 @@ class ShapeFileImportBase(ImportBase):
         try:
             input_data = self.input_data[0]
         except IndexError as error:
-            raise ImportException("Root element not found: %s"  % (error))  
-        
+            raise ImportException("Root element not found: %s" % (error))
+
         self.coord_transform = self.prepare_srid_transform(
-                                    source_srs=input_data.srs, 
-                                    model_class=self.get_model_class(),
-                                    geom_field=self.get_geom_field(), 
-                                    )
+            source_srs=input_data.srs,
+            model_class=self.get_model_class(),
+            geom_field=self.get_geom_field(),
+            )
         return input_data
 
 ########################################
-
-
-    

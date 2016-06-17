@@ -9,6 +9,7 @@ DB_HOST = settings.DATABASES['default']['HOST']
 DB_PORT = settings.DATABASES['default']['PORT']
 DB_PASSWORD = settings.DATABASES['default']['PASSWORD']
 
+
 class CTAHeatmap(object):
     """
     Usage:
@@ -18,47 +19,47 @@ class CTAHeatmap(object):
     cta_map = CTAHeatmap(m)
     cta_map.render_image()
     """
-    
+
     def __init__(self, empty_map, *args, **kwargs):
         self.define_map(empty_map)
-    
+
     def get_subqueries(self):
-        subquery={}
-        subquery[1] = """(SELECT * FROM   public.mtlocation_region,  public.mtlocation_neighborhood,  public.django_content_type WHERE 
+        subquery = {}
+        subquery[1] = """(SELECT * FROM   public.mtlocation_region,  public.mtlocation_neighborhood,  public.django_content_type WHERE
           mtlocation_region.id = mtlocation_neighborhood.region_ptr_id AND
           mtlocation_region.content_type_id = django_content_type.id) as foo"""
-        
-        subquery[2] = """(SELECT * FROM 
+
+        subquery[2] = """(SELECT * FROM
           mtlocation_location as loc
           inner join django_content_type as ct on (loc.content_type_id = ct.id)
           left outer join public.mtlocation_gplace as place on  ( loc.id = place.location_ptr_id )
         where ct.model not in ('transitstop')) as foo"""
-        
-        subquery[4] = """(SELECT 
-          l.id,   l.created,    l.modified,   l.active,   l.name, 
-          s.location_type,  s.url,  s.description,   s.stop_code,  s.stop_id,  s.location_ptr_id, 
+
+        subquery[4] = """(SELECT
+          l.id,   l.created,    l.modified,   l.active,   l.name,
+          s.location_type,  s.url,  s.description,   s.stop_code,  s.stop_id,  s.location_ptr_id,
           l.slug,   l.uuid,   l.content_type_id,   l.point
-        FROM 
-          mtlocation_location l, 
+        FROM
+          mtlocation_location l,
           mtlocation_transitstop s
-        WHERE 
+        WHERE
           s.location_ptr_id = l.id
           and s.location_type = 1) as bar
         """
         return subquery
-    
+
     def get_stylesheet(self):
         cta_heatmap_xml = os.path.join(settings.PROJECT_ROOT, 'mtdistmap', 'cta_heatmap.xml')
         f = open(cta_heatmap_xml)
         schema = f.read()
         f.close()
         return schema
-    
+
     def define_map(self, map):
-        
+
         subquery = self.get_subqueries()
         schema = self.get_stylesheet()
-        
+
         mapnik.load_map_from_string(map, schema)
         connection_params = dict(dbname=DB_NAME, user=DB_USER, host=DB_HOST, password=DB_PASSWORD, port=DB_PORT, )
         ds = mapnik.PostGIS(table='mtlocation_cityborder', **connection_params)
@@ -70,7 +71,7 @@ class CTAHeatmap(object):
         ds = mapnik.PostGIS(table='mtlocation_ctaraillines', **connection_params)
         map.layers[3].datasource = ds
         ds = mapnik.PostGIS(table=subquery[4], geometry_table="mtlocation_location", geometry_field='point', **connection_params)
-        map.layers[4].datasource = ds        
+        map.layers[4].datasource = ds
         self.map = map
 
     def render_image(self):
@@ -78,6 +79,3 @@ class CTAHeatmap(object):
         map.zoom_all()
         #map.zoom_to_box(bbox)
         mapnik.render_to_file(map, 'chicago.png', 'png')
-
-
-

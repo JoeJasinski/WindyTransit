@@ -1,6 +1,5 @@
 from django.db import models
 
-from south.modelsinspector import add_introspection_rules
 from django_extensions.db.fields import UUIDField as ExtUUIDField
 
 class UUIDField(ExtUUIDField):
@@ -41,4 +40,3 @@ class SeparatedValuesField(models.TextField):
     def value_to_string(self, obj):
         value = self._get_val_from_obj(obj)
 
-add_introspection_rules([], ["^mobiletrans\.mtlocation\.fields\.SeparatedValuesField"])

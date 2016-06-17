@@ -16,25 +16,23 @@ default_template_dir = default_project_root.path('templates')
 
 env = environ.Env(
     DJANGO_DEBUG=(bool, False),
-    
+
     DJANGO_PROJECT_ROOT=(str, str(default_project_root)),
     DJANGO_ENVIRONMENT_ROOT=(str, str(default_environment_root)),
     DJANGO_LOG_DIR=(str, str(default_log_dir)),
     DJANGO_HTDOCS_DIR=(str, str(default_htdocs_dir)),
-    
+
     DJANGO_STATIC_DIR=(str, str(default_static_dir)),
     DJANGO_STATIC_ROOT=(str, str(default_static_root)),
-    
+
     DJANGO_MEDIA_ROOT=(str, str(default_media_root)),
     DJANGO_TEMPLATE_DIR=(str, str(default_template_dir)),
 )
 DEBUG = env('DJANGO_DEBUG')
-PROJECT_ROOT  = env("DJANGO_PROJECT_ROOT")
+PROJECT_ROOT = env("DJANGO_PROJECT_ROOT")
 ENVIRONMENT_ROOT = env("DJANGO_ENVIRONMENT_ROOT")
 LOG_DIR = env("DJANGO_LOG_DIR")
 HTDOCS_DIR = env("DJANGO_HTDOCS_DIR")
-
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -48,7 +46,6 @@ MANAGERS = ADMINS
 
 
 GOOGLE_PLACES_API_KEY = ''
-
 
 
 # Local time zone for this installation. Choices can be found here:
@@ -111,28 +108,42 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
     'compressor.finders.CompressorFinder',
     'djangobower.finders.BowerFinder',
 )
 
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
 
-COMPRESS_ENABLED=True
-COMPRESS_OUTPUT_DIR=''
-COMPRESS_CSS_FILTERS=[
+COMPRESS_ENABLED = True
+COMPRESS_OUTPUT_DIR = ''
+COMPRESS_CSS_FILTERS = [
     'compressor.filters.css_default.CssAbsoluteFilter',
-    'compressor.filters.cssmin.CSSMinFilter',] 
+    'compressor.filters.cssmin.CSSMinFilter', ]
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '9v5=sh2zq5^5-g1x+9q=prax%7jc+xw5%5_+^be!n=z%xk2v=_'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            env("DJANGO_TEMPLATE_DIR"),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.messages.context_processors.messages',
+                "django.core.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                'django.core.context_processors.request',
+                "django.core.context_processors.media",
+                'django.core.context_processors.static',
+                'mobiletrans.mtcore.context_processors.site',
+            ],
+        },
+    },
+]
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -142,24 +153,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.request",
-    "django.contrib.auth.context_processors.auth",
-    'django.core.context_processors.request',
-    "django.core.context_processors.media",
-    'django.core.context_processors.static',
-    'mobiletrans.mtcore.context_processors.site',
-)
-
-
 ROOT_URLCONF = 'mobiletrans.urls'
-
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    env("DJANGO_TEMPLATE_DIR"),
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -171,11 +165,10 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.gis',
     'django_extensions',
-    "south", 
     "compressor",
     'rest_framework',
     'djangobower',
-    
+
     'mobiletrans.mtcore',
     'mobiletrans.mtlocation',
     'mobiletrans.mtimport',
@@ -188,32 +181,6 @@ BOWER_INSTALLED_APPS = (
     'leaflet#0.7.3',
     'leaflet-omnivore#0.3.0',
 )
-
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
-
-
-
 
 LOGGING = {
     'version': 1,
@@ -245,7 +212,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename':os.path.join(LOG_DIR,"mobiletrans.log"),
+            'filename': os.path.join(LOG_DIR, "mobiletrans.log"),
             'formatter': 'verbose'
         },
     },
@@ -262,4 +229,3 @@ LOGGING = {
         },
     }
 }
-

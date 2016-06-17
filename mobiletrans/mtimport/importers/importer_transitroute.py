@@ -4,7 +4,8 @@ from autoslug.settings import slugify
 from mobiletrans.mtimport.importer import CSVImportBase
 from mobiletrans.mtlocation import models as loc_models
 from mobiletrans.mtimport import models
-from mobiletrans.mtimport.exceptions import * 
+from mobiletrans.mtimport.exceptions import *
+
 
 class TransitRoute(CSVImportBase):
 
@@ -15,13 +16,13 @@ class TransitRoute(CSVImportBase):
     def parse_row(self, row):
         row = list(row)
         existing = False
-        
-        pk = "route_id"          
+
+        pk = "route_id"
         try:
             pk_val = row[0]
         except IndexError as error:
             raise IndexError("%s %s" % (pk, error))
-        
+
         try:
             transitroute = self.get_model_class().objects.get(route_id=pk_val)
             existing = True
@@ -35,47 +36,47 @@ class TransitRoute(CSVImportBase):
         try:
             value = row[attr[0]]
         except IndexError as error:
-            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
-        setattr(transitroute, attr[1], value) 
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))
+        setattr(transitroute, attr[1], value)
 
         attr = (2, 'long_name')
         try:
             value = row[attr[0]]
         except IndexError as error:
-            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
-        setattr(transitroute, attr[1], value) 
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))
+        setattr(transitroute, attr[1], value)
 
         attr = (3, 'type')
         try:
             value = row[attr[0]]
         except IndexError as error:
-            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
-        setattr(transitroute, attr[1], value) 
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))
+        setattr(transitroute, attr[1], value)
 
         attr = (4, 'url')
         try:
             value = row[attr[0]]
         except IndexError as error:
-            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
-        setattr(transitroute, attr[1], value) 
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))
+        setattr(transitroute, attr[1], value)
 
         attr = (5, 'color')
         try:
             value = row[attr[0]]
         except IndexError as error:
-            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
-        setattr(transitroute, attr[1], value) 
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))
+        setattr(transitroute, attr[1], value)
 
         attr = (6, 'text_color')
         try:
             value = row[attr[0]]
         except IndexError as error:
-            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error)) 
-        setattr(transitroute, attr[1], value) 
+            raise IndexError("%s %s: %s %s" % (pk, pk_val, attr[1], error))
+        setattr(transitroute, attr[1], value)
 
         if existing:
             self.stats['existing'] += 1
         else:
             self.stats['new'] += 1
-        
+
         return transitroute
