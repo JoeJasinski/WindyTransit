@@ -1,24 +1,24 @@
-{% load compress %}{% comment %}
-This Page is to store all site-level imports and meta data. 
+{% load compress static %}{% comment %}
+This Page is to store all site-level imports and meta data.
 It only contains a block for the base layout and header/footer blocks
 {% endcomment %}<!DOCTYPE html>
 <html lang="en">
 <head>
  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
- <meta name="description" content="Find whats around the Chicago CTA"> 
- <meta name="author" content="joe jasinski, brenton bade"> 
- <meta name="keywords" content="mobile, chicago, location, cta"> 
+ <meta name="description" content="Find whats around the Chicago CTA">
+ <meta name="author" content="joe jasinski, brenton bade">
+ <meta name="keywords" content="mobile, chicago, location, cta">
  <title>Mobile Trans {% block title %} - Home{% endblock %}</title>
   <meta name="HandheldFriendly" content="true">
   <meta name="viewport" content="width=device-width; initial-scale=0.666667; maximum-scale=0.666667; user-scalable=0">
   <meta name="viewport" content="width=device-width">
  {% block extra_head %}
  {% compress css %}
- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/master.css" charset="utf-8">
+ <link rel="stylesheet" type="text/css" href="{% static 'css/master.css' %}" charset="utf-8">
  {% endcompress %}
- <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.min.js" charset="utf-8"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
- <script type="text/javascript" src="{{ STATIC_URL }}js/django_csrf.js" charset="utf-8"></script> 
+ <script type="text/javascript" src="{% static 'js/django_csrf.js' %}" charset="utf-8"></script>
  {% endblock extra_head %}
 </head>
 <body>

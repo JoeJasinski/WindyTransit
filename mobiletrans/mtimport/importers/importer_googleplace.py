@@ -45,10 +45,10 @@ class GPlaceLocation(ImportBase):
             data = self.input_data.places
         else:
             models.InputRecord.objects.make_note(
-             input_record=self.input_record,
-             note="query data missing 'places' element.",
-             type=models.TRANSFER_NOTE_STATUS_ERROR,
-             )
+                input_record=self.input_record,
+                note="query data missing 'places' element.",
+                type=models.TRANSFER_NOTE_STATUS_ERROR,
+            )
             models.InputRecord.objects.end_import(self.input_record, models.TRANSFER_STATUS_FAILED)
             raise ImportException("query data missing 'places' element.")
         return data
@@ -60,18 +60,19 @@ class GPlaceLocation(ImportBase):
         row.get_details()
 
         try:
-            uuid = row.id
+            reference_sha1 = row.id
         except AttributeError as error:
             raise AttributeError("id %s: uuid %s" % (id, error))
 
         try:
-            place = self.get_model_class().objects.get(uuid=uuid)
+            place = self.get_model_class().objects.get(reference_sha1=reference_sha1)
             existing = True
         except ObjectDoesNotExist:
-            place = self.get_model_class()(uuid=uuid)
+            place = self.get_model_class()(reference_sha1=reference_sha1)
             existing = False
         except MultipleObjectsReturned:
-            raise ImportException("multiple objects returned with uuid %s " % uuid)
+            raise ImportException(
+                "multiple objects returned with reference_sha1 %s " % reference_sha1)
 
         try:
             name = row.name
@@ -84,15 +85,15 @@ class GPlaceLocation(ImportBase):
         except AttributeError as error:
             raise AttributeError("id %s: geo_location %s" % (id, error))
         else:
-            if geo.has_key('lng'):
+            if 'lng' in geo:
                 longitude = geo['lng']
             else:
                 raise AttributeError("id %s: geo_location.lng" % (id))
 
-            if geo.has_key('lat'):
+            if 'lat' in geo:
                 lattitude = geo['lat']
             else:
-                raise AttributeError("id %s: geo_location.lat " % (id ))
+                raise AttributeError("id %s: geo_location.lat " % (id))
 
         point = fromstr('POINT(%s %s)' % (longitude, lattitude))
         place.point = point

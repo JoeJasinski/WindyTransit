@@ -155,26 +155,31 @@ class TransitStop(Location):
     class_slug = 'transit_stop'
 
     route = models.ManyToManyField('mtlocation.TransitRoute', blank=True)
-    stop_id = models.IntegerField(unique=True,
+    stop_id = models.IntegerField(
+        unique=True,
         help_text=("Required. The stop_id field contains an ID that uniquely "
                    "identifies a stop or station. Multiple routes may use the "
                    "same stop. The stop_id is dataset unique."))
-    stop_code = models.IntegerField(blank=True, null=True,
+    stop_code = models.IntegerField(
+        blank=True, null=True,
         help_text=("Optional. The stop_code field contains short text or a "
                    "number that uniquely identifies the stop for passengers. "
                    "Stop codes are often used in phone-based transit information "
                    "systems or printed on stop signage to make it easier for "
                    "riders to get a stop schedule or real-time arrival information "
                    "for a particular stop."))
-    description = models.TextField(blank=True, null=True,
+    description = models.TextField(
+        blank=True, null=True,
         help_text=("Optional. The stop_desc field contains a description of a stop. "
                    "Please provide useful, quality information. Do not simply "
                    "duplicate the name of the stop."))
-    url = models.URLField(blank=True, null=True,
+    url = models.URLField(
+        blank=True, null=True,
         help_text=("Optional. The stop_url field contains the URL of a web page about "
                    "a particular stop. This should be different from the agency_url "
                    "and the route_url fields. "))
-    location_type = models.IntegerField(choices=TRANSIT_STOP_TYPES,
+    location_type = models.IntegerField(
+        choices=TRANSIT_STOP_TYPES,
         help_text=("Optional. The location_type field identifies whether this stop ID "
                    "represents a stop or station. If no location type is specified, or "
                    "the location_type is blank, stop IDs are treated as stops. Stations "
@@ -198,8 +203,7 @@ class TransitStop(Location):
 
     def serialize(self):
         serialize_parent = super(self.__class__, self).serialize().copy()
-        serialize_parent.update(
-            { #'routes':map(lambda r: r.serialize(), self.route),
+        serialize_parent.update({  #  'routes':map(lambda r: r.serialize(), self.route),
             'stop_id': self.stop_id,  'stop_code': self.stop_code,
             'description': self.description, 'url': self.url,
             'location_type_name': self.get_location_type_display(),
@@ -217,9 +221,11 @@ class TransitStop(Location):
             except:
                 pass
             else:
-                return_value = "http://%s%simage/location-transit-%s.png" % (site, static_url, route_id)
+                return_value = "http://%s%simage/location-transit-%s.png" % (
+                    site, static_url, route_id)
         if not return_value:
-            return_value = "http://%s%simage/location-transit.png" % (site, static_url)
+            return_value = "http://%s%simage/location-transit.png" % (
+                site, static_url)
         return return_value
 
 
@@ -229,43 +235,58 @@ class TransitRoute(models.Model):
 
     uuid = models.UUIDField(default=uuid.uuid4)
 
-    route_id = models.CharField(max_length=64,
-        help_text=("Required. The route_id field contains an ID that uniquely identifies a "
-                   "route. The route_id is dataset unique."))
-    short_name = models.CharField(max_length=64,
-        help_text=("Required. The route_short_name contains the short name of a route. "
-                   "This will often be a short, abstract identifier like \"32\", \"100X\", "
-                   "or \"Green\" that riders use to identify a route, but which doesn't give "
-                   "any indication of what places the route serves. If the route does not have "
-                   "a short name, please specify a route_long_name and use an empty string "
-                   "as the value for this field."))
-    long_name = models.CharField(max_length=255,
-        help_text=("Required. The route_long_name contains the full name of a route. This name "
-                   "is generally more descriptive than the route_short_name and will often include "
-                   "the route's destination or stop. If the route does not have a long name, "
-                   "please specify a route_short_name and use an empty string as the value for this field."))
-    description = models.TextField(blank=True, null=True,
-        help_text=("Optional. The route_desc field contains a description of a route. Please provide "
-                   "useful, quality information. Do not simply duplicate the name of the route. For "
-                   "example, \"A trains operate between Inwood-207 St, Manhattan and Far Rockaway-Mott "
-                   "Avenue, Queens at all times. Also from about 6AM until about midnight, additional A "
-                   "trains operate between Inwood-207 St and Lefferts Boulevard (trains typically alternate "
-                   "between Lefferts Blvd and Far Rockaway).\""))
-    type = models.IntegerField(choices=TRANSIT_ROUTE_TYPE,
+    route_id = models.CharField(
+        max_length=64,
+        help_text=(
+            "Required. The route_id field contains an ID that uniquely identifies a "
+            "route. The route_id is dataset unique."))
+    short_name = models.CharField(
+        max_length=64,
+        help_text=(
+            "Required. The route_short_name contains the short name of a route. "
+            "This will often be a short, abstract identifier like \"32\", \"100X\", "
+            "or \"Green\" that riders use to identify a route, but which doesn't give "
+            "any indication of what places the route serves. If the route does not have "
+            "a short name, please specify a route_long_name and use an empty string "
+            "as the value for this field."))
+    long_name = models.CharField(
+        max_length=255,
+        help_text=(
+            "Required. The route_long_name contains the full name of a route. This name "
+            "is generally more descriptive than the route_short_name and will often include "
+            "the route's destination or stop. If the route does not have a long name, "
+            "please specify a route_short_name and use an empty string as the value for this field."))
+    description = models.TextField(
+        blank=True, null=True,
+        help_text=(
+            "Optional. The route_desc field contains a description of a route. Please provide "
+            "useful, quality information. Do not simply duplicate the name of the route. For "
+            "example, \"A trains operate between Inwood-207 St, Manhattan and Far Rockaway-Mott "
+            "Avenue, Queens at all times. Also from about 6AM until about midnight, additional A "
+            "trains operate between Inwood-207 St and Lefferts Boulevard (trains typically alternate "
+            "between Lefferts Blvd and Far Rockaway).\""))
+    type = models.IntegerField(
+        choices=TRANSIT_ROUTE_TYPE,
         help_text=("Required. The route_type field describes the type of transportation used on a route."))
-    color = models.CharField(max_length=6, blank=True, null=True,
-        help_text=("Optional. In systems that have colors assigned to routes, the route_color field defines "
-                   "a color that corresponds to a route. The color must be provided as a six-character "
-                   "hexadecimal number, for example, 00FFFF. If no color is specified, the default route "
-                   "color is white (FFFFFF)."))
-    text_color = models.CharField(max_length=6, blank=True, null=True,
-        help_text=("Optional. The route_text_color field can be used to specify a legible color to use for "
-                   "text drawn against a background of route_color. The color must be provided as a "
-                   "six-character hexadecimal number, for example, FFD700. If no color is specified, the "
-                   "default text color is black (000000)."))
-    url = models.URLField(blank=True, null=True,
-        help_text=("Optional. The route_url field contains the URL of a web page about that particular "
-                   "route. This should be different from the agency_url."))
+    color = models.CharField(
+        max_length=6, blank=True, null=True,
+        help_text=(
+            "Optional. In systems that have colors assigned to routes, the route_color field defines "
+            "a color that corresponds to a route. The color must be provided as a six-character "
+            "hexadecimal number, for example, 00FFFF. If no color is specified, the default route "
+            "color is white (FFFFFF)."))
+    text_color = models.CharField(
+        max_length=6, blank=True, null=True,
+        help_text=(
+            "Optional. The route_text_color field can be used to specify a legible color to use for "
+            "text drawn against a background of route_color. The color must be provided as a "
+            "six-character hexadecimal number, for example, FFD700. If no color is specified, the "
+            "default text color is black (000000)."))
+    url = models.URLField(
+        blank=True, null=True,
+        help_text=(
+            "Optional. The route_url field contains the URL of a web page about that particular "
+            "route. This should be different from the agency_url."))
 
     class Meta:
         verbose_name = "Transit Route"
@@ -431,15 +452,27 @@ class Zipcode(Region):
 
 class GPlace(Location):
 
-    rating = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
-    vicinity = models.TextField(blank=True, null=True)
-    types = SeparatedValuesField(blank=True, null=True)
-    reference = models.CharField(max_length=1024, blank=True, null=True)
-    international_phone_number = models.CharField(max_length=30, blank=True, null=True)
-    local_phone_number = models.CharField(max_length=30, blank=True, null=True)
-    website = models.URLField(blank=True, null=True)
-    address = models.TextField(blank=True, null=True)
-    url = models.URLField(blank=True, null=True)
+    reference_sha1 = models.CharField(
+        max_length=40, null=True, blank=True, unique=True,
+        help_text='A sha1 of the reference - used for ensuring uniqueness of reference\'s.')
+    rating = models.DecimalField(
+        max_digits=4, decimal_places=2, blank=True, null=True)
+    vicinity = models.TextField(
+        blank=True, null=True)
+    types = SeparatedValuesField(
+        blank=True, null=True)
+    reference = models.CharField(
+        max_length=1024, blank=True, null=True)
+    international_phone_number = models.CharField(
+        max_length=30, blank=True, null=True)
+    local_phone_number = models.CharField(
+        max_length=30, blank=True, null=True)
+    website = models.URLField(
+        blank=True, null=True)
+    address = models.TextField(
+        blank=True, null=True)
+    url = models.URLField(
+        blank=True, null=True)
 
     class Meta:
         verbose_name = "Google Place"
